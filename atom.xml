@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://crazydear.github.io</id>
     <title>Cradear&apos;s blog</title>
-    <updated>2020-04-10T07:48:33.091Z</updated>
+    <updated>2020-04-10T08:05:59.813Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://crazydear.github.io"/>
     <link rel="self" href="https://crazydear.github.io/atom.xml"/>
@@ -73,10 +73,7 @@ class baidu_ocr():
                 print(url)
 
     def __help__(self):
-        print(&quot;&quot;&quot;    aa = baidu_ocr()
-    aa.ocr(url='http')          # 网址的用法
-    aa.localpic('path.png')     # 本地图片的用法
-    print(aa.content)&quot;&quot;&quot;)
+        print(&quot;&quot;&quot;aa = baidu_ocr()\n aa.ocr(url='http')  # 网址的用法\n aa.localpic('path.png')     # 本地图片的用法\n print(aa.content)&quot;&quot;&quot;)
 </code></pre>
 ]]></content>
     </entry>
