@@ -1,12 +1,9 @@
 <head>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="今天与大家分享的是利用百度OCR接口进行文字识别。
-首先呢，先去百度AI中心申请应用，如图
-
-将API Key和Secret Key分别填到代码的相应位置处，替换完成后是不带&quot;[]&quot;的哦。
-#!/usr/bin/env ..." />
-    <meta name="keywords" content="Python,百度接口,OCR" />
+    <meta name="description" content="关于若依cms（ruoyi）介绍这里不在详细描述了，下面摘自官方的介绍
+ruoyi内置功能 用户管理：用户是系统操作者，该功能主要完成系统用户配置。 部门管理：配置系统组织机构（公司、部门、小组），树结构展现支持数据权限。 岗位管理：配置系..." />
+    <meta name="keywords" content="CMS,blog" />
     <link rel="stylesheet" href="https://crazydear.github.io/media/css/bootstrap.min.css">
     
     <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/default.min.css">
@@ -291,106 +288,112 @@
         <div class="postshow">
             
             <div class="postdetailimg" style="width:100%;overflow: hidden;display: none">
-                <img src="https://crazydear.github.io/post-images/百度OCR接口的调用.png" class="postimage" style="cursor:auto">
+                <img src="https://crazydear.github.io/post-images/ruoyiCMS.png" class="postimage" style="cursor:auto">
             </div>
             <div class="postinfo">
                 <div class="postdate"><i class="fa fa-calendar"></i>2020-04-10</div>
-                <div class="poststatus postdate"><i class="fa fa-clock-o"></i> 2 min read</div>
+                <div class="poststatus postdate"><i class="fa fa-clock-o"></i> 4 min read</div>
                 <div class="posttag">
                     
-                    <a href="https://crazydear.github.io/tag/l-KQkj-BI/" class="postlink">
-                        <i class="fa fa-tag"></i> Python
+                    <a href="https://crazydear.github.io/tag/4D6G_OukV/" class="postlink">
+                        <i class="fa fa-tag"></i> CMS
                     </a>
                     
-                    <a href="https://crazydear.github.io/tag/Jnyjgkg8ig/" class="postlink">
-                        <i class="fa fa-tag"></i> 百度接口
-                    </a>
-                    
-                    <a href="https://crazydear.github.io/tag/Y6Q0ULO6qg/" class="postlink">
-                        <i class="fa fa-tag"></i> OCR
+                    <a href="https://crazydear.github.io/tag/XYL8KmnHyM/" class="postlink">
+                        <i class="fa fa-tag"></i> blog
                     </a>
                     
                 </div>
             </div>
             
             <div id="texttitle" style="text-align: center">
-                <h2>百度OCR接口的调用</h2>
+                <h2>国产Java框架的若依cms安装折腾记录</h2>
             </div>
             <div class="text ">
-                <p>今天与大家分享的是利用百度OCR接口进行文字识别。</p>
-<p>首先呢，先去<a href="https://console.bce.baidu.com/ai/?_=1586498131714&amp;fromai=1#/ai/ocr/app/list">百度AI中心</a>申请应用，如图<br>
-<img src="https://crazydear.github.io/post-images/baiduocr.png" alt="" loading="lazy"><br>
-将API Key和Secret Key分别填到代码的相应位置处，替换完成后是不带&quot;[]&quot;的哦。</p>
-<pre><code class="language-python">#!/usr/bin/env python
-# -*- coding:utf-8 -*-
-# Author:李绍丰 河北工业大学-能源与环境工程学院
-# times：2020.3.17
-
-# ****************************************************************
-# 程序功能：调用百度文字识别
-# 模块划分：无
-# ****************************************************************
-
-import requests
-import base64
-
-
-class baidu_ocr():
-    def __init__(self):
-        self.request_url = &quot;https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic&quot;
-        self.content = []
-        self.get_token()
-
-    def get_token(self):
-        '''把获取的AK和SK替换下面的[AK],[SK]'''
-        host = 'https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&amp;client_id=[AK]&amp;client_secret=[SK]'
-        response = requests.get(host)
-        if response:
-            self.token = response.json()['access_token']
-        else:
-            if response.json()['error_description'] == 'unknown client id':
-                raise ValueError(&quot;API Key不正确&quot;)
-            else:
-                raise ValueError(&quot;Secret Key不正确&quot;)
-
-    def localpic(self,path):
-        f = open(path, 'rb')
-        self.img = base64.b64encode(f.read())
-        self.ocr(self.img)
-
-    def ocr(self, image=None, url=None):
-        if image:
-            params = {&quot;image&quot;:image}
-        else:
-            params = {&quot;url&quot;: url}
-        request_url = self.request_url + &quot;?access_token=&quot; + self.token
-        headers = {'content-type': 'application/x-www-form-urlencoded'}
-        response = requests.post(request_url, data=params, headers=headers)
-        if response:
-            try:
-                self.content.append(x['words'] for x in response.json()['words_result'])
-                return response.json()['words_result']
-            except:
-                print(url)
-
-    def __help__(self):
-        print(&quot;&quot;&quot;aa = baidu_ocr()\n aa.ocr(url='http')  # 网址的用法\n aa.localpic('path.png')     # 本地图片的用法\n print(aa.content)&quot;&quot;&quot;)
+                <p>关于若依cms（ruoyi）介绍这里不在详细描述了，下面摘自官方的介绍</p>
+<p>ruoyi内置功能 用户管理：用户是系统操作者，该功能主要完成系统用户配置。 部门管理：配置系统组织机构（公司、部门、小组），树结构展现支持数据权限。 岗位管理：配置系统用户所属担任职务。 菜单管理：配置系统菜单，操作权限，按钮权限标识等。 角色管理：角色菜单权限分配、设置角色按机构进行数据范围权限划分。 字典管理：对系统中经常使用的一些较为固定的数据进行维护。 参数管理：对系统动态配置常用参数。 通知公告：系统通知公告信息发布维护。 操作日志：系统正常操作日志记录和查询；系统异常信息日志记录和查询。 登录日志：系统登录日志记录查询包含登录异常。 在线用户：当前系统中活跃用户状态监控。 定时任务：在线（添加、修改、删除)任务调度包含执行结果日志。 代码生成：前后端代码的生成（java、html、xml、sql）支持CRUD下载 。 系统接口：根据业务代码自动生成相关的api接口文档。 服务监控：监视当前系统CPU、内存、磁盘、堆栈等相关信息。 在线构建器：拖动表单元素生成相应的HTML代码。 连接池监视：监视当前系统数据库连接池状态，可进行分析SQL找出系统性能瓶颈。 ruoyi-cms新增功能 ehcache缓存模块 ruoyi-ehcache 并配备页面监控</p>
+<p>redis缓存模块 ruoyi-redis 并配备页面监控</p>
+<p>数据库备份操作页面</p>
+<p>慢请求响应记录，系统响应时间超过500毫秒时，后台方法将被记录！</p>
+<p>爬虫模块 ruoyi-spider :爬虫任务和爬虫配置</p>
+<p>内容管理 ruoyi-cms :</p>
+<p>a). 文章管理 b). 素材分钟管理 c). 栏目分类 d). 标签管理 e). 邮件发送管理 f). 附件管理 g). 素材管理 h). 相册管理 i). 广告位管理</p>
+<p>j). 友情链接管理 k). 模板管理 l). 评论管理 m). 资源管理 n). 链接分类管理 o). 链接管理 p). PV页面访问管理 q). 其它</p>
+<p>博客主题界面。配备三套前台博客页面主题随意切换。(pblog,pnews,avatar)在sys_config表中配置主题。</p>
+<p>本次安装折腾为ruoyi-plus</p>
+<p>系统环境,ubuntu java mysql redis mvn git</p>
+<pre><code class="language-apt-get">apt-get install mysql-server
+apt-get install redis
+apt-get install git
+apt-get install maven
+git clone https://gitee.com/markbro/ruoyi-plus.git
 </code></pre>
+<p>创建ry_plus数据库</p>
+<p>导入sql文件里里面的SQL到ry_plus数据库</p>
+<pre><code>source /path
+</code></pre>
+<p>修改下面文件里的MySQL账号信息</p>
+<pre><code>ruoyi-admin /src/main/resources/application-druid.yml
+</code></pre>
+<p>启动MySQL redis</p>
+<p>进入ruoyi-plus目录</p>
+<p>执行下面命令编译安装</p>
+<pre><code class="language-mvn">mvn clean package -Dmaven.test.skip=true
+cd /ruoyi-admin/target
+java -jar ruoyi-admin.jar
+</code></pre>
+<p>一切顺利你就会看到下面的信息</p>
+<pre><code>////////////////////////////////////////////////////////////////////
+//                          _ooOoo_                               //
+//                         o8888888o                              //
+//                         88&quot; . &quot;88                              //
+//                         (| ^_^ |)                              //
+//                         O\  =  /O                              //
+//                      ____/`---'\____                           //
+//                    .'  \\|     |//  `.                         //
+//                   /  \\|||  :  |||//  \                        //
+//                  /  _||||| -:- |||||-  \                       //
+//                  |   | \\\  -  /// |   |                       //
+//                  | \_|  ''\---/''  |   |                       //
+//                  \  .-\__  `-`  ___/-. /                       //
+//                ___`. .'  /--.--\  `. . ___                     //
+//              .&quot;&quot; '&lt;  `.___\_&lt;|&gt;_/___.'  &gt;'&quot;&quot;.                  //
+//            | | :  `- \`.;`\ _ /`;.`/ - ` : | |                 //
+//            \  \ `-.   \_ __\ /__ _/   .-` /  /                 //
+//      ========`-.____`-.___\_____/___.-`____.-'========         //
+//                           `=---='                              //
+//      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        //
+//             佛祖保佑       永不宕机      永无BUG               //
+////////////////////////////////////////////////////////////////////
 
-            </div>
-            
-            <div class="prev-post">
-                上一篇
-                <a href="https://crazydear.github.io/post/ruoyiCMS/">
-                    国产Java框架的若依cms安装折腾记录
-                </a>
+
+
+(♥◠‿◠)ﾉﾞ  若依启动成功   ლ(´ڡ`ლ)ﾞ
+ .-------.       ____     __
+ |  _ _   \      \   \   /  /
+ | ( ' )  |       \  _. /  '
+ |(_ o _) /        _( )_ .'
+ | (_,_).' __  ___(_ o _)'
+ |  |\ \  |  ||   |(_,_)'
+ |  | \ `'   /|   `-'  /
+ |  |  \    /  \      /
+ ''-'   `'-'    `-..-'
+23:21:10.298 [main] INFO  c.r.RuoYiApplication - [main,31] -
+----------------------------------------------------------
+        Application  is running! Access URLs:
+        Local:          http://localhost:80/
+        External:       http://127.0.1.1:80/
+</code></pre>
+<p>打开链接会自动填写用户名和密码</p>
+<p>上个图吧~</p>
+
             </div>
             
             
             <div class="next-post">
                 下一篇
-                <a href="https://crazydear.github.io/post/Markdown/">
-                    Markdown语法
+                <a href="https://crazydear.github.io/post/百度OCR接口的调用/">
+                    百度OCR接口的调用
                 </a>
             </div>
             
@@ -554,106 +557,112 @@ class baidu_ocr():
         <div class="postshow">
             
             <div class="postdetailimg" style="width:100%;overflow: hidden;display: none">
-                <img src="https://crazydear.github.io/post-images/百度OCR接口的调用.png" class="postimage" style="cursor:auto">
+                <img src="https://crazydear.github.io/post-images/ruoyiCMS.png" class="postimage" style="cursor:auto">
             </div>
             <div class="postinfo">
                 <div class="postdate"><i class="fa fa-calendar"></i>2020-04-10</div>
-                <div class="poststatus postdate"><i class="fa fa-clock-o"></i> 2 min read</div>
+                <div class="poststatus postdate"><i class="fa fa-clock-o"></i> 4 min read</div>
                 <div class="posttag">
                     
-                    <a href="https://crazydear.github.io/tag/l-KQkj-BI/" class="postlink">
-                        <i class="fa fa-tag"></i> Python
+                    <a href="https://crazydear.github.io/tag/4D6G_OukV/" class="postlink">
+                        <i class="fa fa-tag"></i> CMS
                     </a>
                     
-                    <a href="https://crazydear.github.io/tag/Jnyjgkg8ig/" class="postlink">
-                        <i class="fa fa-tag"></i> 百度接口
-                    </a>
-                    
-                    <a href="https://crazydear.github.io/tag/Y6Q0ULO6qg/" class="postlink">
-                        <i class="fa fa-tag"></i> OCR
+                    <a href="https://crazydear.github.io/tag/XYL8KmnHyM/" class="postlink">
+                        <i class="fa fa-tag"></i> blog
                     </a>
                     
                 </div>
             </div>
             
             <div id="texttitle" style="text-align: center">
-                <h2>百度OCR接口的调用</h2>
+                <h2>国产Java框架的若依cms安装折腾记录</h2>
             </div>
             <div class="text ">
-                <p>今天与大家分享的是利用百度OCR接口进行文字识别。</p>
-<p>首先呢，先去<a href="https://console.bce.baidu.com/ai/?_=1586498131714&amp;fromai=1#/ai/ocr/app/list">百度AI中心</a>申请应用，如图<br>
-<img src="https://crazydear.github.io/post-images/baiduocr.png" alt="" loading="lazy"><br>
-将API Key和Secret Key分别填到代码的相应位置处，替换完成后是不带&quot;[]&quot;的哦。</p>
-<pre><code class="language-python">#!/usr/bin/env python
-# -*- coding:utf-8 -*-
-# Author:李绍丰 河北工业大学-能源与环境工程学院
-# times：2020.3.17
-
-# ****************************************************************
-# 程序功能：调用百度文字识别
-# 模块划分：无
-# ****************************************************************
-
-import requests
-import base64
-
-
-class baidu_ocr():
-    def __init__(self):
-        self.request_url = &quot;https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic&quot;
-        self.content = []
-        self.get_token()
-
-    def get_token(self):
-        '''把获取的AK和SK替换下面的[AK],[SK]'''
-        host = 'https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&amp;client_id=[AK]&amp;client_secret=[SK]'
-        response = requests.get(host)
-        if response:
-            self.token = response.json()['access_token']
-        else:
-            if response.json()['error_description'] == 'unknown client id':
-                raise ValueError(&quot;API Key不正确&quot;)
-            else:
-                raise ValueError(&quot;Secret Key不正确&quot;)
-
-    def localpic(self,path):
-        f = open(path, 'rb')
-        self.img = base64.b64encode(f.read())
-        self.ocr(self.img)
-
-    def ocr(self, image=None, url=None):
-        if image:
-            params = {&quot;image&quot;:image}
-        else:
-            params = {&quot;url&quot;: url}
-        request_url = self.request_url + &quot;?access_token=&quot; + self.token
-        headers = {'content-type': 'application/x-www-form-urlencoded'}
-        response = requests.post(request_url, data=params, headers=headers)
-        if response:
-            try:
-                self.content.append(x['words'] for x in response.json()['words_result'])
-                return response.json()['words_result']
-            except:
-                print(url)
-
-    def __help__(self):
-        print(&quot;&quot;&quot;aa = baidu_ocr()\n aa.ocr(url='http')  # 网址的用法\n aa.localpic('path.png')     # 本地图片的用法\n print(aa.content)&quot;&quot;&quot;)
+                <p>关于若依cms（ruoyi）介绍这里不在详细描述了，下面摘自官方的介绍</p>
+<p>ruoyi内置功能 用户管理：用户是系统操作者，该功能主要完成系统用户配置。 部门管理：配置系统组织机构（公司、部门、小组），树结构展现支持数据权限。 岗位管理：配置系统用户所属担任职务。 菜单管理：配置系统菜单，操作权限，按钮权限标识等。 角色管理：角色菜单权限分配、设置角色按机构进行数据范围权限划分。 字典管理：对系统中经常使用的一些较为固定的数据进行维护。 参数管理：对系统动态配置常用参数。 通知公告：系统通知公告信息发布维护。 操作日志：系统正常操作日志记录和查询；系统异常信息日志记录和查询。 登录日志：系统登录日志记录查询包含登录异常。 在线用户：当前系统中活跃用户状态监控。 定时任务：在线（添加、修改、删除)任务调度包含执行结果日志。 代码生成：前后端代码的生成（java、html、xml、sql）支持CRUD下载 。 系统接口：根据业务代码自动生成相关的api接口文档。 服务监控：监视当前系统CPU、内存、磁盘、堆栈等相关信息。 在线构建器：拖动表单元素生成相应的HTML代码。 连接池监视：监视当前系统数据库连接池状态，可进行分析SQL找出系统性能瓶颈。 ruoyi-cms新增功能 ehcache缓存模块 ruoyi-ehcache 并配备页面监控</p>
+<p>redis缓存模块 ruoyi-redis 并配备页面监控</p>
+<p>数据库备份操作页面</p>
+<p>慢请求响应记录，系统响应时间超过500毫秒时，后台方法将被记录！</p>
+<p>爬虫模块 ruoyi-spider :爬虫任务和爬虫配置</p>
+<p>内容管理 ruoyi-cms :</p>
+<p>a). 文章管理 b). 素材分钟管理 c). 栏目分类 d). 标签管理 e). 邮件发送管理 f). 附件管理 g). 素材管理 h). 相册管理 i). 广告位管理</p>
+<p>j). 友情链接管理 k). 模板管理 l). 评论管理 m). 资源管理 n). 链接分类管理 o). 链接管理 p). PV页面访问管理 q). 其它</p>
+<p>博客主题界面。配备三套前台博客页面主题随意切换。(pblog,pnews,avatar)在sys_config表中配置主题。</p>
+<p>本次安装折腾为ruoyi-plus</p>
+<p>系统环境,ubuntu java mysql redis mvn git</p>
+<pre><code class="language-apt-get">apt-get install mysql-server
+apt-get install redis
+apt-get install git
+apt-get install maven
+git clone https://gitee.com/markbro/ruoyi-plus.git
 </code></pre>
+<p>创建ry_plus数据库</p>
+<p>导入sql文件里里面的SQL到ry_plus数据库</p>
+<pre><code>source /path
+</code></pre>
+<p>修改下面文件里的MySQL账号信息</p>
+<pre><code>ruoyi-admin /src/main/resources/application-druid.yml
+</code></pre>
+<p>启动MySQL redis</p>
+<p>进入ruoyi-plus目录</p>
+<p>执行下面命令编译安装</p>
+<pre><code class="language-mvn">mvn clean package -Dmaven.test.skip=true
+cd /ruoyi-admin/target
+java -jar ruoyi-admin.jar
+</code></pre>
+<p>一切顺利你就会看到下面的信息</p>
+<pre><code>////////////////////////////////////////////////////////////////////
+//                          _ooOoo_                               //
+//                         o8888888o                              //
+//                         88&quot; . &quot;88                              //
+//                         (| ^_^ |)                              //
+//                         O\  =  /O                              //
+//                      ____/`---'\____                           //
+//                    .'  \\|     |//  `.                         //
+//                   /  \\|||  :  |||//  \                        //
+//                  /  _||||| -:- |||||-  \                       //
+//                  |   | \\\  -  /// |   |                       //
+//                  | \_|  ''\---/''  |   |                       //
+//                  \  .-\__  `-`  ___/-. /                       //
+//                ___`. .'  /--.--\  `. . ___                     //
+//              .&quot;&quot; '&lt;  `.___\_&lt;|&gt;_/___.'  &gt;'&quot;&quot;.                  //
+//            | | :  `- \`.;`\ _ /`;.`/ - ` : | |                 //
+//            \  \ `-.   \_ __\ /__ _/   .-` /  /                 //
+//      ========`-.____`-.___\_____/___.-`____.-'========         //
+//                           `=---='                              //
+//      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        //
+//             佛祖保佑       永不宕机      永无BUG               //
+////////////////////////////////////////////////////////////////////
 
-            </div>
-            
-            <div class="prev-post">
-                上一篇
-                <a href="https://crazydear.github.io/post/ruoyiCMS/">
-                    国产Java框架的若依cms安装折腾记录
-                </a>
+
+
+(♥◠‿◠)ﾉﾞ  若依启动成功   ლ(´ڡ`ლ)ﾞ
+ .-------.       ____     __
+ |  _ _   \      \   \   /  /
+ | ( ' )  |       \  _. /  '
+ |(_ o _) /        _( )_ .'
+ | (_,_).' __  ___(_ o _)'
+ |  |\ \  |  ||   |(_,_)'
+ |  | \ `'   /|   `-'  /
+ |  |  \    /  \      /
+ ''-'   `'-'    `-..-'
+23:21:10.298 [main] INFO  c.r.RuoYiApplication - [main,31] -
+----------------------------------------------------------
+        Application  is running! Access URLs:
+        Local:          http://localhost:80/
+        External:       http://127.0.1.1:80/
+</code></pre>
+<p>打开链接会自动填写用户名和密码</p>
+<p>上个图吧~</p>
+
             </div>
             
             
             <div class="next-post">
                 下一篇
-                <a href="https://crazydear.github.io/post/Markdown/">
-                    Markdown语法
+                <a href="https://crazydear.github.io/post/百度OCR接口的调用/">
+                    百度OCR接口的调用
                 </a>
             </div>
             
