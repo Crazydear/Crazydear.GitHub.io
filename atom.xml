@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://crazydear.github.io</id>
     <title>Cradear&apos;s blog</title>
-    <updated>2020-04-10T12:14:46.577Z</updated>
+    <updated>2020-04-11T03:38:05.917Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://crazydear.github.io"/>
     <link rel="self" href="https://crazydear.github.io/atom.xml"/>
@@ -28,7 +28,8 @@
 <p>博客主题界面。配备三套前台博客页面主题随意切换。(pblog,pnews,avatar)在sys_config表中配置主题。</p>
 <p>本次安装折腾为ruoyi-plus</p>
 <p>系统环境,ubuntu java mysql redis mvn git</p>
-<pre><code class="language-apt-get">apt-get install mysql-server
+<pre><code>apt-get install openjdk-8-jdk
+apt-get install mysql-server
 apt-get install redis
 apt-get install git
 apt-get install maven
@@ -44,7 +45,8 @@ git clone https://gitee.com/markbro/ruoyi-plus.git
 <p>启动MySQL redis</p>
 <p>进入ruoyi-plus目录</p>
 <p>执行下面命令编译安装</p>
-<pre><code class="language-mvn">mvn clean package -Dmaven.test.skip=true
+<pre><code>mvn clean
+mvn clean package -Dmaven.test.skip=true
 cd /ruoyi-admin/target
 java -jar ruoyi-admin.jar
 </code></pre>
