@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://crazydear.github.io</id>
     <title>Cradear&apos;s blog</title>
-    <updated>2020-04-15T12:33:46.852Z</updated>
+    <updated>2020-04-15T12:39:31.525Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://crazydear.github.io"/>
     <link rel="self" href="https://crazydear.github.io/atom.xml"/>
@@ -89,9 +89,8 @@ include /etc/nginx/conf.d/*.conf;
 </code></pre>
 <pre><code class="language-shell">touch /etc/nginx/ssl.conf
 </code></pre>
-<pre><code>#/etc/nginx/ssl.conf
-
-ssl_certificate /etc/ssl/certs/ssl-cert-snakeoil.pem;
+<p>/etc/nginx/ssl.conf</p>
+<pre><code>ssl_certificate /etc/ssl/certs/ssl-cert-snakeoil.pem;
 ssl_certificate_key /etc/ssl/private/ssl-cert-snakeoil.key;
 ssl_trusted_certificate /etc/ssl/certs/ssl-cert-snakeoil.pem;
 #ssl_certificate /etc/letsencrypt/rsa-certs/fullchain.pem;
@@ -108,69 +107,63 @@ ssl_prefer_server_ciphers on;
 ssl_stapling on;
 ssl_stapling_verify on;
 </code></pre>
-<pre><code>
+<p>/etc/nginx/proxy.conf</p>
+<pre><code>proxy_set_header Host \$host;
+proxy_set_header X-Real-IP \$remote_addr;
+proxy_set_header X-Forwarded-Host \$host;
+proxy_set_header X-Forwarded-Protocol \$scheme;
+proxy_set_header X-Forwarded-For \$remote_addr;
+proxy_set_header X-Forwarded-Port \$server_port;
+proxy_set_header X-Forwarded-Server \$host;
+proxy_connect_timeout 3600;
+proxy_send_timeout 3600;
+proxy_read_timeout 3600;
+proxy_redirect off;
 </code></pre>
-<p>#/etc/nginx/proxy.conf</p>
-<p>proxy_set_header Host $host;<br>
-proxy_set_header X-Real-IP $remote_addr;<br>
-proxy_set_header X-Forwarded-Host $host;<br>
-proxy_set_header X-Forwarded-Protocol $scheme;<br>
-proxy_set_header X-Forwarded-For $remote_addr;<br>
-proxy_set_header X-Forwarded-Port $server_port;<br>
-proxy_set_header X-Forwarded-Server $host;<br>
-proxy_connect_timeout 3600;<br>
-proxy_send_timeout 3600;<br>
-proxy_read_timeout 3600;<br>
-proxy_redirect off;</p>
-<pre><code>
+<p>/etc/nginx/header.conf</p>
+<pre><code>add_header Strict-Transport-Security &quot;max-age=15768000; includeSubDomains; preload;&quot;;
+add_header X-Robots-Tag none always;
+add_header X-Download-Options noopen always;
+add_header X-Permitted-Cross-Domain-Policies none always;
+add_header X-Content-Type-Options &quot;nosniff&quot; always;
+add_header X-XSS-Protection &quot;1; mode=block&quot; always;
+add_header Referrer-Policy &quot;no-referrer&quot; always;
+add_header X-Frame-Options &quot;SAMEORIGIN&quot; always;
 </code></pre>
-<p>#/etc/nginx/header.conf</p>
-<p>add_header Strict-Transport-Security &quot;max-age=15768000; includeSubDomains; preload;&quot;;<br>
-add_header X-Robots-Tag none always;<br>
-add_header X-Download-Options noopen always;<br>
-add_header X-Permitted-Cross-Domain-Policies none always;<br>
-add_header X-Content-Type-Options &quot;nosniff&quot; always;<br>
-add_header X-XSS-Protection &quot;1; mode=block&quot; always;<br>
-add_header Referrer-Policy &quot;no-referrer&quot; always;<br>
-add_header X-Frame-Options &quot;SAMEORIGIN&quot; always;</p>
-<pre><code>
+<p>/etc/nginx/optimization.conf</p>
+<pre><code>fastcgi_hide_header X-Powered-By;
+fastcgi_read_timeout 3600;
+fastcgi_send_timeout 3600;
+fastcgi_connect_timeout 3600;
+fastcgi_buffers 64 64K;
+fastcgi_buffer_size 256k;
+fastcgi_busy_buffers_size 3840K;
+fastcgi_cache_key \$http_cookie\$request_method\$host\$request_uri;
+fastcgi_cache_use_stale error timeout invalid_header http_500;
+fastcgi_ignore_headers Cache-Control Expires Set-Cookie;
+gzip on;
+gzip_vary on;
+gzip_comp_level 4;
+gzip_min_length 256;
+gzip_proxied expired no-cache no-store private no_last_modified no_etag auth;
+gzip_types application/atom+xml application/javascript application/json application/ld+json application/manifest+json application/rss+xml application/vnd.geo+json application/vnd.ms-fontobject application/x-font-ttf application/x-web-app-manifest+json application/xhtml+xml application/xml font/opentype image/bmp image/svg+xml image/x-icon text/cache-manifest text/css text/plain text/vcard text/vnd.rim.location.xloc text/vtt text/x-component text/x-cross-domain-policy;
+gzip_disable &quot;MSIE [1-6]\.&quot;;
 </code></pre>
-<p>#/etc/nginx/optimization.conf</p>
-<p>fastcgi_hide_header X-Powered-By;<br>
-fastcgi_read_timeout 3600;<br>
-fastcgi_send_timeout 3600;<br>
-fastcgi_connect_timeout 3600;<br>
-fastcgi_buffers 64 64K;<br>
-fastcgi_buffer_size 256k;<br>
-fastcgi_busy_buffers_size 3840K;<br>
-fastcgi_cache_key $http_cookie$request_method$host$request_uri;<br>
-fastcgi_cache_use_stale error timeout invalid_header http_500;<br>
-fastcgi_ignore_headers Cache-Control Expires Set-Cookie;<br>
-gzip on;<br>
-gzip_vary on;<br>
-gzip_comp_level 4;<br>
-gzip_min_length 256;<br>
-gzip_proxied expired no-cache no-store private no_last_modified no_etag auth;<br>
-gzip_types application/atom+xml application/javascript application/json application/ld+json application/manifest+json application/rss+xml application/vnd.geo+json application/vnd.ms-fontobject application/x-font-ttf application/x-web-app-manifest+json application/xhtml+xml application/xml font/opentype image/bmp image/svg+xml image/x-icon text/cache-manifest text/css text/plain text/vcard text/vnd.rim.location.xloc text/vtt text/x-component text/x-cross-domain-policy;<br>
-gzip_disable &quot;MSIE [1-6].&quot;;</p>
-<pre><code>
+<p>/etc/nginx/php_optimization.conf</p>
+<pre><code>fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
+fastcgi_param PATH_INFO \$path_info;
+fastcgi_param modHeadersAvailable true;
+fastcgi_param front_controller_active true;
+fastcgi_pass php-handler;
+fastcgi_param HTTPS on;
+fastcgi_intercept_errors on;
+fastcgi_request_buffering off;
+fastcgi_cache_valid 404 1m;
+fastcgi_cache_valid any 1h;
+fastcgi_cache_methods GET HEAD;
 </code></pre>
-<p>#/etc/nginx/php_optimization.conf</p>
-<p>fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;<br>
-fastcgi_param PATH_INFO $path_info;<br>
-fastcgi_param modHeadersAvailable true;<br>
-fastcgi_param front_controller_active true;<br>
-fastcgi_pass php-handler;<br>
-fastcgi_param HTTPS on;<br>
-fastcgi_intercept_errors on;<br>
-fastcgi_request_buffering off;<br>
-fastcgi_cache_valid 404 1m;<br>
-fastcgi_cache_valid any 1h;<br>
-fastcgi_cache_methods GET HEAD;</p>
-<pre><code>
-#/etc/ssl/certs/dhparam.pem
-
------BEGIN DH PARAMETERS-----
+<p>/etc/ssl/certs/dhparam.pem</p>
+<pre><code>-----BEGIN DH PARAMETERS-----
 MIICCAKCAgEA//////////+t+FRYortKmq/cViAnPTzx2LnFg84tNpWp4TZBFGQz
 +8yTnc4kmz75fS/jY2MMddj2gbICrsRhetPfHtXV/WVhJDP1H18GbtCFY2VVPe0a
 87VXE15/V8k1mE8McODmi3fipona8+/och3xWKE2rec1MKzKT0g6eXq8CrGCsyT7
