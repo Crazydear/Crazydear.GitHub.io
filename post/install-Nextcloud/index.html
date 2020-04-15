@@ -8,8 +8,9 @@ apt autoclean -y
 apt autoremove -y
 
 2.重启所有服务
+最后使用
 service nginx restart
-service mysql rest..." />
+service mysql..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://crazydear.github.io/media/css/bootstrap.min.css">
     
@@ -40,7 +41,7 @@ service mysql rest..." />
 <body>
     <div id=side>
         <div class="avatar-border">
-            <img src="https://crazydear.github.io/images/avatar.png?v=1586954368045" class="avatar">
+            <img src="https://crazydear.github.io/images/avatar.png?v=1586994053013" class="avatar">
         </div>
         <div class="sitename">Cradear&#39;s blog</div>
         <span class="describtion" data-text='["想我所想，做我想做"]'>&nbsp;</span>
@@ -316,6 +317,7 @@ apt autoclean -y
 apt autoremove -y
 </code></pre>
 <h2 id="2重启所有服务">2.重启所有服务</h2>
+<p>最后使用</p>
 <pre><code class="language-shell">service nginx restart
 service mysql restart
 service redis-server restart
@@ -472,17 +474,17 @@ zAqCkc3OyX3Pjsm1Wn+IpGtNtahR9EGC4caKAH5eZV9q//////////8CAQI=
 </code></pre>
 <h2 id="5安装php">5.安装PHP</h2>
 <p>安装相关软件</p>
-<pre><code>apt install php7.4-fpm php7.4-gd php7.4-mysql php7.4-sqlite3 php7.4-curl php7.4-xml php7.4-zip php7.4-intl php7.4-mbstring php7.4-json php7.4-bz2 php7.4-ldap php-apcu imagemagick php-imagick -y
+<pre><code class="language-shell">apt install php7.4-fpm php7.4-gd php7.4-mysql php7.4-sqlite3 php7.4-curl php7.4-xml php7.4-zip php7.4-intl php7.4-mbstring php7.4-json php7.4-bz2 php7.4-ldap php-apcu imagemagick php-imagick -y
 </code></pre>
 <p>备份配置文件</p>
-<pre><code>cp /etc/php/7.4/fpm/pool.d/www.conf /etc/php/7.4/fpm/pool.d/www.conf.bak
+<pre><code class="language-shell">cp /etc/php/7.4/fpm/pool.d/www.conf /etc/php/7.4/fpm/pool.d/www.conf.bak
 cp /etc/php/7.4/cli/php.ini /etc/php/7.4/cli/php.ini.bak
 cp /etc/php/7.4/fpm/php.ini /etc/php/7.4/fpm/php.ini.bak
 cp /etc/php/7.4/fpm/php-fpm.conf /etc/php/7.4/fpm/php-fpm.conf.bak
 cp /etc/ImageMagick-6/policy.xml /etc/ImageMagick-6/policy.xml.bak
 </code></pre>
 <p>对www.conf文件进行配置</p>
-<pre><code>sed -i &quot;s/;env\[HOSTNAME\] = /env[HOSTNAME] = /&quot; /etc/php/7.4/fpm/pool.d/www.conf
+<pre><code class="language-shell">sed -i &quot;s/;env\[HOSTNAME\] = /env[HOSTNAME] = /&quot; /etc/php/7.4/fpm/pool.d/www.conf
 sed -i &quot;s/;env\[TMP\] = /env[TMP] = /&quot; /etc/php/7.4/fpm/pool.d/www.conf
 sed -i &quot;s/;env\[TMPDIR\] = /env[TMPDIR] = /&quot; /etc/php/7.4/fpm/pool.d/www.conf
 sed -i &quot;s/;env\[TEMP\] = /env[TEMP] = /&quot; /etc/php/7.4/fpm/pool.d/www.conf
@@ -494,7 +496,7 @@ sed -i &quot;s/pm.max_spare_servers =.*/pm.max_spare_servers = 18/&quot; /etc/ph
 sed -i &quot;s/;pm.max_requests =.*/pm.max_requests = 1000/&quot; /etc/php/7.4/fpm/pool.d/www.conf
 </code></pre>
 <p>对cli/php.ini文件进行配置</p>
-<pre><code>sed -i &quot;s/output_buffering =.*/output_buffering = 'Off'/&quot; /etc/php/7.4/cli/php.ini
+<pre><code class="language-shell">sed -i &quot;s/output_buffering =.*/output_buffering = 'Off'/&quot; /etc/php/7.4/cli/php.ini
 sed -i &quot;s/max_execution_time =.*/max_execution_time = 3600/&quot; /etc/php/7.4/cli/php.ini
 sed -i &quot;s/max_input_time =.*/max_input_time = 3600/&quot; /etc/php/7.4/cli/php.ini
 sed -i &quot;s/post_max_size =.*/post_max_size = 10240M/&quot; /etc/php/7.4/cli/php.ini
@@ -502,7 +504,7 @@ sed -i &quot;s/upload_max_filesize =.*/upload_max_filesize = 10240M/&quot; /etc/
 sed -i &quot;s/;date.timezone.*/date.timezone = Asia\/\Shanghai/&quot; /etc/php/7.4/cli/php.ini
 </code></pre>
 <p>对fpm/php.ini文件进行配置</p>
-<pre><code>sed -i &quot;s/memory_limit = 128M/memory_limit = 512M/&quot; /etc/php/7.4/fpm/php.ini
+<pre><code class="language-shell">sed -i &quot;s/memory_limit = 128M/memory_limit = 512M/&quot; /etc/php/7.4/fpm/php.ini
 sed -i &quot;s/output_buffering =.*/output_buffering = 'Off'/&quot; /etc/php/7.4/fpm/php.ini
 sed -i &quot;s/max_execution_time =.*/max_execution_time = 3600/&quot; /etc/php/7.4/fpm/php.ini
 sed -i &quot;s/max_input_time =.*/max_input_time = 3600/&quot; /etc/php/7.4/fpm/php.ini
@@ -520,7 +522,7 @@ sed -i &quot;s/;opcache.save_comments=.*/opcache.save_comments=1/&quot; /etc/php
 sed -i &quot;$aapc.enable_cli=1&quot; /etc/php/7.4/mods-available/apcu.ini
 </code></pre>
 <h2 id="6安装-mariadb">6.安装 MariaDB</h2>
-<pre><code>apt update &amp;&amp; apt install mariadb-server -y
+<pre><code class="language-shell">apt update &amp;&amp; apt install mariadb-server -y
 /usr/sbin/service mysql stop
 mv /etc/mysql/my.cnf /etc/mysql/my.cnf.bak
 </code></pre>
@@ -599,7 +601,7 @@ quote-names
 key_buffer = 16M
 </code></pre>
 <p>创建数据库</p>
-<pre><code>/usr/sbin/service mysql restart &amp;&amp; mysql -uroot &lt;&lt;EOF
+<pre><code class="language-shell">/usr/sbin/service mysql restart &amp;&amp; mysql -uroot &lt;&lt;EOF
 CREATE DATABASE nextcloud CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 CREATE USER nextcloud@localhost identified by 'nextcloud';
 GRANT ALL PRIVILEGES on nextcloud.* to nextcloud@localhost;
@@ -608,7 +610,7 @@ EOF
 </code></pre>
 <blockquote>
 <p>说明</p>
-<pre><code>CREATE DATABASE 数据库名称 CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+<pre><code class="language-shell">CREATE DATABASE 数据库名称 CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 CREATE USER 用户名@localhost identified by '密码';
 GRANT ALL PRIVILEGES on 数据库.* to 用户名@localhost identified by '密码';
 </code></pre>
@@ -617,7 +619,7 @@ GRANT ALL PRIVILEGES on 数据库.* to 用户名@localhost identified by '密码
 <pre><code>mysql_secure_installation
 </code></pre>
 <h2 id="7安装redis-server">7.安装Redis-Server</h2>
-<pre><code>apt install redis-server php-redis -y
+<pre><code class="language-shell">apt install redis-server php-redis -y
 cp /etc/redis/redis.conf /etc/redis/redis.conf.bak
 sed -i &quot;s/port 6379/port 0/&quot; /etc/redis/redis.conf
 sed -i s/\#\ unixsocket/\unixsocket/g /etc/redis/redis.conf
@@ -627,9 +629,9 @@ usermod -a -G redis www-data
 cp /etc/sysctl.conf /etc/sysctl.conf.bak &amp;&amp; sed -i '$avm.overcommit_memory = 1' /etc/sysctl.conf
 </code></pre>
 <h2 id="8安装https证书">8.安装HTTPS证书</h2>
-<pre><code>apt install ssl-cert -y
+<pre><code class="language-shell">apt install ssl-cert -y
 </code></pre>
-<pre><code>mkdir -p /var/www/letsencrypt /etc/letsencrypt/rsa-certs /etc/letsencrypt/ecc-certs
+<pre><code class="language-shell">mkdir -p /var/www/letsencrypt /etc/letsencrypt/rsa-certs /etc/letsencrypt/ecc-certs
 chown -R www-data:www-data /var/www
 touch /etc/nginx/conf.d/letsencrypt.conf
 </code></pre>
@@ -647,12 +649,11 @@ root /var/www/letsencrypt;
 }
 </code></pre>
 <h2 id="9prepare-nginx-for-nextcloud-and-ssl">9.prepare NGINX for Nextcloud and SSL</h2>
-<pre><code>[ -f /etc/nginx/conf.d/default.conf ] &amp;&amp; mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf.bak
+<pre><code class="language-shell">[ -f /etc/nginx/conf.d/default.conf ] &amp;&amp; mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf.bak
 touch /etc/nginx/conf.d/default.conf
 </code></pre>
-<pre><code>#/etc/nginx/conf.d/nextcloud.conf
-
-server {
+<p>/etc/nginx/conf.d/nextcloud.conf</p>
+<pre><code>server {
 server_name YOUR.DEDYN.IO;
 listen 80 default_server;
 listen [::]:80 default_server;
@@ -727,23 +728,24 @@ expires 360d;
 }
 </code></pre>
 <h2 id="10下载安装nextcloud">10.下载安装Nextcloud</h2>
-<pre><code>wget https://download.nextcloud.com/server/releases/latest.tar.bz2
+<pre><code class="language-shell">wget https://download.nextcloud.com/server/releases/latest.tar.bz2
 tar -xjf latest.tar.bz2 -C /var/www
 chown -R www-data:www-data /var/www/
 rm -f latest.tar.bz2
 </code></pre>
 <p>通过Ｃron脚本使Nextcloud任务定期地在系统后台自动运行</p>
-<pre><code>(crontab -u www-data -l ; echo &quot;*/5 * * * * php -f /var/www/nextcloud/cron.php &gt; /dev/null 2&gt;&amp;1&quot;) | crontab -u www-data -
+<pre><code class="language-shell">(crontab -u www-data -l ; echo &quot;*/5 * * * * php -f /var/www/nextcloud/cron.php &gt; /dev/null 2&gt;&amp;1&quot;) | crontab -u www-data -
 </code></pre>
 <p>解决ImageMagick errors</p>
-<pre><code>sed -i &quot;s/rights=\&quot;none\&quot; pattern=\&quot;PS\&quot;/rights=\&quot;read|write\&quot; pattern=\&quot;PS\&quot;/&quot; /etc/ImageMagick-6/policy.xml
+<pre><code class="language-shell">sed -i &quot;s/rights=\&quot;none\&quot; pattern=\&quot;PS\&quot;/rights=\&quot;read|write\&quot; pattern=\&quot;PS\&quot;/&quot; /etc/ImageMagick-6/policy.xml
 sed -i &quot;s/rights=\&quot;none\&quot; pattern=\&quot;EPI\&quot;/rights=\&quot;read|write\&quot; pattern=\&quot;EPI\&quot;/&quot; /etc/ImageMagick-6/policy.xml
 sed -i &quot;s/rights=\&quot;none\&quot; pattern=\&quot;PDF\&quot;/rights=\&quot;read|write\&quot; pattern=\&quot;PDF\&quot;/&quot; /etc/ImageMagick-6/policy.xml
 sed -i &quot;s/rights=\&quot;none\&quot; pattern=\&quot;XPS\&quot;/rights=\&quot;read|write\&quot; pattern=\&quot;XPS\&quot;/&quot; /etc/ImageMagick-6/policy.xml
 ln -s /usr/local/bin/gs /usr/bin/gs
 </code></pre>
-<p>最后打开浏览器进行安装吧</p>
-<pre><code>cat /dev/null &gt; ~/.bash_history &amp;&amp; history -c &amp;&amp; history -w
+<p>步骤2重启所有服务<br>
+最后打开浏览器进行安装吧</p>
+<pre><code class="language-shell">cat /dev/null &gt; ~/.bash_history &amp;&amp; history -c &amp;&amp; history -w
 </code></pre>
 <p><a href="https://github.com/Crazydear/Techno-share/blob/master/project/nextcloud/install_new.sh">一键安装脚本</a></p>
 
@@ -954,6 +956,7 @@ apt autoclean -y
 apt autoremove -y
 </code></pre>
 <h2 id="2重启所有服务">2.重启所有服务</h2>
+<p>最后使用</p>
 <pre><code class="language-shell">service nginx restart
 service mysql restart
 service redis-server restart
@@ -1110,17 +1113,17 @@ zAqCkc3OyX3Pjsm1Wn+IpGtNtahR9EGC4caKAH5eZV9q//////////8CAQI=
 </code></pre>
 <h2 id="5安装php">5.安装PHP</h2>
 <p>安装相关软件</p>
-<pre><code>apt install php7.4-fpm php7.4-gd php7.4-mysql php7.4-sqlite3 php7.4-curl php7.4-xml php7.4-zip php7.4-intl php7.4-mbstring php7.4-json php7.4-bz2 php7.4-ldap php-apcu imagemagick php-imagick -y
+<pre><code class="language-shell">apt install php7.4-fpm php7.4-gd php7.4-mysql php7.4-sqlite3 php7.4-curl php7.4-xml php7.4-zip php7.4-intl php7.4-mbstring php7.4-json php7.4-bz2 php7.4-ldap php-apcu imagemagick php-imagick -y
 </code></pre>
 <p>备份配置文件</p>
-<pre><code>cp /etc/php/7.4/fpm/pool.d/www.conf /etc/php/7.4/fpm/pool.d/www.conf.bak
+<pre><code class="language-shell">cp /etc/php/7.4/fpm/pool.d/www.conf /etc/php/7.4/fpm/pool.d/www.conf.bak
 cp /etc/php/7.4/cli/php.ini /etc/php/7.4/cli/php.ini.bak
 cp /etc/php/7.4/fpm/php.ini /etc/php/7.4/fpm/php.ini.bak
 cp /etc/php/7.4/fpm/php-fpm.conf /etc/php/7.4/fpm/php-fpm.conf.bak
 cp /etc/ImageMagick-6/policy.xml /etc/ImageMagick-6/policy.xml.bak
 </code></pre>
 <p>对www.conf文件进行配置</p>
-<pre><code>sed -i &quot;s/;env\[HOSTNAME\] = /env[HOSTNAME] = /&quot; /etc/php/7.4/fpm/pool.d/www.conf
+<pre><code class="language-shell">sed -i &quot;s/;env\[HOSTNAME\] = /env[HOSTNAME] = /&quot; /etc/php/7.4/fpm/pool.d/www.conf
 sed -i &quot;s/;env\[TMP\] = /env[TMP] = /&quot; /etc/php/7.4/fpm/pool.d/www.conf
 sed -i &quot;s/;env\[TMPDIR\] = /env[TMPDIR] = /&quot; /etc/php/7.4/fpm/pool.d/www.conf
 sed -i &quot;s/;env\[TEMP\] = /env[TEMP] = /&quot; /etc/php/7.4/fpm/pool.d/www.conf
@@ -1132,7 +1135,7 @@ sed -i &quot;s/pm.max_spare_servers =.*/pm.max_spare_servers = 18/&quot; /etc/ph
 sed -i &quot;s/;pm.max_requests =.*/pm.max_requests = 1000/&quot; /etc/php/7.4/fpm/pool.d/www.conf
 </code></pre>
 <p>对cli/php.ini文件进行配置</p>
-<pre><code>sed -i &quot;s/output_buffering =.*/output_buffering = 'Off'/&quot; /etc/php/7.4/cli/php.ini
+<pre><code class="language-shell">sed -i &quot;s/output_buffering =.*/output_buffering = 'Off'/&quot; /etc/php/7.4/cli/php.ini
 sed -i &quot;s/max_execution_time =.*/max_execution_time = 3600/&quot; /etc/php/7.4/cli/php.ini
 sed -i &quot;s/max_input_time =.*/max_input_time = 3600/&quot; /etc/php/7.4/cli/php.ini
 sed -i &quot;s/post_max_size =.*/post_max_size = 10240M/&quot; /etc/php/7.4/cli/php.ini
@@ -1140,7 +1143,7 @@ sed -i &quot;s/upload_max_filesize =.*/upload_max_filesize = 10240M/&quot; /etc/
 sed -i &quot;s/;date.timezone.*/date.timezone = Asia\/\Shanghai/&quot; /etc/php/7.4/cli/php.ini
 </code></pre>
 <p>对fpm/php.ini文件进行配置</p>
-<pre><code>sed -i &quot;s/memory_limit = 128M/memory_limit = 512M/&quot; /etc/php/7.4/fpm/php.ini
+<pre><code class="language-shell">sed -i &quot;s/memory_limit = 128M/memory_limit = 512M/&quot; /etc/php/7.4/fpm/php.ini
 sed -i &quot;s/output_buffering =.*/output_buffering = 'Off'/&quot; /etc/php/7.4/fpm/php.ini
 sed -i &quot;s/max_execution_time =.*/max_execution_time = 3600/&quot; /etc/php/7.4/fpm/php.ini
 sed -i &quot;s/max_input_time =.*/max_input_time = 3600/&quot; /etc/php/7.4/fpm/php.ini
@@ -1158,7 +1161,7 @@ sed -i &quot;s/;opcache.save_comments=.*/opcache.save_comments=1/&quot; /etc/php
 sed -i &quot;$aapc.enable_cli=1&quot; /etc/php/7.4/mods-available/apcu.ini
 </code></pre>
 <h2 id="6安装-mariadb">6.安装 MariaDB</h2>
-<pre><code>apt update &amp;&amp; apt install mariadb-server -y
+<pre><code class="language-shell">apt update &amp;&amp; apt install mariadb-server -y
 /usr/sbin/service mysql stop
 mv /etc/mysql/my.cnf /etc/mysql/my.cnf.bak
 </code></pre>
@@ -1237,7 +1240,7 @@ quote-names
 key_buffer = 16M
 </code></pre>
 <p>创建数据库</p>
-<pre><code>/usr/sbin/service mysql restart &amp;&amp; mysql -uroot &lt;&lt;EOF
+<pre><code class="language-shell">/usr/sbin/service mysql restart &amp;&amp; mysql -uroot &lt;&lt;EOF
 CREATE DATABASE nextcloud CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 CREATE USER nextcloud@localhost identified by 'nextcloud';
 GRANT ALL PRIVILEGES on nextcloud.* to nextcloud@localhost;
@@ -1246,7 +1249,7 @@ EOF
 </code></pre>
 <blockquote>
 <p>说明</p>
-<pre><code>CREATE DATABASE 数据库名称 CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+<pre><code class="language-shell">CREATE DATABASE 数据库名称 CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 CREATE USER 用户名@localhost identified by '密码';
 GRANT ALL PRIVILEGES on 数据库.* to 用户名@localhost identified by '密码';
 </code></pre>
@@ -1255,7 +1258,7 @@ GRANT ALL PRIVILEGES on 数据库.* to 用户名@localhost identified by '密码
 <pre><code>mysql_secure_installation
 </code></pre>
 <h2 id="7安装redis-server">7.安装Redis-Server</h2>
-<pre><code>apt install redis-server php-redis -y
+<pre><code class="language-shell">apt install redis-server php-redis -y
 cp /etc/redis/redis.conf /etc/redis/redis.conf.bak
 sed -i &quot;s/port 6379/port 0/&quot; /etc/redis/redis.conf
 sed -i s/\#\ unixsocket/\unixsocket/g /etc/redis/redis.conf
@@ -1265,9 +1268,9 @@ usermod -a -G redis www-data
 cp /etc/sysctl.conf /etc/sysctl.conf.bak &amp;&amp; sed -i '$avm.overcommit_memory = 1' /etc/sysctl.conf
 </code></pre>
 <h2 id="8安装https证书">8.安装HTTPS证书</h2>
-<pre><code>apt install ssl-cert -y
+<pre><code class="language-shell">apt install ssl-cert -y
 </code></pre>
-<pre><code>mkdir -p /var/www/letsencrypt /etc/letsencrypt/rsa-certs /etc/letsencrypt/ecc-certs
+<pre><code class="language-shell">mkdir -p /var/www/letsencrypt /etc/letsencrypt/rsa-certs /etc/letsencrypt/ecc-certs
 chown -R www-data:www-data /var/www
 touch /etc/nginx/conf.d/letsencrypt.conf
 </code></pre>
@@ -1285,12 +1288,11 @@ root /var/www/letsencrypt;
 }
 </code></pre>
 <h2 id="9prepare-nginx-for-nextcloud-and-ssl">9.prepare NGINX for Nextcloud and SSL</h2>
-<pre><code>[ -f /etc/nginx/conf.d/default.conf ] &amp;&amp; mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf.bak
+<pre><code class="language-shell">[ -f /etc/nginx/conf.d/default.conf ] &amp;&amp; mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf.bak
 touch /etc/nginx/conf.d/default.conf
 </code></pre>
-<pre><code>#/etc/nginx/conf.d/nextcloud.conf
-
-server {
+<p>/etc/nginx/conf.d/nextcloud.conf</p>
+<pre><code>server {
 server_name YOUR.DEDYN.IO;
 listen 80 default_server;
 listen [::]:80 default_server;
@@ -1365,23 +1367,24 @@ expires 360d;
 }
 </code></pre>
 <h2 id="10下载安装nextcloud">10.下载安装Nextcloud</h2>
-<pre><code>wget https://download.nextcloud.com/server/releases/latest.tar.bz2
+<pre><code class="language-shell">wget https://download.nextcloud.com/server/releases/latest.tar.bz2
 tar -xjf latest.tar.bz2 -C /var/www
 chown -R www-data:www-data /var/www/
 rm -f latest.tar.bz2
 </code></pre>
 <p>通过Ｃron脚本使Nextcloud任务定期地在系统后台自动运行</p>
-<pre><code>(crontab -u www-data -l ; echo &quot;*/5 * * * * php -f /var/www/nextcloud/cron.php &gt; /dev/null 2&gt;&amp;1&quot;) | crontab -u www-data -
+<pre><code class="language-shell">(crontab -u www-data -l ; echo &quot;*/5 * * * * php -f /var/www/nextcloud/cron.php &gt; /dev/null 2&gt;&amp;1&quot;) | crontab -u www-data -
 </code></pre>
 <p>解决ImageMagick errors</p>
-<pre><code>sed -i &quot;s/rights=\&quot;none\&quot; pattern=\&quot;PS\&quot;/rights=\&quot;read|write\&quot; pattern=\&quot;PS\&quot;/&quot; /etc/ImageMagick-6/policy.xml
+<pre><code class="language-shell">sed -i &quot;s/rights=\&quot;none\&quot; pattern=\&quot;PS\&quot;/rights=\&quot;read|write\&quot; pattern=\&quot;PS\&quot;/&quot; /etc/ImageMagick-6/policy.xml
 sed -i &quot;s/rights=\&quot;none\&quot; pattern=\&quot;EPI\&quot;/rights=\&quot;read|write\&quot; pattern=\&quot;EPI\&quot;/&quot; /etc/ImageMagick-6/policy.xml
 sed -i &quot;s/rights=\&quot;none\&quot; pattern=\&quot;PDF\&quot;/rights=\&quot;read|write\&quot; pattern=\&quot;PDF\&quot;/&quot; /etc/ImageMagick-6/policy.xml
 sed -i &quot;s/rights=\&quot;none\&quot; pattern=\&quot;XPS\&quot;/rights=\&quot;read|write\&quot; pattern=\&quot;XPS\&quot;/&quot; /etc/ImageMagick-6/policy.xml
 ln -s /usr/local/bin/gs /usr/bin/gs
 </code></pre>
-<p>最后打开浏览器进行安装吧</p>
-<pre><code>cat /dev/null &gt; ~/.bash_history &amp;&amp; history -c &amp;&amp; history -w
+<p>步骤2重启所有服务<br>
+最后打开浏览器进行安装吧</p>
+<pre><code class="language-shell">cat /dev/null &gt; ~/.bash_history &amp;&amp; history -c &amp;&amp; history -w
 </code></pre>
 <p><a href="https://github.com/Crazydear/Techno-share/blob/master/project/nextcloud/install_new.sh">一键安装脚本</a></p>
 
