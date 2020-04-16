@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://crazydear.github.io</id>
     <title>Cradear&apos;s blog</title>
-    <updated>2020-04-16T01:40:02.918Z</updated>
+    <updated>2020-04-16T12:42:53.455Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://crazydear.github.io"/>
     <link rel="self" href="https://crazydear.github.io/atom.xml"/>
@@ -10,6 +10,193 @@
     <logo>https://crazydear.github.io/images/avatar.png</logo>
     <icon>https://crazydear.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Cradear&apos;s blog</rights>
+    <entry>
+        <title type="html"><![CDATA[Flask 和 requests 搭建一个简单的API服务]]></title>
+        <id>https://crazydear.github.io/post/flask-he-requests-da-jian-yi-ge-jian-dan-de-api-fu-wu/</id>
+        <link href="https://crazydear.github.io/post/flask-he-requests-da-jian-yi-ge-jian-dan-de-api-fu-wu/">
+        </link>
+        <updated>2020-04-16T12:29:06.000Z</updated>
+        <content type="html"><![CDATA[<p>路由器为腾达路由器，使用requests来进行数据的获取，使用flask来进行实现api的搭建</p>
+<p>requests我就不介绍了，这个大家都很熟悉了，这篇文章主要是来提供一个编写爬虫的思路以及flask怎么搭建一个简单的api服务。</p>
+<h1 id="1分析页面">1.分析页面</h1>
+<p>我使用的是腾达路由器，一般路由器的管理ip地址是192.168.0.1<br>
+<img src="https://crazydear.github.io/post-images/1587040310729.png" alt="" loading="lazy"><br>
+进入之后的页面长这样<br>
+按下F12进入开发者页面选择network选项可以看到下面的样子<br>
+<img src="https://crazydear.github.io/post-images/1587040335844.gif" alt="" loading="lazy"><br>
+通过分析会发现，路由器是采用轮询（按照一定的时间间隔来向服务器来获取数据）的方式来获取数据，从这里可以获取发送请求的类型==&gt;是GET类型，以及一些发送的参数<br>
+<code>http://192.168.0.1/goform/getStatus?random=0.46529553086082265&amp;modules=internetStatus%2CdeviceStatistics%2CsystemInfo%2CwanAdvCfg%2CwifiRelay%2CwifiBasicCfg%2CsysTime</code><br>
+在问号后面的有两个参数，分别是 random、modules，通过测试发现，random这个参数不影响数据的获取，所以将其删去，剩下的url部分变成了<br>
+<code>http://192.168.0.1/goform/getStatus?modules=XXX</code><br>
+,接下来确定XXX的值从上面的gif可以发现，这里modules的值是<br>
+<code>internetStatus,deviceStatistics,systemInfo,wanAdvCfg,wifiRelay,wifiBasicCfg,sysTime</code><br>
+,可以发现这里应该是从路由器获取的各个参数，我们换一个页面来看一下，是不是会有其他的参数<br>
+<img src="https://crazydear.github.io/post-images/1587040456330.gif" alt="" loading="lazy"><br>
+从上面的gif发现这里出现了其他参数，甚至连url的地址都变了。所以现在当务之急的找到一个确定的url来使用requests发送请求，获取数据。到这里，来分析network这里的内容会让工作变得困难，不如来分析一个js文件（因为前面发现所有的GET请求都是xhr类型的，也就是ajax来进行发送的数据）<br>
+<img src="https://crazydear.github.io/post-images/1587040475673.png" alt="" loading="lazy"><br>
+从这里发现了好几个js文件，打开后分析<br>
+<img src="https://crazydear.github.io/post-images/1587040509203.webp" alt="" loading="lazy"><br>
+<img src="https://crazydear.github.io/post-images/1587040529979.webp" alt="" loading="lazy"><br>
+分别在js文件里面获得了几乎所有的参数，而且发现了url的规律，gofrom/后面的路径不起作用，真正起作用的是modules的值，路由器根据值的不同来返回不同的数据。<br>
+把上面所有的modules的值收集起来，经过去重后获得了下面33个参数</p>
+<pre><code>wifiBasicCfg wifiAdvCfg wifiPower wifiWPS wifiGuest wifiBeamforming loginAuth wanAdvCfg lanCfg softWare wifiRelay sysTime remoteWeb isWifiClients systemInfo hasNewSoftVersion internetStatus deviceStatistics parentCtrlList parentAccessCtrl wanBasicCfg localhost onlineList macFilter guestList staticIPList IPTV portList ddns dmz upnp ping
+</code></pre>
+<p>到这里基本上分析的差不多了，来整理一下</p>
+<p>url是<code>http://192.168.0.1/goform/getStatus?modules=XXX</code>,其中getStatus这个路径可以是上面的js里面的任意一个getUrl的值，返回的值是由modules的值来确定的。</p>
+<h1 id="2发送请求上代码">2.发送请求（上代码）</h1>
+<pre><code class="language-python">import requests
+
+import json
+
+module = [
+    &quot;wifiBasicCfg&quot;,
+    &quot;wifiAdvCfg&quot;,
+    &quot;wifiPower&quot;,
+    &quot;wifiWPS&quot;,
+    &quot;wifiGuest&quot;,
+    &quot;wifiBeamforming&quot;,
+    &quot;loginAuth&quot;,
+    &quot;wanAdvCfg&quot;,
+    &quot;lanCfg&quot;,
+    &quot;softWare&quot;,
+    &quot;wifiRelay&quot;,
+    &quot;sysTime&quot;,
+    &quot;remoteWeb&quot;,
+    &quot;isWifiClients&quot;,
+    &quot;systemInfo&quot;,
+    &quot;hasNewSoftVersion&quot;,
+    &quot;internetStatus&quot;,
+    &quot;deviceStatistics&quot;,
+    &quot;parentCtrlList&quot;,
+    &quot;parentAccessCtrl&quot;,
+    &quot;wanBasicCfg&quot;,
+    &quot;localhost&quot;,
+    &quot;onlineList&quot;,
+    &quot;macFilter&quot;,
+    &quot;guestList&quot;,
+    &quot;staticIPList&quot;,
+    &quot;IPTV&quot;,
+    &quot;portList&quot;,
+    &quot;ddns&quot;,
+    &quot;dmz&quot;,
+    &quot;upnp&quot;,
+    &quot;ping&quot;
+]
+
+
+class Wifi:
+    &quot;&quot;&quot;获取连接本WiFi的其他设备信息&quot;&quot;&quot;
+
+    def __init__(self, IP='192.168.0.1'):
+        self.IP = IP
+        self.data = self.req()
+
+    def req(self):
+        &quot;&quot;&quot;获取WiFi数据&quot;&quot;&quot;
+        req = requests.session()
+        module_args = &quot;,&quot;.join(module)
+        url = f'http://{self.IP}/goform/getStatus?&amp;modules={module_args}'
+        try:
+            req = req.get(url).json()
+            '''with open(&quot;wifi.json&quot;, 'r') as data:
+                req = json.loads(data.read())'''
+            self.status = True
+        except:
+            self.status = False
+        return req
+
+    #用于为后面flask搭建api来提供接口
+    def get(self, config_name):
+        if self.status:
+            if config_name ==&quot;all&quot;:
+                data = self.data
+            else:
+                try:
+                    data = self.data[config_name]
+                except:
+                    data = f&quot;no_{config_name}_data&quot;
+        else:
+            data = f&quot;no_{config_name}_data&quot;
+        return data
+</code></pre>
+<h1 id="3使用flask来搭建一个简单的api接口便于在浏览器中发起请求">3.使用flask来搭建一个简单的api接口，便于在浏览器中发起请求</h1>
+<pre><code class="language-python">from flask import Flask,render_template,jsonify
+
+app = Flask(__name__)
+
+from wifi import Wifi
+
+#实例化一个对象
+w = Wifi()
+
+#@app.route(&quot;/api/&lt;config_name&gt;&quot;)定义了这个路径需要做的事情，这里的的路径是router/&lt;config_name&gt;
+#当浏览器像这个地址发送请求的时候，get函数就会被调用，同时&lt;config_name&gt;会作为一个参数，传入get函数
+#method规定了请求的类型
+@app.route(&quot;/api/&lt;config_name&gt;&quot;,methods=['POST','GET'])
+def get(config_name):
+    try:
+        #返回json格式的数据
+        return jsonify(w.get(config_name))
+    except:
+        return &quot;404&quot;
+if __name__ == &quot;__main__&quot;:
+    app.run(debug=True)
+</code></pre>
+<p>运行app.py文件，测试可以发现<br>
+<img src="https://crazydear.github.io/post-images/1587040709592.jpg" alt="" loading="lazy"><br>
+上面的方法是使用面向对象的方法来写的<br>
+下面是一个普通的函数式的写法</p>
+<pre><code class="language-python">import requests
+import json
+module = [
+...
+]
+IP = &quot;192.168.0.1&quot;
+status = &quot;&quot;
+data = &quot;&quot;
+def req():
+    &quot;&quot;&quot;获取WiFi数据&quot;&quot;&quot;
+    req = requests.session()
+    module_args = &quot;,&quot;.join(module)
+    url = f'http://{IP}/goform/getStatus?&amp;modules={module_args}'
+    try:
+        req = req.get(url).json()
+        status = True
+    except:
+        status = False
+    return req
+
+#用于为后面flask搭建api来提供接口
+def get(config_name):
+    if status:
+        if config_name ==&quot;all&quot;:
+            data = data
+        else:
+            try:
+                data = data[config_name]
+            except:
+                data = f&quot;no_{config_name}_data&quot;
+    else:
+        data = f&quot;no_{config_name}_data&quot;
+    return data
+#flask部分
+from flask import Flask,render_template,jsonify
+app = Flask(__name__)
+#@app.route(&quot;/api/&lt;config_name&gt;&quot;)定义了这个路径需要做的事情，这里的的路径是router/&lt;config_name&gt;
+#当浏览器像这个地址发送请求的时候，get函数就会被调用，同时&lt;config_name&gt;会作为一个参数，传入get函数
+#method规定了请求的类型
+@app.route(&quot;/api/&lt;config_name&gt;&quot;,methods=['POST','GET'])
+def get_(config_name):
+    try:
+        #返回json格式的数据
+        return jsonify(get(config_name))
+    except:
+        return &quot;404&quot;
+if __name__ == &quot;__main__&quot;:
+    app.run(debug=True)
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Nextcloud手工安装记录]]></title>
         <id>https://crazydear.github.io/post/install-Nextcloud/</id>
