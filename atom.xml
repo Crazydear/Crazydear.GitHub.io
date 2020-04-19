@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://crazydear.github.io</id>
     <title>Cradear&apos;s blog</title>
-    <updated>2020-04-16T12:42:53.455Z</updated>
+    <updated>2020-04-19T02:50:42.046Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://crazydear.github.io"/>
     <link rel="self" href="https://crazydear.github.io/atom.xml"/>
@@ -10,6 +10,167 @@
     <logo>https://crazydear.github.io/images/avatar.png</logo>
     <icon>https://crazydear.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Cradear&apos;s blog</rights>
+    <entry>
+        <title type="html"><![CDATA[Scrcpy - 开源免费在电脑显示手机画面并控制手机的工具 ]]></title>
+        <id>https://crazydear.github.io/post/Scrcpy/</id>
+        <link href="https://crazydear.github.io/post/Scrcpy/">
+        </link>
+        <updated>2020-04-19T02:45:21.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="scrcpy-一些实用的命令参数">Scrcpy 一些实用的命令参数：</h3>
+<p>这些参数可以多个自由组合使用，注意区分大小写。</p>
+<table>
+<thead>
+<tr>
+<th>Scrcpy 的命令参数</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>关闭手机屏幕</strong></td>
+<td><code>scrcpy -S</code></td>
+</tr>
+<tr>
+<td><strong>限制画面分辨率</strong></td>
+<td><code>scrcpy -m 1024</code> (比如限制为 1024)</td>
+</tr>
+<tr>
+<td><strong>修改视频码率</strong></td>
+<td><code>scrcpy -b 4M</code> (默认 8Mbps，改成 4Mbps)</td>
+</tr>
+<tr>
+<td><strong>裁剪画面</strong></td>
+<td><code>scrcpy -c 1224:1440:0:0</code> 表示分辨率 1224x1440 并且偏移坐标为 (0,0)</td>
+</tr>
+<tr>
+<td><strong>多设备切换</strong></td>
+<td><code>scrcpy -s 设备ID</code> (使用 <code>adb devices</code> 命令查看设备ID)</td>
+</tr>
+<tr>
+<td><strong>窗口置顶</strong></td>
+<td><code>scrcpy -T</code></td>
+</tr>
+<tr>
+<td><strong>显示触摸点击</strong></td>
+<td><code>scrcpy -t</code> 在演示或录制教程时，可在画面上对应显示出点击动作</td>
+</tr>
+<tr>
+<td><strong>全屏显示</strong></td>
+<td><code>scrcpy -f</code></td>
+</tr>
+<tr>
+<td><strong>文件传输默认路径</strong></td>
+<td><code>scrcpy --push-target /你的/目录</code> 将文件拖放到 scrcpy 可以传输文件，此命令指定默认保存目录</td>
+</tr>
+<tr>
+<td><strong>只读模式(仅显示不控制)</strong></td>
+<td><code>scrcpy -n</code></td>
+</tr>
+<tr>
+<td><strong>屏幕录像</strong></td>
+<td><code>scrcpy -r 视频文件名.mp4</code> 或 <code>.mkv</code></td>
+</tr>
+<tr>
+<td><strong>屏幕录像 (禁用电脑显示)</strong></td>
+<td><code>scrcpy -Nr 文件名.mkv</code></td>
+</tr>
+<tr>
+<td><strong>设置窗口标题</strong></td>
+<td><code>scrcpy --window-title '异次元好棒！'</code></td>
+</tr>
+<tr>
+<td><strong>同步传输声音</strong></td>
+<td>可借助 <a href="https://github.com/rom1v/usbaudio">USBaudio</a> 这个开源项目实现，但仅支持 <a href="https://www.iplaysoft.com/os/linux-platform">Linux</a> 系统</td>
+</tr>
+</tbody>
+</table>
+<h3 id="scrcpy-使用与快捷键">Scrcpy 使用与快捷键：</h3>
+<p>启动之后，你就可以在电脑桌面上看到 Scrcpy 的投屏窗口和手机画面了，你可以直接用鼠标进行操作，它同时也有很多键盘快捷键可以使用。</p>
+<figure data-type="image" tabindex="1"><img src="https://img.iplaysoft.com/wp-content/uploads/2019/scrcpy/scrcpy_android.jpg!0x0.webp" alt="scrcpy" loading="lazy"></figure>
+<table>
+<thead>
+<tr>
+<th>Scrcpy 快捷键列表</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>切换全屏模式</td>
+<td><code>Ctrl</code>+<code>F</code></td>
+</tr>
+<tr>
+<td>将窗口调整为1：1（完美像素）</td>
+<td><code>Ctrl</code>+<code>G</code></td>
+</tr>
+<tr>
+<td>调整窗口大小以删除黑色边框</td>
+<td><code>Ctrl</code>+<code>X</code> | 双击黑色背景</td>
+</tr>
+<tr>
+<td>设备 <code>HOME</code> 键</td>
+<td><code>Ctrl</code>+<code>H</code> | 鼠标中键</td>
+</tr>
+<tr>
+<td>设备 <code>BACK</code> 键</td>
+<td><code>Ctrl</code>+<code>B</code> | 鼠标右键</td>
+</tr>
+<tr>
+<td>设备 <code>任务管理</code> 键 (切换APP)</td>
+<td><code>Ctrl</code>+<code>S</code></td>
+</tr>
+<tr>
+<td>设备 <code>菜单</code> 键</td>
+<td><code>Ctrl</code>+<code>M</code></td>
+</tr>
+<tr>
+<td>设备<code>音量+</code>键</td>
+<td><code>Ctrl</code>+<code>↑</code></td>
+</tr>
+<tr>
+<td>设备<code>音量-</code>键</td>
+<td><code>Ctrl</code>+<code>↓</code></td>
+</tr>
+<tr>
+<td>设备<code>电源键</code></td>
+<td><code>Ctrl</code>+<code>P</code></td>
+</tr>
+<tr>
+<td>点亮手机屏幕</td>
+<td>鼠标右键</td>
+</tr>
+<tr>
+<td>复制内容到设备</td>
+<td><code>Ctrl</code>+<code>V</code></td>
+</tr>
+<tr>
+<td>启用/禁用 FPS 计数器（stdout）</td>
+<td><code>Ctrl</code>+<code>i</code></td>
+</tr>
+<tr>
+<td>安装APK</td>
+<td>将 apk 文件拖入投屏</td>
+</tr>
+<tr>
+<td>传输文件到设备</td>
+<td>将文件拖入投屏（非apk）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="使用-wifi-无线连接">使用 WIFi 无线连接：</h3>
+<p>Scrcpy 使用 adb 与 Android 设备通讯，而 adb 本身是支持无线连接的。因此除了 USB 数据线之外，我们也能无线使用。前提是需要保证手机和电脑处于同一<a href="https://www.iplaysoft.com/tag/%E5%B1%80%E5%9F%9F%E7%BD%91">局域网</a> (连接到相同的 <a href="https://www.iplaysoft.com/tag/wifi">WiFi</a> 路由器)，步骤如下：</p>
+<ol>
+<li>查询设备当前的 IP 地址 (设置 →关于手机→状态)</li>
+<li>启用 adb TCP/IP 连接，执行命令：<code>adb tcpip 5555</code>，其中 5555 为端口号</li>
+<li>拔掉你的数据线</li>
+<li>通过 WiFi 进行连接，执行命令：<code>adb connect 设备IP地址:5555</code></li>
+<li>重新启动 scrcpy 即可</li>
+<li>如果 WiFi 较慢，可以调整码率：<code>scrcpy -b 3M -m 800</code>，意思是限制 3 Mbps，画面分辨率限制 800，数值可以随意调整。</li>
+<li>如需切换回 USB 模式，执行：<code>adb usb</code></li>
+</ol>
+<p><a href="https://github.com/Genymobile/scrcpy">项目地址</a></p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Flask 和 requests 搭建一个简单的API服务]]></title>
         <id>https://crazydear.github.io/post/flask-he-requests-da-jian-yi-ge-jian-dan-de-api-fu-wu/</id>
