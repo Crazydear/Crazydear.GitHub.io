@@ -1,27 +1,14 @@
 <head>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Scrcpy 一些实用的命令参数：
-这些参数可以多个自由组合使用，注意区分大小写。
+    <meta name="description" content="实验环境
+操作系统： Ubuntu 20.04 64位
+软件：
+Nginx	|	Aria2	|	AriaNg	|	File browser
+安装过程
 
-
-
-Scrcpy 的命令参数
-
-
-
-
-
-关闭手机屏幕
-scrcpy -S
-
-
-限制画面分辨率
-scrcpy -m 1024 (比如限制为 1024)
-
-
-..." />
-    <meta name="keywords" content="手机,远控" />
+先说最简单的方法，就是利用大佬已经做好的脚本，一键执行就行，大佬的项目在此链接，但是也并..." />
+    <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://crazydear.github.io/media/css/bootstrap.min.css">
     
     <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/default.min.css">
@@ -313,196 +300,217 @@ scrcpy -m 1024 (比如限制为 1024)
         <div class="postshow">
             
             <div class="postdetailimg" style="width:100%;overflow: hidden;display: none">
-                <img src="https://acg.xydwz.cn/gqapi/gqapi.php" class="postimage" style="cursor:auto">
+                <img src="/media/images/postdefault.png" class="postimage">
             </div>
             <div class="postinfo">
-                <div class="postdate"><i class="fa fa-calendar"></i>2020-04-19</div>
-                <div class="poststatus postdate"><i class="fa fa-clock-o"></i> 3 min read</div>
+                <div class="postdate"><i class="fa fa-calendar"></i>2020-08-12</div>
+                <div class="poststatus postdate"><i class="fa fa-clock-o"></i> 6 min read</div>
                 <div class="posttag">
-                    
-                    <a href="https://crazydear.github.io/tag/A9eyJe6OC/" class="postlink">
-                        <i class="fa fa-tag"></i> 手机
-                    </a>
-                    
-                    <a href="https://crazydear.github.io/tag/5Ak_qctM3v/" class="postlink">
-                        <i class="fa fa-tag"></i> 远控
-                    </a>
                     
                 </div>
             </div>
             
             <div id="texttitle" style="text-align: center">
-                <h2>Scrcpy - 开源免费在电脑显示手机画面并控制手机的工具 </h2>
+                <h2>CCAA-打造离线下载服务器</h2>
             </div>
             <div class="text ">
-                <h3 id="scrcpy-一些实用的命令参数">Scrcpy 一些实用的命令参数：</h3>
-<p>这些参数可以多个自由组合使用，注意区分大小写。</p>
+                <h2 id="实验环境">实验环境</h2>
+<p>操作系统： Ubuntu 20.04 64位</p>
+<p>软件：</p>
+<p>Nginx	|	<a href="https://github.com/q3aql/aria2-static-builds/releases">Aria2</a>	|	<a href="https://github.com/helloxz/ccaa/archive/master.zip">AriaNg</a>	|	<a href="https://github.com/filebrowser/filebrowser/releases">File browser</a></p>
+<h2 id="安装过程">安装过程</h2>
+<blockquote>
+<p>先说最简单的方法，就是利用大佬已经做好的脚本，一键执行就行，大佬的项目在此<a href="https://github.com/helloxz/ccaa/">链接</a>，但是也并没有对所有的系统进行适配，有些系统环境还是不能部署成功。</p>
+<p>既然是学习，就不如自己一步步地来部署CCAA这个项目，一来可以熟悉Linux命令，二来学习一些错误的处理。</p>
+<p>本教程依然是基于大佬的项目，我只是把脚本自动执行的内容一步步分解出来。</p>
+</blockquote>
+<h3 id="1安装前的准备">1.安装前的准备</h3>
+<p>创建临时目录</p>
+<pre><code class="language-bash">mkdir ./ccaa_temp
+</code></pre>
+<p>创建用户和用户组</p>
+<pre><code class="language-bash">groupadd ccaa
+useradd -M -g ccaa ccaa -s /sbin/nologin
+</code></pre>
+<h3 id="2下载软件">2.下载软件</h3>
+<p>进入临时目录</p>
+<pre><code>cd ./ccaa_tmp
+</code></pre>
+<p>下载本教程软件</p>
+<pre><code class="language-bash">wget https://github.com/q3aql/aria2-static-builds/releases/download/v1.35.0/aria2-1.35.0-linux-gnu-64bit-build1.deb
+wget https://github.com/filebrowser/filebrowser/releases/download/v2.6.2/linux-arm64-filebrowser.tar.gz
+wget https://github.com/helloxz/ccaa/archive/master.zip
+</code></pre>
+<blockquote>
+<p>可以根据自己的情况选择适合自己的安装包，当然也可以自己下载源码编译安装</p>
+</blockquote>
 <table>
 <thead>
 <tr>
-<th>Scrcpy 的命令参数</th>
-<th></th>
+<th>Aria2</th>
+<th>Filebrowser</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>关闭手机屏幕</strong></td>
-<td><code>scrcpy -S</code></td>
+<td>https://github.com/q3aql/aria2-static-builds/releases</td>
+<td>https://github.com/filebrowser/filebrowser/releases</td>
 </tr>
 <tr>
-<td><strong>限制画面分辨率</strong></td>
-<td><code>scrcpy -m 1024</code> (比如限制为 1024)</td>
-</tr>
-<tr>
-<td><strong>修改视频码率</strong></td>
-<td><code>scrcpy -b 4M</code> (默认 8Mbps，改成 4Mbps)</td>
-</tr>
-<tr>
-<td><strong>裁剪画面</strong></td>
-<td><code>scrcpy -c 1224:1440:0:0</code> 表示分辨率 1224x1440 并且偏移坐标为 (0,0)</td>
-</tr>
-<tr>
-<td><strong>多设备切换</strong></td>
-<td><code>scrcpy -s 设备ID</code> (使用 <code>adb devices</code> 命令查看设备ID)</td>
-</tr>
-<tr>
-<td><strong>窗口置顶</strong></td>
-<td><code>scrcpy -T</code></td>
-</tr>
-<tr>
-<td><strong>显示触摸点击</strong></td>
-<td><code>scrcpy -t</code> 在演示或录制教程时，可在画面上对应显示出点击动作</td>
-</tr>
-<tr>
-<td><strong>全屏显示</strong></td>
-<td><code>scrcpy -f</code></td>
-</tr>
-<tr>
-<td><strong>文件传输默认路径</strong></td>
-<td><code>scrcpy --push-target /你的/目录</code> 将文件拖放到 scrcpy 可以传输文件，此命令指定默认保存目录</td>
-</tr>
-<tr>
-<td><strong>只读模式(仅显示不控制)</strong></td>
-<td><code>scrcpy -n</code></td>
-</tr>
-<tr>
-<td><strong>屏幕录像</strong></td>
-<td><code>scrcpy -r 视频文件名.mp4</code> 或 <code>.mkv</code></td>
-</tr>
-<tr>
-<td><strong>屏幕录像 (禁用电脑显示)</strong></td>
-<td><code>scrcpy -Nr 文件名.mkv</code></td>
-</tr>
-<tr>
-<td><strong>设置窗口标题</strong></td>
-<td><code>scrcpy --window-title '异次元好棒！'</code></td>
-</tr>
-<tr>
-<td><strong>同步传输声音</strong></td>
-<td>可借助 <a href="https://github.com/rom1v/usbaudio">USBaudio</a> 这个开源项目实现，但仅支持 <a href="https://www.iplaysoft.com/os/linux-platform">Linux</a> 系统</td>
+<td><img src="https://crazydear.github.io/post-images/1597223244358.png" alt="" loading="lazy"></td>
+<td></td>
 </tr>
 </tbody>
 </table>
-<h3 id="scrcpy-使用与快捷键">Scrcpy 使用与快捷键：</h3>
-<p>启动之后，你就可以在电脑桌面上看到 Scrcpy 的投屏窗口和手机画面了，你可以直接用鼠标进行操作，它同时也有很多键盘快捷键可以使用。</p>
-<figure data-type="image" tabindex="1"><img src="https://img.iplaysoft.com/wp-content/uploads/2019/scrcpy/scrcpy_android.jpg!0x0.webp" alt="scrcpy" loading="lazy"></figure>
-<table>
-<thead>
-<tr>
-<th>Scrcpy 快捷键列表</th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>切换全屏模式</td>
-<td><code>Ctrl</code>+<code>F</code></td>
-</tr>
-<tr>
-<td>将窗口调整为1：1（完美像素）</td>
-<td><code>Ctrl</code>+<code>G</code></td>
-</tr>
-<tr>
-<td>调整窗口大小以删除黑色边框</td>
-<td><code>Ctrl</code>+<code>X</code> | 双击黑色背景</td>
-</tr>
-<tr>
-<td>设备 <code>HOME</code> 键</td>
-<td><code>Ctrl</code>+<code>H</code> | 鼠标中键</td>
-</tr>
-<tr>
-<td>设备 <code>BACK</code> 键</td>
-<td><code>Ctrl</code>+<code>B</code> | 鼠标右键</td>
-</tr>
-<tr>
-<td>设备 <code>任务管理</code> 键 (切换APP)</td>
-<td><code>Ctrl</code>+<code>S</code></td>
-</tr>
-<tr>
-<td>设备 <code>菜单</code> 键</td>
-<td><code>Ctrl</code>+<code>M</code></td>
-</tr>
-<tr>
-<td>设备<code>音量+</code>键</td>
-<td><code>Ctrl</code>+<code>↑</code></td>
-</tr>
-<tr>
-<td>设备<code>音量-</code>键</td>
-<td><code>Ctrl</code>+<code>↓</code></td>
-</tr>
-<tr>
-<td>设备<code>电源键</code></td>
-<td><code>Ctrl</code>+<code>P</code></td>
-</tr>
-<tr>
-<td>点亮手机屏幕</td>
-<td>鼠标右键</td>
-</tr>
-<tr>
-<td>复制内容到设备</td>
-<td><code>Ctrl</code>+<code>V</code></td>
-</tr>
-<tr>
-<td>启用/禁用 FPS 计数器（stdout）</td>
-<td><code>Ctrl</code>+<code>i</code></td>
-</tr>
-<tr>
-<td>安装APK</td>
-<td>将 apk 文件拖入投屏</td>
-</tr>
-<tr>
-<td>传输文件到设备</td>
-<td>将文件拖入投屏（非apk）</td>
-</tr>
-</tbody>
-</table>
-<h3 id="使用-wifi-无线连接">使用 WIFi 无线连接：</h3>
-<p>Scrcpy 使用 adb 与 Android 设备通讯，而 adb 本身是支持无线连接的。因此除了 USB 数据线之外，我们也能无线使用。前提是需要保证手机和电脑处于同一<a href="https://www.iplaysoft.com/tag/%E5%B1%80%E5%9F%9F%E7%BD%91">局域网</a> (连接到相同的 <a href="https://www.iplaysoft.com/tag/wifi">WiFi</a> 路由器)，步骤如下：</p>
-<ol>
-<li>查询设备当前的 IP 地址 (设置 →关于手机→状态)</li>
-<li>启用 adb TCP/IP 连接，执行命令：<code>adb tcpip 5555</code>，其中 5555 为端口号</li>
-<li>拔掉你的数据线</li>
-<li>通过 WiFi 进行连接，执行命令：<code>adb connect 设备IP地址:5555</code></li>
-<li>重新启动 scrcpy 即可</li>
-<li>如果 WiFi 较慢，可以调整码率：<code>scrcpy -b 3M -m 800</code>，意思是限制 3 Mbps，画面分辨率限制 800，数值可以随意调整。</li>
-<li>如需切换回 USB 模式，执行：<code>adb usb</code></li>
-</ol>
-<p><a href="https://github.com/Genymobile/scrcpy">项目地址</a></p>
+<h3 id="3安装软件">3.安装软件</h3>
+<h4 id="31-安装aria2">3.1 安装aria2</h4>
+<pre><code class="language-bash">dpkg -i aria2-1.35.0-linux-gnu-64bit-build1.deb
+</code></pre>
+<blockquote>
+<p>出现下面的错误是因为下载的版本与系统有关，目前CPU是ARM64，然而我们下载的是AMD64位的安装包，所以选择适合我们的安装包 <code>wget https://github.com/q3aql/aria2-static-builds/releases/download/v1.35.0/aria2-1.35.0-linux-gnu-arm-rbpi-build1.deb</code>，然后再运行 <code>dpkg -i aria2-1.35.0-linux-gnu-arm-rbpi-build1.deb</code>，安装成功。</p>
+<figure data-type="image" tabindex="1"><img src="https://crazydear.github.io/post-images/1597223270466.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="2"><img src="https://crazydear.github.io/post-images/1597223286448.png" alt="" loading="lazy"></figure>
+</blockquote>
+<h4 id="32-安装filebrowser">3.2 安装Filebrowser</h4>
+<pre><code class="language-bash">tar -zxvf linux-arm64-filebrowser.tar.gz	# 解压
+mv filebrowser /usr/sbin					# 移动位置
+</code></pre>
+<h4 id="33-安装nginx">3.3 安装Nginx</h4>
+<pre><code class="language-bash">apt-get install -y nginx
+systemctl enable nginx		# 开机启动
+</code></pre>
+<h4 id="34-安装ariang">3.4 安装AriaNG</h4>
+<pre><code class="language-bash">unzip master.zip	# 解压
+mv ccaa-master/ccaa_dir/AriaNg/* /var/www/html/
+</code></pre>
+<h3 id="4-配置软件">4. 配置软件</h3>
+<p>将Aria2和Filebrowser配置文件移到<code>/etc/ccaa</code></p>
+<pre><code class="language-bash"> mkdir /etc/ccaa
+ mv ccaa-master/ccaa_dir/aria2.* /etc/ccaa/
+ mv ccaa-master/ccaa_dir/config.json /etc/ccaa/
+ touch /etc/ccaa/filebrowser.db
+</code></pre>
+<p>手动配置</p>
+<pre><code class="language-bash">osip=$(curl -4s https://api.ip.sb/ip)
+mkdir /var/www/data		# 下载目录
+sed -i &quot;s%dir=%dir=/var/www/data%g&quot; /etc/ccaa/aria2.conf
+sed -i &quot;s/rpc-secret=/rpc-secret=123456/g&quot; /etc/ccaa/aria2.conf
+sed -i &quot;s%ccaaDown%/var/www/data%g&quot; /etc/ccaa/config.json	#替换filebrowser读取路径
+sed -i &quot;s/server_ip/${osip}/g&quot; /var/www/html/index.html	#替换AriaNg服务器链接
+</code></pre>
+<h3 id="5启动服务">5.启动服务</h3>
+<pre><code class="language-bash">nohup sudo -u ccaa aria2c --conf-path=/etc/ccaa/aria2.conf &gt; /var/log/aria2.log 2&gt;&amp;1 &amp;	#启动Aria2
+nohup sudo -u ccaa filebrowser -c /etc/ccaa/config.json &gt; /var/log/fbrun.log 2&gt;&amp;1 &amp;		#运行filebrowser
+service nginx start
+</code></pre>
+<p>重置权限</p>
+<pre><code class="language-bash">chown -R ccaa:ccaa /etc/ccaa/	
+chown -R ccaa:ccaa /var/www/data
+</code></pre>
+<p>到这里，基本配置已经完成，可以直接访问IP或者域名使用</p>
+<figure data-type="image" tabindex="3"><img src="https://crazydear.github.io/post-images/1597223317357.png" alt="" loading="lazy"></figure>
+<h3 id="6-进阶教程">6. 进阶教程</h3>
+<pre><code class="language-bash">cat &lt;&lt;EOF &gt;/usr/sbin/ccaa
+#!/bin/bash
+#####		CCAA管理脚本			#####
+#####		Author:xiaoz.me			#####
+#####		Update:2020-02-27		#####
 
-            </div>
-            
-            <div class="prev-post">
-                上一篇
-                <a href="https://crazydear.github.io/post/da-zao-chi-xian-xia-zai-fu-wu-qi/">
-                    CCAA-打造离线下载服务器
-                </a>
+#导入环境变量
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/bin:/sbin
+export PATH
+
+aria2pid=\$(pgrep 'aria2c')
+filebrowser_pid=\$(pgrep 'filebrowser')
+
+case \$1 in
+	'start')
+		nohup sudo -u ccaa aria2c --conf-path=/etc/ccaa/aria2.conf &gt; /var/log/aria2.log 2&gt;&amp;1 &amp;
+		nohup sudo -u ccaa filebrowser -c /etc/ccaa/config.json &gt; /var/log/fbrun.log 2&gt;&amp;1 &amp;
+		exit
+	;;
+	'stop')
+		kill -9 \${aria2pid}
+		kill -9 \${filebrowser_pid}
+	;;
+	'restart')
+		kill -9 \${aria2pid}
+		kill -9 \${filebrowser_pid}
+		nohup sudo -u ccaa aria2c --conf-path=/etc/ccaa/aria2.conf &gt; /var/log/aria2.log 2&gt;&amp;1 &amp;
+		nohup sudo -u ccaa filebrowser -c /etc/ccaa/config.json &gt; /var/log/fbrun.log 2&gt;&amp;1 &amp;
+		exit;
+	;;
+	'status')
+		if [ &quot;\$aria2pid&quot; == &quot;&quot; ]
+			then
+				echo &quot;Not running!&quot;
+			else
+				echo '-----------------------------------------------'
+				echo &quot;Aria2 is running,pid is \${aria2pid}.&quot;
+				echo &quot;Filebrowser is running,pid is \${filebrowser_pid}.&quot;
+				echo '-----------------------------------------------'
+		fi
+	;;
+	*)
+		echo '参数错误！'
+		exit
+	;;
+esac
+EOF
+
+chmod +x /usr/sbin/ccaa		# 增加执行权限
+</code></pre>
+<h3 id="常用命令">常用命令</h3>
+<ul>
+<li>ccaa:进入CCAA操作界面</li>
+<li>ccaa status:查看CCAA运行状态</li>
+<li>ccaa stop:停止CCAA</li>
+<li>ccaa start:启动CCAA</li>
+<li>ccaa restart:重启CCAA</li>
+</ul>
+<p>开放过多端口，不容易管理，也容易发生恶意入侵，所以通过nginx使用不同的域名反代到80端口。</p>
+<p>在nginx的配置文件里加入以下代码，同时将 域名DNS解析添加 <code>*.aria.hearme.cn</code>到自己的服务器</p>
+<pre><code class="language-nginx"># ariaRPC
+server {
+    listen 80;
+    server_name rpc.aria.hearme.cn;
+    client_max_body_size 1024m;
+    location / {
+        proxy_set_header HOST $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass http://127.0.0.1:6800/;
+    }  
+}
+
+# Filebrowser
+server {
+    listen 80;
+    server_name fb.aria.hearme.cn;
+    client_max_body_size 1024m;
+    location / {
+        proxy_set_header HOST $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass http://127.0.0.1:6081/;
+    }  
+}
+</code></pre>
+<figure data-type="image" tabindex="4"><img src="https://crazydear.github.io/post-images/1597223349185.png" alt="" loading="lazy"></figure>
+<p>对应的主页上的链接也需要修改。</p>
+<p>最后访问网站，修改下面两个地方即可大功告成。</p>
+<figure data-type="image" tabindex="5"><img src="https://crazydear.github.io/post-images/1597223374564.png" alt="" loading="lazy"></figure>
+<p>CCAA的帮助文档可查看[这里](</p>
+
             </div>
             
             
             <div class="next-post">
                 下一篇
-                <a href="https://crazydear.github.io/post/flask-he-requests-da-jian-yi-ge-jian-dan-de-api-fu-wu/">
-                    Flask 和 requests 搭建一个简单的API服务
+                <a href="https://crazydear.github.io/post/Scrcpy/">
+                    Scrcpy - 开源免费在电脑显示手机画面并控制手机的工具 
                 </a>
             </div>
             
@@ -576,11 +584,23 @@ scrcpy -m 1024 (比如限制为 1024)
                     <ul class="markdownIt-TOC">
 <li>
 <ul>
-<li>
+<li><a href="#%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83">实验环境</a></li>
+<li><a href="#%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B">安装过程</a>
 <ul>
-<li><a href="#scrcpy-%E4%B8%80%E4%BA%9B%E5%AE%9E%E7%94%A8%E7%9A%84%E5%91%BD%E4%BB%A4%E5%8F%82%E6%95%B0">Scrcpy 一些实用的命令参数：</a></li>
-<li><a href="#scrcpy-%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%BF%AB%E6%8D%B7%E9%94%AE">Scrcpy 使用与快捷键：</a></li>
-<li><a href="#%E4%BD%BF%E7%94%A8-wifi-%E6%97%A0%E7%BA%BF%E8%BF%9E%E6%8E%A5">使用 WIFi 无线连接：</a></li>
+<li><a href="#1%E5%AE%89%E8%A3%85%E5%89%8D%E7%9A%84%E5%87%86%E5%A4%87">1.安装前的准备</a></li>
+<li><a href="#2%E4%B8%8B%E8%BD%BD%E8%BD%AF%E4%BB%B6">2.下载软件</a></li>
+<li><a href="#3%E5%AE%89%E8%A3%85%E8%BD%AF%E4%BB%B6">3.安装软件</a>
+<ul>
+<li><a href="#31-%E5%AE%89%E8%A3%85aria2">3.1 安装aria2</a></li>
+<li><a href="#32-%E5%AE%89%E8%A3%85filebrowser">3.2 安装Filebrowser</a></li>
+<li><a href="#33-%E5%AE%89%E8%A3%85nginx">3.3 安装Nginx</a></li>
+<li><a href="#34-%E5%AE%89%E8%A3%85ariang">3.4 安装AriaNG</a></li>
+</ul>
+</li>
+<li><a href="#4-%E9%85%8D%E7%BD%AE%E8%BD%AF%E4%BB%B6">4. 配置软件</a></li>
+<li><a href="#5%E5%90%AF%E5%8A%A8%E6%9C%8D%E5%8A%A1">5.启动服务</a></li>
+<li><a href="#6-%E8%BF%9B%E9%98%B6%E6%95%99%E7%A8%8B">6. 进阶教程</a></li>
+<li><a href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4">常用命令</a></li>
 </ul>
 </li>
 </ul>
@@ -687,196 +707,217 @@ scrcpy -m 1024 (比如限制为 1024)
         <div class="postshow">
             
             <div class="postdetailimg" style="width:100%;overflow: hidden;display: none">
-                <img src="https://acg.xydwz.cn/gqapi/gqapi.php" class="postimage" style="cursor:auto">
+                <img src="/media/images/postdefault.png" class="postimage">
             </div>
             <div class="postinfo">
-                <div class="postdate"><i class="fa fa-calendar"></i>2020-04-19</div>
-                <div class="poststatus postdate"><i class="fa fa-clock-o"></i> 3 min read</div>
+                <div class="postdate"><i class="fa fa-calendar"></i>2020-08-12</div>
+                <div class="poststatus postdate"><i class="fa fa-clock-o"></i> 6 min read</div>
                 <div class="posttag">
-                    
-                    <a href="https://crazydear.github.io/tag/A9eyJe6OC/" class="postlink">
-                        <i class="fa fa-tag"></i> 手机
-                    </a>
-                    
-                    <a href="https://crazydear.github.io/tag/5Ak_qctM3v/" class="postlink">
-                        <i class="fa fa-tag"></i> 远控
-                    </a>
                     
                 </div>
             </div>
             
             <div id="texttitle" style="text-align: center">
-                <h2>Scrcpy - 开源免费在电脑显示手机画面并控制手机的工具 </h2>
+                <h2>CCAA-打造离线下载服务器</h2>
             </div>
             <div class="text ">
-                <h3 id="scrcpy-一些实用的命令参数">Scrcpy 一些实用的命令参数：</h3>
-<p>这些参数可以多个自由组合使用，注意区分大小写。</p>
+                <h2 id="实验环境">实验环境</h2>
+<p>操作系统： Ubuntu 20.04 64位</p>
+<p>软件：</p>
+<p>Nginx	|	<a href="https://github.com/q3aql/aria2-static-builds/releases">Aria2</a>	|	<a href="https://github.com/helloxz/ccaa/archive/master.zip">AriaNg</a>	|	<a href="https://github.com/filebrowser/filebrowser/releases">File browser</a></p>
+<h2 id="安装过程">安装过程</h2>
+<blockquote>
+<p>先说最简单的方法，就是利用大佬已经做好的脚本，一键执行就行，大佬的项目在此<a href="https://github.com/helloxz/ccaa/">链接</a>，但是也并没有对所有的系统进行适配，有些系统环境还是不能部署成功。</p>
+<p>既然是学习，就不如自己一步步地来部署CCAA这个项目，一来可以熟悉Linux命令，二来学习一些错误的处理。</p>
+<p>本教程依然是基于大佬的项目，我只是把脚本自动执行的内容一步步分解出来。</p>
+</blockquote>
+<h3 id="1安装前的准备">1.安装前的准备</h3>
+<p>创建临时目录</p>
+<pre><code class="language-bash">mkdir ./ccaa_temp
+</code></pre>
+<p>创建用户和用户组</p>
+<pre><code class="language-bash">groupadd ccaa
+useradd -M -g ccaa ccaa -s /sbin/nologin
+</code></pre>
+<h3 id="2下载软件">2.下载软件</h3>
+<p>进入临时目录</p>
+<pre><code>cd ./ccaa_tmp
+</code></pre>
+<p>下载本教程软件</p>
+<pre><code class="language-bash">wget https://github.com/q3aql/aria2-static-builds/releases/download/v1.35.0/aria2-1.35.0-linux-gnu-64bit-build1.deb
+wget https://github.com/filebrowser/filebrowser/releases/download/v2.6.2/linux-arm64-filebrowser.tar.gz
+wget https://github.com/helloxz/ccaa/archive/master.zip
+</code></pre>
+<blockquote>
+<p>可以根据自己的情况选择适合自己的安装包，当然也可以自己下载源码编译安装</p>
+</blockquote>
 <table>
 <thead>
 <tr>
-<th>Scrcpy 的命令参数</th>
-<th></th>
+<th>Aria2</th>
+<th>Filebrowser</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>关闭手机屏幕</strong></td>
-<td><code>scrcpy -S</code></td>
+<td>https://github.com/q3aql/aria2-static-builds/releases</td>
+<td>https://github.com/filebrowser/filebrowser/releases</td>
 </tr>
 <tr>
-<td><strong>限制画面分辨率</strong></td>
-<td><code>scrcpy -m 1024</code> (比如限制为 1024)</td>
-</tr>
-<tr>
-<td><strong>修改视频码率</strong></td>
-<td><code>scrcpy -b 4M</code> (默认 8Mbps，改成 4Mbps)</td>
-</tr>
-<tr>
-<td><strong>裁剪画面</strong></td>
-<td><code>scrcpy -c 1224:1440:0:0</code> 表示分辨率 1224x1440 并且偏移坐标为 (0,0)</td>
-</tr>
-<tr>
-<td><strong>多设备切换</strong></td>
-<td><code>scrcpy -s 设备ID</code> (使用 <code>adb devices</code> 命令查看设备ID)</td>
-</tr>
-<tr>
-<td><strong>窗口置顶</strong></td>
-<td><code>scrcpy -T</code></td>
-</tr>
-<tr>
-<td><strong>显示触摸点击</strong></td>
-<td><code>scrcpy -t</code> 在演示或录制教程时，可在画面上对应显示出点击动作</td>
-</tr>
-<tr>
-<td><strong>全屏显示</strong></td>
-<td><code>scrcpy -f</code></td>
-</tr>
-<tr>
-<td><strong>文件传输默认路径</strong></td>
-<td><code>scrcpy --push-target /你的/目录</code> 将文件拖放到 scrcpy 可以传输文件，此命令指定默认保存目录</td>
-</tr>
-<tr>
-<td><strong>只读模式(仅显示不控制)</strong></td>
-<td><code>scrcpy -n</code></td>
-</tr>
-<tr>
-<td><strong>屏幕录像</strong></td>
-<td><code>scrcpy -r 视频文件名.mp4</code> 或 <code>.mkv</code></td>
-</tr>
-<tr>
-<td><strong>屏幕录像 (禁用电脑显示)</strong></td>
-<td><code>scrcpy -Nr 文件名.mkv</code></td>
-</tr>
-<tr>
-<td><strong>设置窗口标题</strong></td>
-<td><code>scrcpy --window-title '异次元好棒！'</code></td>
-</tr>
-<tr>
-<td><strong>同步传输声音</strong></td>
-<td>可借助 <a href="https://github.com/rom1v/usbaudio">USBaudio</a> 这个开源项目实现，但仅支持 <a href="https://www.iplaysoft.com/os/linux-platform">Linux</a> 系统</td>
+<td><img src="https://crazydear.github.io/post-images/1597223244358.png" alt="" loading="lazy"></td>
+<td></td>
 </tr>
 </tbody>
 </table>
-<h3 id="scrcpy-使用与快捷键">Scrcpy 使用与快捷键：</h3>
-<p>启动之后，你就可以在电脑桌面上看到 Scrcpy 的投屏窗口和手机画面了，你可以直接用鼠标进行操作，它同时也有很多键盘快捷键可以使用。</p>
-<figure data-type="image" tabindex="1"><img src="https://img.iplaysoft.com/wp-content/uploads/2019/scrcpy/scrcpy_android.jpg!0x0.webp" alt="scrcpy" loading="lazy"></figure>
-<table>
-<thead>
-<tr>
-<th>Scrcpy 快捷键列表</th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>切换全屏模式</td>
-<td><code>Ctrl</code>+<code>F</code></td>
-</tr>
-<tr>
-<td>将窗口调整为1：1（完美像素）</td>
-<td><code>Ctrl</code>+<code>G</code></td>
-</tr>
-<tr>
-<td>调整窗口大小以删除黑色边框</td>
-<td><code>Ctrl</code>+<code>X</code> | 双击黑色背景</td>
-</tr>
-<tr>
-<td>设备 <code>HOME</code> 键</td>
-<td><code>Ctrl</code>+<code>H</code> | 鼠标中键</td>
-</tr>
-<tr>
-<td>设备 <code>BACK</code> 键</td>
-<td><code>Ctrl</code>+<code>B</code> | 鼠标右键</td>
-</tr>
-<tr>
-<td>设备 <code>任务管理</code> 键 (切换APP)</td>
-<td><code>Ctrl</code>+<code>S</code></td>
-</tr>
-<tr>
-<td>设备 <code>菜单</code> 键</td>
-<td><code>Ctrl</code>+<code>M</code></td>
-</tr>
-<tr>
-<td>设备<code>音量+</code>键</td>
-<td><code>Ctrl</code>+<code>↑</code></td>
-</tr>
-<tr>
-<td>设备<code>音量-</code>键</td>
-<td><code>Ctrl</code>+<code>↓</code></td>
-</tr>
-<tr>
-<td>设备<code>电源键</code></td>
-<td><code>Ctrl</code>+<code>P</code></td>
-</tr>
-<tr>
-<td>点亮手机屏幕</td>
-<td>鼠标右键</td>
-</tr>
-<tr>
-<td>复制内容到设备</td>
-<td><code>Ctrl</code>+<code>V</code></td>
-</tr>
-<tr>
-<td>启用/禁用 FPS 计数器（stdout）</td>
-<td><code>Ctrl</code>+<code>i</code></td>
-</tr>
-<tr>
-<td>安装APK</td>
-<td>将 apk 文件拖入投屏</td>
-</tr>
-<tr>
-<td>传输文件到设备</td>
-<td>将文件拖入投屏（非apk）</td>
-</tr>
-</tbody>
-</table>
-<h3 id="使用-wifi-无线连接">使用 WIFi 无线连接：</h3>
-<p>Scrcpy 使用 adb 与 Android 设备通讯，而 adb 本身是支持无线连接的。因此除了 USB 数据线之外，我们也能无线使用。前提是需要保证手机和电脑处于同一<a href="https://www.iplaysoft.com/tag/%E5%B1%80%E5%9F%9F%E7%BD%91">局域网</a> (连接到相同的 <a href="https://www.iplaysoft.com/tag/wifi">WiFi</a> 路由器)，步骤如下：</p>
-<ol>
-<li>查询设备当前的 IP 地址 (设置 →关于手机→状态)</li>
-<li>启用 adb TCP/IP 连接，执行命令：<code>adb tcpip 5555</code>，其中 5555 为端口号</li>
-<li>拔掉你的数据线</li>
-<li>通过 WiFi 进行连接，执行命令：<code>adb connect 设备IP地址:5555</code></li>
-<li>重新启动 scrcpy 即可</li>
-<li>如果 WiFi 较慢，可以调整码率：<code>scrcpy -b 3M -m 800</code>，意思是限制 3 Mbps，画面分辨率限制 800，数值可以随意调整。</li>
-<li>如需切换回 USB 模式，执行：<code>adb usb</code></li>
-</ol>
-<p><a href="https://github.com/Genymobile/scrcpy">项目地址</a></p>
+<h3 id="3安装软件">3.安装软件</h3>
+<h4 id="31-安装aria2">3.1 安装aria2</h4>
+<pre><code class="language-bash">dpkg -i aria2-1.35.0-linux-gnu-64bit-build1.deb
+</code></pre>
+<blockquote>
+<p>出现下面的错误是因为下载的版本与系统有关，目前CPU是ARM64，然而我们下载的是AMD64位的安装包，所以选择适合我们的安装包 <code>wget https://github.com/q3aql/aria2-static-builds/releases/download/v1.35.0/aria2-1.35.0-linux-gnu-arm-rbpi-build1.deb</code>，然后再运行 <code>dpkg -i aria2-1.35.0-linux-gnu-arm-rbpi-build1.deb</code>，安装成功。</p>
+<figure data-type="image" tabindex="1"><img src="https://crazydear.github.io/post-images/1597223270466.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="2"><img src="https://crazydear.github.io/post-images/1597223286448.png" alt="" loading="lazy"></figure>
+</blockquote>
+<h4 id="32-安装filebrowser">3.2 安装Filebrowser</h4>
+<pre><code class="language-bash">tar -zxvf linux-arm64-filebrowser.tar.gz	# 解压
+mv filebrowser /usr/sbin					# 移动位置
+</code></pre>
+<h4 id="33-安装nginx">3.3 安装Nginx</h4>
+<pre><code class="language-bash">apt-get install -y nginx
+systemctl enable nginx		# 开机启动
+</code></pre>
+<h4 id="34-安装ariang">3.4 安装AriaNG</h4>
+<pre><code class="language-bash">unzip master.zip	# 解压
+mv ccaa-master/ccaa_dir/AriaNg/* /var/www/html/
+</code></pre>
+<h3 id="4-配置软件">4. 配置软件</h3>
+<p>将Aria2和Filebrowser配置文件移到<code>/etc/ccaa</code></p>
+<pre><code class="language-bash"> mkdir /etc/ccaa
+ mv ccaa-master/ccaa_dir/aria2.* /etc/ccaa/
+ mv ccaa-master/ccaa_dir/config.json /etc/ccaa/
+ touch /etc/ccaa/filebrowser.db
+</code></pre>
+<p>手动配置</p>
+<pre><code class="language-bash">osip=$(curl -4s https://api.ip.sb/ip)
+mkdir /var/www/data		# 下载目录
+sed -i &quot;s%dir=%dir=/var/www/data%g&quot; /etc/ccaa/aria2.conf
+sed -i &quot;s/rpc-secret=/rpc-secret=123456/g&quot; /etc/ccaa/aria2.conf
+sed -i &quot;s%ccaaDown%/var/www/data%g&quot; /etc/ccaa/config.json	#替换filebrowser读取路径
+sed -i &quot;s/server_ip/${osip}/g&quot; /var/www/html/index.html	#替换AriaNg服务器链接
+</code></pre>
+<h3 id="5启动服务">5.启动服务</h3>
+<pre><code class="language-bash">nohup sudo -u ccaa aria2c --conf-path=/etc/ccaa/aria2.conf &gt; /var/log/aria2.log 2&gt;&amp;1 &amp;	#启动Aria2
+nohup sudo -u ccaa filebrowser -c /etc/ccaa/config.json &gt; /var/log/fbrun.log 2&gt;&amp;1 &amp;		#运行filebrowser
+service nginx start
+</code></pre>
+<p>重置权限</p>
+<pre><code class="language-bash">chown -R ccaa:ccaa /etc/ccaa/	
+chown -R ccaa:ccaa /var/www/data
+</code></pre>
+<p>到这里，基本配置已经完成，可以直接访问IP或者域名使用</p>
+<figure data-type="image" tabindex="3"><img src="https://crazydear.github.io/post-images/1597223317357.png" alt="" loading="lazy"></figure>
+<h3 id="6-进阶教程">6. 进阶教程</h3>
+<pre><code class="language-bash">cat &lt;&lt;EOF &gt;/usr/sbin/ccaa
+#!/bin/bash
+#####		CCAA管理脚本			#####
+#####		Author:xiaoz.me			#####
+#####		Update:2020-02-27		#####
 
-            </div>
-            
-            <div class="prev-post">
-                上一篇
-                <a href="https://crazydear.github.io/post/da-zao-chi-xian-xia-zai-fu-wu-qi/">
-                    CCAA-打造离线下载服务器
-                </a>
+#导入环境变量
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/bin:/sbin
+export PATH
+
+aria2pid=\$(pgrep 'aria2c')
+filebrowser_pid=\$(pgrep 'filebrowser')
+
+case \$1 in
+	'start')
+		nohup sudo -u ccaa aria2c --conf-path=/etc/ccaa/aria2.conf &gt; /var/log/aria2.log 2&gt;&amp;1 &amp;
+		nohup sudo -u ccaa filebrowser -c /etc/ccaa/config.json &gt; /var/log/fbrun.log 2&gt;&amp;1 &amp;
+		exit
+	;;
+	'stop')
+		kill -9 \${aria2pid}
+		kill -9 \${filebrowser_pid}
+	;;
+	'restart')
+		kill -9 \${aria2pid}
+		kill -9 \${filebrowser_pid}
+		nohup sudo -u ccaa aria2c --conf-path=/etc/ccaa/aria2.conf &gt; /var/log/aria2.log 2&gt;&amp;1 &amp;
+		nohup sudo -u ccaa filebrowser -c /etc/ccaa/config.json &gt; /var/log/fbrun.log 2&gt;&amp;1 &amp;
+		exit;
+	;;
+	'status')
+		if [ &quot;\$aria2pid&quot; == &quot;&quot; ]
+			then
+				echo &quot;Not running!&quot;
+			else
+				echo '-----------------------------------------------'
+				echo &quot;Aria2 is running,pid is \${aria2pid}.&quot;
+				echo &quot;Filebrowser is running,pid is \${filebrowser_pid}.&quot;
+				echo '-----------------------------------------------'
+		fi
+	;;
+	*)
+		echo '参数错误！'
+		exit
+	;;
+esac
+EOF
+
+chmod +x /usr/sbin/ccaa		# 增加执行权限
+</code></pre>
+<h3 id="常用命令">常用命令</h3>
+<ul>
+<li>ccaa:进入CCAA操作界面</li>
+<li>ccaa status:查看CCAA运行状态</li>
+<li>ccaa stop:停止CCAA</li>
+<li>ccaa start:启动CCAA</li>
+<li>ccaa restart:重启CCAA</li>
+</ul>
+<p>开放过多端口，不容易管理，也容易发生恶意入侵，所以通过nginx使用不同的域名反代到80端口。</p>
+<p>在nginx的配置文件里加入以下代码，同时将 域名DNS解析添加 <code>*.aria.hearme.cn</code>到自己的服务器</p>
+<pre><code class="language-nginx"># ariaRPC
+server {
+    listen 80;
+    server_name rpc.aria.hearme.cn;
+    client_max_body_size 1024m;
+    location / {
+        proxy_set_header HOST $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass http://127.0.0.1:6800/;
+    }  
+}
+
+# Filebrowser
+server {
+    listen 80;
+    server_name fb.aria.hearme.cn;
+    client_max_body_size 1024m;
+    location / {
+        proxy_set_header HOST $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass http://127.0.0.1:6081/;
+    }  
+}
+</code></pre>
+<figure data-type="image" tabindex="4"><img src="https://crazydear.github.io/post-images/1597223349185.png" alt="" loading="lazy"></figure>
+<p>对应的主页上的链接也需要修改。</p>
+<p>最后访问网站，修改下面两个地方即可大功告成。</p>
+<figure data-type="image" tabindex="5"><img src="https://crazydear.github.io/post-images/1597223374564.png" alt="" loading="lazy"></figure>
+<p>CCAA的帮助文档可查看[这里](</p>
+
             </div>
             
             
             <div class="next-post">
                 下一篇
-                <a href="https://crazydear.github.io/post/flask-he-requests-da-jian-yi-ge-jian-dan-de-api-fu-wu/">
-                    Flask 和 requests 搭建一个简单的API服务
+                <a href="https://crazydear.github.io/post/Scrcpy/">
+                    Scrcpy - 开源免费在电脑显示手机画面并控制手机的工具 
                 </a>
             </div>
             
