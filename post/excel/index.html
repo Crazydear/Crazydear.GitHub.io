@@ -1,15 +1,10 @@
 <head>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="👏  欢迎使用 Gridea ！
-✍️  Gridea 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...
-
-Github
-Gridea 主页
-示例网站
-特性👇
-📝  你可以使用最酷的 Markdo..." />
-    <meta name="keywords" content="Gridea" />
+    <meta name="description" content="Excle常用函数
+身份证验证
+=IF(A5=&quot;&quot;,&quot;&quot;,IF(LEN(A5)=18,IF(MID(&quot;10X98765432&quot;,MOD(SUMPRODUCT(MID(A5,ROW(..." />
+    <meta name="keywords" content="Excel,笔记" />
     <link rel="stylesheet" href="https://crazydear.github.io/media/css/bootstrap.min.css">
     
     <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.1/build/styles/default.min.css">
@@ -301,55 +296,56 @@ Gridea 主页
         <div class="postshow">
             
             <div class="postdetailimg" style="width:100%;overflow: hidden;display: none">
-                <img src="https://crazydear.github.io/post-images/hello-gridea.jpeg" class="postimage" style="cursor:auto">
+                <img src="https://crazydear.github.io/post-images/excel.jpg" class="postimage" style="cursor:auto">
             </div>
             <div class="postinfo">
-                <div class="postdate"><i class="fa fa-calendar"></i>2018-12-12</div>
+                <div class="postdate"><i class="fa fa-calendar"></i>2021-01-17</div>
                 <div class="poststatus postdate"><i class="fa fa-clock-o"></i> 2 min read</div>
                 <div class="posttag">
                     
-                    <a href="https://crazydear.github.io/tag/MZvqxRve5/" class="postlink">
-                        <i class="fa fa-tag"></i> Gridea
+                    <a href="https://crazydear.github.io/tag/YiYGnrOa0/" class="postlink">
+                        <i class="fa fa-tag"></i> Excel
+                    </a>
+                    
+                    <a href="https://crazydear.github.io/tag/fOvNCIVhhD/" class="postlink">
+                        <i class="fa fa-tag"></i> 笔记
                     </a>
                     
                 </div>
             </div>
             
             <div id="texttitle" style="text-align: center">
-                <h2>Hello Gridea</h2>
+                <h2>Excel 公式技巧</h2>
             </div>
             <div class="text ">
-                <p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
-<!-- more -->
-<p><a href="https://github.com/getgridea/gridea">Github</a><br>
-<a href="https://gridea.dev/">Gridea 主页</a><br>
-<a href="http://fehey.com/">示例网站</a></p>
-<h2 id="特性">特性👇</h2>
-<p>📝  你可以使用最酷的 <strong>Markdown</strong> 语法，进行快速创作</p>
-<p>🌉  你可以给文章配上精美的封面图和在文章任意位置插入图片</p>
-<p>🏷️  你可以对文章进行标签分组</p>
-<p>📋  你可以自定义菜单，甚至可以创建外部链接菜单</p>
-<p>💻  你可以在 <strong>Windows</strong>，<strong>MacOS</strong> 或 <strong>Linux</strong> 设备上使用此客户端</p>
-<p>🌎  你可以使用 <strong>𝖦𝗂𝗍𝗁𝗎𝖻 𝖯𝖺𝗀𝖾𝗌</strong> 或 <strong>Coding Pages</strong> 向世界展示，未来将支持更多平台</p>
-<p>💬  你可以进行简单的配置，接入 <a href="https://github.com/gitalk/gitalk">Gitalk</a> 或 <a href="https://github.com/SukkaW/DisqusJS">DisqusJS</a> 评论系统</p>
-<p>🇬🇧  你可以使用<strong>中文简体</strong>或<strong>英语</strong></p>
-<p>🌁  你可以任意使用应用内默认主题或任意第三方主题，强大的主题自定义能力</p>
-<p>🖥  你可以自定义源文件夹，利用 OneDrive、百度网盘、iCloud、Dropbox 等进行多设备同步</p>
-<p>🌱 当然 <strong>Gridea</strong> 还很年轻，有很多不足，但请相信，它会不停向前 🏃</p>
-<p>未来，它一定会成为你离不开的伙伴</p>
-<p>尽情发挥你的才华吧！</p>
-<p>😘 Enjoy~</p>
+                <h1 id="excle常用函数">Excle常用函数</h1>
+<h2 id="身份证验证">身份证验证</h2>
+<pre><code class="language-vb">=IF(A5=&quot;&quot;,&quot;&quot;,IF(LEN(A5)=18,IF(MID(&quot;10X98765432&quot;,MOD(SUMPRODUCT(MID(A5,ROW($1:$17),1)*2^(18-ROW($1:$17))),11)+1,1)=RIGHT(A5),&quot;正确&quot;,&quot;错误&quot;),&quot;位数不为18位&quot;))
+</code></pre>
+<h2 id="年龄计算">年龄计算</h2>
+<pre><code class="language-vb">=YEAR(TODAY())-MID(A3,7,4)
+</code></pre>
+<h2 id="性别">性别</h2>
+<pre><code class="language-vb">=IF(ISODD(MID(A3,17,1)),&quot;男&quot;,&quot;女&quot;)
+</code></pre>
+<h2 id="出生日期">出生日期</h2>
+<pre><code class="language-VB">=TEXT(MID(A2,7,8),&quot;0-00-00&quot;) 		# 2021-01-01
+=TEXT(MID(A2,7,8),&quot;0\/00\/00&quot;)		# 2021/01/01
+=TEXT(MID(A2,7,8),&quot;0年00月00日&quot;)	  # 2021年01月01日 
+</code></pre>
+<h2 id="省份">省份</h2>
+<pre><code class="language-vb">=LOOKUP(VALUE(LEFT(D2,2)),{11,&quot;北京市&quot;;12,&quot;天津市&quot;;13,&quot;河北省&quot;;14,&quot;山西省&quot;;15,&quot;内蒙古自治区&quot;;21,&quot;辽宁省&quot;;22,&quot;吉林省&quot;;23,&quot;黑龙江省&quot;;31,&quot;上海市&quot;;32,&quot;江苏省&quot;;33,&quot;浙江省&quot;;34,&quot;安徽省&quot;;35,&quot;福建省&quot;;36,&quot;江西省&quot;;37,&quot;山东省&quot;;41,&quot;河南省&quot;;42,&quot;湖北省&quot;;43,&quot;湖南省&quot;;44,&quot;广东省&quot;;45,&quot;广西壮族自治区&quot;;46,&quot;海南省&quot;;50,&quot;重庆市&quot;;51,&quot;四川省&quot;;52,&quot;贵州省&quot;;53,&quot;云南省&quot;;54,&quot;西藏自治区&quot;;61,&quot;陕西省&quot;;62,&quot;甘肃省&quot;;63,&quot;青海省&quot;;64,&quot;宁夏回族自治区&quot;;65,&quot;新疆维吾尔自治区&quot;;71,&quot;台湾省&quot;;81,&quot;香港特别行政区&quot;;82,&quot;澳门特别行政区&quot;;&quot;&quot;,&quot;0&quot;})
+</code></pre>
 
             </div>
             
-            <div class="prev-post">
-                上一篇
-                <a href="https://crazydear.github.io/post/Software-Recommendation/">
-                    Software-Recommendation
+            
+            <div class="next-post">
+                下一篇
+                <a href="https://crazydear.github.io/post/da-zao-chi-xian-xia-zai-fu-wu-qi/">
+                    CCAA-打造离线下载服务器
                 </a>
             </div>
-            
             
         </div>
     </div>
@@ -419,9 +415,13 @@ Gridea 主页
                 </div>
                 <div class="toc-container">
                     <ul class="markdownIt-TOC">
-<li>
+<li><a href="#excle%E5%B8%B8%E7%94%A8%E5%87%BD%E6%95%B0">Excle常用函数</a>
 <ul>
-<li><a href="#%E7%89%B9%E6%80%A7">特性👇</a></li>
+<li><a href="#%E8%BA%AB%E4%BB%BD%E8%AF%81%E9%AA%8C%E8%AF%81">身份证验证</a></li>
+<li><a href="#%E5%B9%B4%E9%BE%84%E8%AE%A1%E7%AE%97">年龄计算</a></li>
+<li><a href="#%E6%80%A7%E5%88%AB">性别</a></li>
+<li><a href="#%E5%87%BA%E7%94%9F%E6%97%A5%E6%9C%9F">出生日期</a></li>
+<li><a href="#%E7%9C%81%E4%BB%BD">省份</a></li>
 </ul>
 </li>
 </ul>
@@ -526,55 +526,56 @@ Gridea 主页
         <div class="postshow">
             
             <div class="postdetailimg" style="width:100%;overflow: hidden;display: none">
-                <img src="https://crazydear.github.io/post-images/hello-gridea.jpeg" class="postimage" style="cursor:auto">
+                <img src="https://crazydear.github.io/post-images/excel.jpg" class="postimage" style="cursor:auto">
             </div>
             <div class="postinfo">
-                <div class="postdate"><i class="fa fa-calendar"></i>2018-12-12</div>
+                <div class="postdate"><i class="fa fa-calendar"></i>2021-01-17</div>
                 <div class="poststatus postdate"><i class="fa fa-clock-o"></i> 2 min read</div>
                 <div class="posttag">
                     
-                    <a href="https://crazydear.github.io/tag/MZvqxRve5/" class="postlink">
-                        <i class="fa fa-tag"></i> Gridea
+                    <a href="https://crazydear.github.io/tag/YiYGnrOa0/" class="postlink">
+                        <i class="fa fa-tag"></i> Excel
+                    </a>
+                    
+                    <a href="https://crazydear.github.io/tag/fOvNCIVhhD/" class="postlink">
+                        <i class="fa fa-tag"></i> 笔记
                     </a>
                     
                 </div>
             </div>
             
             <div id="texttitle" style="text-align: center">
-                <h2>Hello Gridea</h2>
+                <h2>Excel 公式技巧</h2>
             </div>
             <div class="text ">
-                <p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
-<!-- more -->
-<p><a href="https://github.com/getgridea/gridea">Github</a><br>
-<a href="https://gridea.dev/">Gridea 主页</a><br>
-<a href="http://fehey.com/">示例网站</a></p>
-<h2 id="特性">特性👇</h2>
-<p>📝  你可以使用最酷的 <strong>Markdown</strong> 语法，进行快速创作</p>
-<p>🌉  你可以给文章配上精美的封面图和在文章任意位置插入图片</p>
-<p>🏷️  你可以对文章进行标签分组</p>
-<p>📋  你可以自定义菜单，甚至可以创建外部链接菜单</p>
-<p>💻  你可以在 <strong>Windows</strong>，<strong>MacOS</strong> 或 <strong>Linux</strong> 设备上使用此客户端</p>
-<p>🌎  你可以使用 <strong>𝖦𝗂𝗍𝗁𝗎𝖻 𝖯𝖺𝗀𝖾𝗌</strong> 或 <strong>Coding Pages</strong> 向世界展示，未来将支持更多平台</p>
-<p>💬  你可以进行简单的配置，接入 <a href="https://github.com/gitalk/gitalk">Gitalk</a> 或 <a href="https://github.com/SukkaW/DisqusJS">DisqusJS</a> 评论系统</p>
-<p>🇬🇧  你可以使用<strong>中文简体</strong>或<strong>英语</strong></p>
-<p>🌁  你可以任意使用应用内默认主题或任意第三方主题，强大的主题自定义能力</p>
-<p>🖥  你可以自定义源文件夹，利用 OneDrive、百度网盘、iCloud、Dropbox 等进行多设备同步</p>
-<p>🌱 当然 <strong>Gridea</strong> 还很年轻，有很多不足，但请相信，它会不停向前 🏃</p>
-<p>未来，它一定会成为你离不开的伙伴</p>
-<p>尽情发挥你的才华吧！</p>
-<p>😘 Enjoy~</p>
+                <h1 id="excle常用函数">Excle常用函数</h1>
+<h2 id="身份证验证">身份证验证</h2>
+<pre><code class="language-vb">=IF(A5=&quot;&quot;,&quot;&quot;,IF(LEN(A5)=18,IF(MID(&quot;10X98765432&quot;,MOD(SUMPRODUCT(MID(A5,ROW($1:$17),1)*2^(18-ROW($1:$17))),11)+1,1)=RIGHT(A5),&quot;正确&quot;,&quot;错误&quot;),&quot;位数不为18位&quot;))
+</code></pre>
+<h2 id="年龄计算">年龄计算</h2>
+<pre><code class="language-vb">=YEAR(TODAY())-MID(A3,7,4)
+</code></pre>
+<h2 id="性别">性别</h2>
+<pre><code class="language-vb">=IF(ISODD(MID(A3,17,1)),&quot;男&quot;,&quot;女&quot;)
+</code></pre>
+<h2 id="出生日期">出生日期</h2>
+<pre><code class="language-VB">=TEXT(MID(A2,7,8),&quot;0-00-00&quot;) 		# 2021-01-01
+=TEXT(MID(A2,7,8),&quot;0\/00\/00&quot;)		# 2021/01/01
+=TEXT(MID(A2,7,8),&quot;0年00月00日&quot;)	  # 2021年01月01日 
+</code></pre>
+<h2 id="省份">省份</h2>
+<pre><code class="language-vb">=LOOKUP(VALUE(LEFT(D2,2)),{11,&quot;北京市&quot;;12,&quot;天津市&quot;;13,&quot;河北省&quot;;14,&quot;山西省&quot;;15,&quot;内蒙古自治区&quot;;21,&quot;辽宁省&quot;;22,&quot;吉林省&quot;;23,&quot;黑龙江省&quot;;31,&quot;上海市&quot;;32,&quot;江苏省&quot;;33,&quot;浙江省&quot;;34,&quot;安徽省&quot;;35,&quot;福建省&quot;;36,&quot;江西省&quot;;37,&quot;山东省&quot;;41,&quot;河南省&quot;;42,&quot;湖北省&quot;;43,&quot;湖南省&quot;;44,&quot;广东省&quot;;45,&quot;广西壮族自治区&quot;;46,&quot;海南省&quot;;50,&quot;重庆市&quot;;51,&quot;四川省&quot;;52,&quot;贵州省&quot;;53,&quot;云南省&quot;;54,&quot;西藏自治区&quot;;61,&quot;陕西省&quot;;62,&quot;甘肃省&quot;;63,&quot;青海省&quot;;64,&quot;宁夏回族自治区&quot;;65,&quot;新疆维吾尔自治区&quot;;71,&quot;台湾省&quot;;81,&quot;香港特别行政区&quot;;82,&quot;澳门特别行政区&quot;;&quot;&quot;,&quot;0&quot;})
+</code></pre>
 
             </div>
             
-            <div class="prev-post">
-                上一篇
-                <a href="https://crazydear.github.io/post/Software-Recommendation/">
-                    Software-Recommendation
+            
+            <div class="next-post">
+                下一篇
+                <a href="https://crazydear.github.io/post/da-zao-chi-xian-xia-zai-fu-wu-qi/">
+                    CCAA-打造离线下载服务器
                 </a>
             </div>
-            
             
         </div>
     </div>
