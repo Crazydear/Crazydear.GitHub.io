@@ -1,0 +1,1522 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://crazydear.github.io</id>
+    <title>Cradear&apos;s blog</title>
+    <updated>2023-01-21T06:04:04.700Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://crazydear.github.io"/>
+    <link rel="self" href="https://crazydear.github.io/atom.xml"/>
+    <subtitle>想我所想，做我想做</subtitle>
+    <logo>https://crazydear.github.io/images/avatar.png</logo>
+    <icon>https://crazydear.github.io/favicon.ico</icon>
+    <rights>All rights reserved 2023, Cradear&apos;s blog</rights>
+    <entry>
+        <title type="html"><![CDATA[Excel 公式技巧]]></title>
+        <id>https://crazydear.github.io/post/excel/</id>
+        <link href="https://crazydear.github.io/post/excel/">
+        </link>
+        <updated>2021-01-17T08:15:58.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="excle常用函数">Excle常用函数</h1>
+<h2 id="身份证验证">身份证验证</h2>
+<pre><code class="language-vb">=IF(A5=&quot;&quot;,&quot;&quot;,IF(LEN(A5)=18,IF(MID(&quot;10X98765432&quot;,MOD(SUMPRODUCT(MID(A5,ROW($1:$17),1)*2^(18-ROW($1:$17))),11)+1,1)=RIGHT(A5),&quot;正确&quot;,&quot;错误&quot;),&quot;位数不为18位&quot;))
+</code></pre>
+<h2 id="年龄计算">年龄计算</h2>
+<pre><code class="language-vb">=YEAR(TODAY())-MID(A3,7,4)
+</code></pre>
+<h2 id="性别">性别</h2>
+<pre><code class="language-vb">=IF(ISODD(MID(A3,17,1)),&quot;男&quot;,&quot;女&quot;)
+</code></pre>
+<h2 id="出生日期">出生日期</h2>
+<pre><code class="language-VB">=TEXT(MID(A2,7,8),&quot;0-00-00&quot;) 		# 2021-01-01
+=TEXT(MID(A2,7,8),&quot;0\/00\/00&quot;)		# 2021/01/01
+=TEXT(MID(A2,7,8),&quot;0年00月00日&quot;)	  # 2021年01月01日 
+</code></pre>
+<h2 id="省份">省份</h2>
+<pre><code class="language-vb">=LOOKUP(VALUE(LEFT(D2,2)),{11,&quot;北京市&quot;;12,&quot;天津市&quot;;13,&quot;河北省&quot;;14,&quot;山西省&quot;;15,&quot;内蒙古自治区&quot;;21,&quot;辽宁省&quot;;22,&quot;吉林省&quot;;23,&quot;黑龙江省&quot;;31,&quot;上海市&quot;;32,&quot;江苏省&quot;;33,&quot;浙江省&quot;;34,&quot;安徽省&quot;;35,&quot;福建省&quot;;36,&quot;江西省&quot;;37,&quot;山东省&quot;;41,&quot;河南省&quot;;42,&quot;湖北省&quot;;43,&quot;湖南省&quot;;44,&quot;广东省&quot;;45,&quot;广西壮族自治区&quot;;46,&quot;海南省&quot;;50,&quot;重庆市&quot;;51,&quot;四川省&quot;;52,&quot;贵州省&quot;;53,&quot;云南省&quot;;54,&quot;西藏自治区&quot;;61,&quot;陕西省&quot;;62,&quot;甘肃省&quot;;63,&quot;青海省&quot;;64,&quot;宁夏回族自治区&quot;;65,&quot;新疆维吾尔自治区&quot;;71,&quot;台湾省&quot;;81,&quot;香港特别行政区&quot;;82,&quot;澳门特别行政区&quot;;&quot;&quot;,&quot;0&quot;})
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[CCAA-打造离线下载服务器]]></title>
+        <id>https://crazydear.github.io/post/da-zao-chi-xian-xia-zai-fu-wu-qi/</id>
+        <link href="https://crazydear.github.io/post/da-zao-chi-xian-xia-zai-fu-wu-qi/">
+        </link>
+        <updated>2020-08-12T08:56:07.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="实验环境">实验环境</h2>
+<p>操作系统： Ubuntu 20.04 64位</p>
+<p>软件：</p>
+<p>Nginx	|	<a href="https://github.com/q3aql/aria2-static-builds/releases">Aria2</a>	|	<a href="https://github.com/helloxz/ccaa/archive/master.zip">AriaNg</a>	|	<a href="https://github.com/filebrowser/filebrowser/releases">File browser</a></p>
+<h2 id="安装过程">安装过程</h2>
+<blockquote>
+<p>先说最简单的方法，就是利用大佬已经做好的脚本，一键执行就行，大佬的项目在此<a href="https://github.com/helloxz/ccaa/">链接</a>，但是也并没有对所有的系统进行适配，有些系统环境还是不能部署成功。</p>
+<p>既然是学习，就不如自己一步步地来部署CCAA这个项目，一来可以熟悉Linux命令，二来学习一些错误的处理。</p>
+<p>本教程依然是基于大佬的项目，我只是把脚本自动执行的内容一步步分解出来。</p>
+</blockquote>
+<h3 id="1安装前的准备">1.安装前的准备</h3>
+<p>创建临时目录</p>
+<pre><code class="language-bash">mkdir ./ccaa_temp
+</code></pre>
+<p>创建用户和用户组</p>
+<pre><code class="language-bash">groupadd ccaa
+useradd -M -g ccaa ccaa -s /sbin/nologin
+</code></pre>
+<h3 id="2下载软件">2.下载软件</h3>
+<p>进入临时目录</p>
+<pre><code>cd ./ccaa_tmp
+</code></pre>
+<p>下载本教程软件</p>
+<pre><code class="language-bash">wget https://github.com/q3aql/aria2-static-builds/releases/download/v1.35.0/aria2-1.35.0-linux-gnu-64bit-build1.deb
+wget https://github.com/filebrowser/filebrowser/releases/download/v2.6.2/linux-arm64-filebrowser.tar.gz
+wget https://github.com/helloxz/ccaa/archive/master.zip
+</code></pre>
+<blockquote>
+<p>可以根据自己的情况选择适合自己的安装包，当然也可以自己下载源码编译安装</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Aria2</th>
+<th>Filebrowser</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>https://github.com/q3aql/aria2-static-builds/releases</td>
+<td>https://github.com/filebrowser/filebrowser/releases</td>
+</tr>
+<tr>
+<td><img src="https://crazydear.github.io/post-images/1597223244358.png" alt="" loading="lazy"></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="3安装软件">3.安装软件</h3>
+<h4 id="31-安装aria2">3.1 安装aria2</h4>
+<pre><code class="language-bash">dpkg -i aria2-1.35.0-linux-gnu-64bit-build1.deb
+</code></pre>
+<blockquote>
+<p>出现下面的错误是因为下载的版本与系统有关，目前CPU是ARM64，然而我们下载的是AMD64位的安装包，所以选择适合我们的安装包 <code>wget https://github.com/q3aql/aria2-static-builds/releases/download/v1.35.0/aria2-1.35.0-linux-gnu-arm-rbpi-build1.deb </code>，然后再运行 <code>dpkg -i aria2-1.35.0-linux-gnu-arm-rbpi-build1.deb</code>，安装成功。</p>
+<figure data-type="image" tabindex="1"><img src="https://crazydear.github.io/post-images/1597223270466.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="2"><img src="https://crazydear.github.io/post-images/1597223286448.png" alt="" loading="lazy"></figure>
+</blockquote>
+<h4 id="32-安装filebrowser">3.2 安装Filebrowser</h4>
+<pre><code class="language-bash">tar -zxvf linux-arm64-filebrowser.tar.gz	# 解压
+mv filebrowser /usr/sbin					# 移动位置
+</code></pre>
+<h4 id="33-安装nginx">3.3 安装Nginx</h4>
+<pre><code class="language-bash">apt-get install -y nginx
+systemctl enable nginx		# 开机启动
+</code></pre>
+<h4 id="34-安装ariang">3.4 安装AriaNG</h4>
+<pre><code class="language-bash">unzip master.zip	# 解压
+mv ccaa-master/ccaa_dir/AriaNg/* /var/www/html/
+</code></pre>
+<h3 id="4-配置软件">4. 配置软件</h3>
+<p>将Aria2和Filebrowser配置文件移到<code>/etc/ccaa</code></p>
+<pre><code class="language-bash"> mkdir /etc/ccaa
+ mv ccaa-master/ccaa_dir/aria2.* /etc/ccaa/
+ mv ccaa-master/ccaa_dir/config.json /etc/ccaa/
+ touch /etc/ccaa/filebrowser.db
+</code></pre>
+<p>手动配置</p>
+<pre><code class="language-bash">osip=$(curl -4s https://api.ip.sb/ip)
+mkdir /var/www/data		# 下载目录
+sed -i &quot;s%dir=%dir=/var/www/data%g&quot; /etc/ccaa/aria2.conf
+sed -i &quot;s/rpc-secret=/rpc-secret=123456/g&quot; /etc/ccaa/aria2.conf
+sed -i &quot;s%ccaaDown%/var/www/data%g&quot; /etc/ccaa/config.json	#替换filebrowser读取路径
+sed -i &quot;s/server_ip/${osip}/g&quot; /var/www/html/index.html	#替换AriaNg服务器链接
+</code></pre>
+<h3 id="5启动服务">5.启动服务</h3>
+<pre><code class="language-bash">nohup sudo -u ccaa aria2c --conf-path=/etc/ccaa/aria2.conf &gt; /var/log/aria2.log 2&gt;&amp;1 &amp;	#启动Aria2
+nohup sudo -u ccaa filebrowser -c /etc/ccaa/config.json &gt; /var/log/fbrun.log 2&gt;&amp;1 &amp;		#运行filebrowser
+service nginx start
+</code></pre>
+<p>重置权限</p>
+<pre><code class="language-bash">chown -R ccaa:ccaa /etc/ccaa/	
+chown -R ccaa:ccaa /var/www/data
+</code></pre>
+<p>到这里，基本配置已经完成，可以直接访问IP或者域名使用</p>
+<figure data-type="image" tabindex="3"><img src="https://crazydear.github.io/post-images/1597223317357.png" alt="" loading="lazy"></figure>
+<h3 id="6-进阶教程">6. 进阶教程</h3>
+<pre><code class="language-bash">cat &lt;&lt;EOF &gt;/usr/sbin/ccaa
+#!/bin/bash
+#####		CCAA管理脚本			#####
+#####		Author:xiaoz.me			#####
+#####		Update:2020-02-27		#####
+
+#导入环境变量
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/bin:/sbin
+export PATH
+
+aria2pid=\$(pgrep 'aria2c')
+filebrowser_pid=\$(pgrep 'filebrowser')
+
+case \$1 in
+	'start')
+		nohup sudo -u ccaa aria2c --conf-path=/etc/ccaa/aria2.conf &gt; /var/log/aria2.log 2&gt;&amp;1 &amp;
+		nohup sudo -u ccaa filebrowser -c /etc/ccaa/config.json &gt; /var/log/fbrun.log 2&gt;&amp;1 &amp;
+		exit
+	;;
+	'stop')
+		kill -9 \${aria2pid}
+		kill -9 \${filebrowser_pid}
+	;;
+	'restart')
+		kill -9 \${aria2pid}
+		kill -9 \${filebrowser_pid}
+		nohup sudo -u ccaa aria2c --conf-path=/etc/ccaa/aria2.conf &gt; /var/log/aria2.log 2&gt;&amp;1 &amp;
+		nohup sudo -u ccaa filebrowser -c /etc/ccaa/config.json &gt; /var/log/fbrun.log 2&gt;&amp;1 &amp;
+		exit;
+	;;
+	'status')
+		if [ &quot;\$aria2pid&quot; == &quot;&quot; ]
+			then
+				echo &quot;Not running!&quot;
+			else
+				echo '-----------------------------------------------'
+				echo &quot;Aria2 is running,pid is \${aria2pid}.&quot;
+				echo &quot;Filebrowser is running,pid is \${filebrowser_pid}.&quot;
+				echo '-----------------------------------------------'
+		fi
+	;;
+	*)
+		echo '参数错误！'
+		exit
+	;;
+esac
+EOF
+
+chmod +x /usr/sbin/ccaa		# 增加执行权限
+</code></pre>
+<h3 id="常用命令">常用命令</h3>
+<ul>
+<li>ccaa:进入CCAA操作界面</li>
+<li>ccaa status:查看CCAA运行状态</li>
+<li>ccaa stop:停止CCAA</li>
+<li>ccaa start:启动CCAA</li>
+<li>ccaa restart:重启CCAA</li>
+</ul>
+<p>开放过多端口，不容易管理，也容易发生恶意入侵，所以通过nginx使用不同的域名反代到80端口。</p>
+<p>在nginx的配置文件里加入以下代码，同时将 域名DNS解析添加 <code>*.aria.hearme.cn</code>到自己的服务器</p>
+<pre><code class="language-nginx"># ariaRPC
+server {
+    listen 80;
+    server_name rpc.aria.hearme.cn;
+    client_max_body_size 1024m;
+    location / {
+        proxy_set_header HOST $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass http://127.0.0.1:6800/;
+    }  
+}
+
+# Filebrowser
+server {
+    listen 80;
+    server_name fb.aria.hearme.cn;
+    client_max_body_size 1024m;
+    location / {
+        proxy_set_header HOST $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass http://127.0.0.1:6081/;
+    }  
+}
+</code></pre>
+<figure data-type="image" tabindex="4"><img src="https://crazydear.github.io/post-images/1597223349185.png" alt="" loading="lazy"></figure>
+<p>对应的主页上的链接也需要修改。</p>
+<p>最后访问网站，修改下面两个地方即可大功告成。</p>
+<figure data-type="image" tabindex="5"><img src="https://crazydear.github.io/post-images/1597223374564.png" alt="" loading="lazy"></figure>
+<p>CCAA的帮助文档可查看[这里](</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Scrcpy - 开源免费在电脑显示手机画面并控制手机的工具 ]]></title>
+        <id>https://crazydear.github.io/post/Scrcpy/</id>
+        <link href="https://crazydear.github.io/post/Scrcpy/">
+        </link>
+        <updated>2020-04-19T02:45:21.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="scrcpy-一些实用的命令参数">Scrcpy 一些实用的命令参数：</h3>
+<p>这些参数可以多个自由组合使用，注意区分大小写。</p>
+<table>
+<thead>
+<tr>
+<th>Scrcpy 的命令参数</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>关闭手机屏幕</strong></td>
+<td><code>scrcpy -S</code></td>
+</tr>
+<tr>
+<td><strong>限制画面分辨率</strong></td>
+<td><code>scrcpy -m 1024</code> (比如限制为 1024)</td>
+</tr>
+<tr>
+<td><strong>修改视频码率</strong></td>
+<td><code>scrcpy -b 4M</code> (默认 8Mbps，改成 4Mbps)</td>
+</tr>
+<tr>
+<td><strong>裁剪画面</strong></td>
+<td><code>scrcpy -c 1224:1440:0:0</code> 表示分辨率 1224x1440 并且偏移坐标为 (0,0)</td>
+</tr>
+<tr>
+<td><strong>多设备切换</strong></td>
+<td><code>scrcpy -s 设备ID</code> (使用 <code>adb devices</code> 命令查看设备ID)</td>
+</tr>
+<tr>
+<td><strong>窗口置顶</strong></td>
+<td><code>scrcpy -T</code></td>
+</tr>
+<tr>
+<td><strong>显示触摸点击</strong></td>
+<td><code>scrcpy -t</code> 在演示或录制教程时，可在画面上对应显示出点击动作</td>
+</tr>
+<tr>
+<td><strong>全屏显示</strong></td>
+<td><code>scrcpy -f</code></td>
+</tr>
+<tr>
+<td><strong>文件传输默认路径</strong></td>
+<td><code>scrcpy --push-target /你的/目录</code> 将文件拖放到 scrcpy 可以传输文件，此命令指定默认保存目录</td>
+</tr>
+<tr>
+<td><strong>只读模式(仅显示不控制)</strong></td>
+<td><code>scrcpy -n</code></td>
+</tr>
+<tr>
+<td><strong>屏幕录像</strong></td>
+<td><code>scrcpy -r 视频文件名.mp4</code> 或 <code>.mkv</code></td>
+</tr>
+<tr>
+<td><strong>屏幕录像 (禁用电脑显示)</strong></td>
+<td><code>scrcpy -Nr 文件名.mkv</code></td>
+</tr>
+<tr>
+<td><strong>设置窗口标题</strong></td>
+<td><code>scrcpy --window-title '异次元好棒！'</code></td>
+</tr>
+<tr>
+<td><strong>同步传输声音</strong></td>
+<td>可借助 <a href="https://github.com/rom1v/usbaudio">USBaudio</a> 这个开源项目实现，但仅支持 <a href="https://www.iplaysoft.com/os/linux-platform">Linux</a> 系统</td>
+</tr>
+</tbody>
+</table>
+<h3 id="scrcpy-使用与快捷键">Scrcpy 使用与快捷键：</h3>
+<p>启动之后，你就可以在电脑桌面上看到 Scrcpy 的投屏窗口和手机画面了，你可以直接用鼠标进行操作，它同时也有很多键盘快捷键可以使用。</p>
+<figure data-type="image" tabindex="1"><img src="https://img.iplaysoft.com/wp-content/uploads/2019/scrcpy/scrcpy_android.jpg!0x0.webp" alt="scrcpy" loading="lazy"></figure>
+<table>
+<thead>
+<tr>
+<th>Scrcpy 快捷键列表</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>切换全屏模式</td>
+<td><code>Ctrl</code>+<code>F</code></td>
+</tr>
+<tr>
+<td>将窗口调整为1：1（完美像素）</td>
+<td><code>Ctrl</code>+<code>G</code></td>
+</tr>
+<tr>
+<td>调整窗口大小以删除黑色边框</td>
+<td><code>Ctrl</code>+<code>X</code> | 双击黑色背景</td>
+</tr>
+<tr>
+<td>设备 <code>HOME</code> 键</td>
+<td><code>Ctrl</code>+<code>H</code> | 鼠标中键</td>
+</tr>
+<tr>
+<td>设备 <code>BACK</code> 键</td>
+<td><code>Ctrl</code>+<code>B</code> | 鼠标右键</td>
+</tr>
+<tr>
+<td>设备 <code>任务管理</code> 键 (切换APP)</td>
+<td><code>Ctrl</code>+<code>S</code></td>
+</tr>
+<tr>
+<td>设备 <code>菜单</code> 键</td>
+<td><code>Ctrl</code>+<code>M</code></td>
+</tr>
+<tr>
+<td>设备<code>音量+</code>键</td>
+<td><code>Ctrl</code>+<code>↑</code></td>
+</tr>
+<tr>
+<td>设备<code>音量-</code>键</td>
+<td><code>Ctrl</code>+<code>↓</code></td>
+</tr>
+<tr>
+<td>设备<code>电源键</code></td>
+<td><code>Ctrl</code>+<code>P</code></td>
+</tr>
+<tr>
+<td>点亮手机屏幕</td>
+<td>鼠标右键</td>
+</tr>
+<tr>
+<td>复制内容到设备</td>
+<td><code>Ctrl</code>+<code>V</code></td>
+</tr>
+<tr>
+<td>启用/禁用 FPS 计数器（stdout）</td>
+<td><code>Ctrl</code>+<code>i</code></td>
+</tr>
+<tr>
+<td>安装APK</td>
+<td>将 apk 文件拖入投屏</td>
+</tr>
+<tr>
+<td>传输文件到设备</td>
+<td>将文件拖入投屏（非apk）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="使用-wifi-无线连接">使用 WIFi 无线连接：</h3>
+<p>Scrcpy 使用 adb 与 Android 设备通讯，而 adb 本身是支持无线连接的。因此除了 USB 数据线之外，我们也能无线使用。前提是需要保证手机和电脑处于同一<a href="https://www.iplaysoft.com/tag/%E5%B1%80%E5%9F%9F%E7%BD%91">局域网</a> (连接到相同的 <a href="https://www.iplaysoft.com/tag/wifi">WiFi</a> 路由器)，步骤如下：</p>
+<ol>
+<li>查询设备当前的 IP 地址 (设置 →关于手机→状态)</li>
+<li>启用 adb TCP/IP 连接，执行命令：<code>adb tcpip 5555</code>，其中 5555 为端口号</li>
+<li>拔掉你的数据线</li>
+<li>通过 WiFi 进行连接，执行命令：<code>adb connect 设备IP地址:5555</code></li>
+<li>重新启动 scrcpy 即可</li>
+<li>如果 WiFi 较慢，可以调整码率：<code>scrcpy -b 3M -m 800</code>，意思是限制 3 Mbps，画面分辨率限制 800，数值可以随意调整。</li>
+<li>如需切换回 USB 模式，执行：<code>adb usb</code></li>
+</ol>
+<p><a href="https://github.com/Genymobile/scrcpy">项目地址</a></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Flask 和 requests 搭建一个简单的API服务]]></title>
+        <id>https://crazydear.github.io/post/flask-he-requests-da-jian-yi-ge-jian-dan-de-api-fu-wu/</id>
+        <link href="https://crazydear.github.io/post/flask-he-requests-da-jian-yi-ge-jian-dan-de-api-fu-wu/">
+        </link>
+        <updated>2020-04-16T12:29:06.000Z</updated>
+        <content type="html"><![CDATA[<p>路由器为腾达路由器，使用requests来进行数据的获取，使用flask来进行实现api的搭建</p>
+<p>requests我就不介绍了，这个大家都很熟悉了，这篇文章主要是来提供一个编写爬虫的思路以及flask怎么搭建一个简单的api服务。</p>
+<h1 id="1分析页面">1.分析页面</h1>
+<p>我使用的是腾达路由器，一般路由器的管理ip地址是192.168.0.1<br>
+<img src="https://crazydear.github.io/post-images/1587040310729.png" alt="" loading="lazy"><br>
+进入之后的页面长这样<br>
+按下F12进入开发者页面选择network选项可以看到下面的样子<br>
+<img src="https://crazydear.github.io/post-images/1587040335844.gif" alt="" loading="lazy"><br>
+通过分析会发现，路由器是采用轮询（按照一定的时间间隔来向服务器来获取数据）的方式来获取数据，从这里可以获取发送请求的类型==&gt;是GET类型，以及一些发送的参数<br>
+<code>http://192.168.0.1/goform/getStatus?random=0.46529553086082265&amp;modules=internetStatus%2CdeviceStatistics%2CsystemInfo%2CwanAdvCfg%2CwifiRelay%2CwifiBasicCfg%2CsysTime</code><br>
+在问号后面的有两个参数，分别是 random、modules，通过测试发现，random这个参数不影响数据的获取，所以将其删去，剩下的url部分变成了<br>
+<code>http://192.168.0.1/goform/getStatus?modules=XXX</code><br>
+,接下来确定XXX的值从上面的gif可以发现，这里modules的值是<br>
+<code>internetStatus,deviceStatistics,systemInfo,wanAdvCfg,wifiRelay,wifiBasicCfg,sysTime</code><br>
+,可以发现这里应该是从路由器获取的各个参数，我们换一个页面来看一下，是不是会有其他的参数<br>
+<img src="https://crazydear.github.io/post-images/1587040456330.gif" alt="" loading="lazy"><br>
+从上面的gif发现这里出现了其他参数，甚至连url的地址都变了。所以现在当务之急的找到一个确定的url来使用requests发送请求，获取数据。到这里，来分析network这里的内容会让工作变得困难，不如来分析一个js文件（因为前面发现所有的GET请求都是xhr类型的，也就是ajax来进行发送的数据）<br>
+<img src="https://crazydear.github.io/post-images/1587040475673.png" alt="" loading="lazy"><br>
+从这里发现了好几个js文件，打开后分析<br>
+<img src="https://crazydear.github.io/post-images/1587040509203.webp" alt="" loading="lazy"><br>
+<img src="https://crazydear.github.io/post-images/1587040529979.webp" alt="" loading="lazy"><br>
+分别在js文件里面获得了几乎所有的参数，而且发现了url的规律，gofrom/后面的路径不起作用，真正起作用的是modules的值，路由器根据值的不同来返回不同的数据。<br>
+把上面所有的modules的值收集起来，经过去重后获得了下面33个参数</p>
+<pre><code>wifiBasicCfg wifiAdvCfg wifiPower wifiWPS wifiGuest wifiBeamforming loginAuth wanAdvCfg lanCfg softWare wifiRelay sysTime remoteWeb isWifiClients systemInfo hasNewSoftVersion internetStatus deviceStatistics parentCtrlList parentAccessCtrl wanBasicCfg localhost onlineList macFilter guestList staticIPList IPTV portList ddns dmz upnp ping
+</code></pre>
+<p>到这里基本上分析的差不多了，来整理一下</p>
+<p>url是<code>http://192.168.0.1/goform/getStatus?modules=XXX</code>,其中getStatus这个路径可以是上面的js里面的任意一个getUrl的值，返回的值是由modules的值来确定的。</p>
+<h1 id="2发送请求上代码">2.发送请求（上代码）</h1>
+<pre><code class="language-python">import requests
+
+import json
+
+module = [
+    &quot;wifiBasicCfg&quot;,
+    &quot;wifiAdvCfg&quot;,
+    &quot;wifiPower&quot;,
+    &quot;wifiWPS&quot;,
+    &quot;wifiGuest&quot;,
+    &quot;wifiBeamforming&quot;,
+    &quot;loginAuth&quot;,
+    &quot;wanAdvCfg&quot;,
+    &quot;lanCfg&quot;,
+    &quot;softWare&quot;,
+    &quot;wifiRelay&quot;,
+    &quot;sysTime&quot;,
+    &quot;remoteWeb&quot;,
+    &quot;isWifiClients&quot;,
+    &quot;systemInfo&quot;,
+    &quot;hasNewSoftVersion&quot;,
+    &quot;internetStatus&quot;,
+    &quot;deviceStatistics&quot;,
+    &quot;parentCtrlList&quot;,
+    &quot;parentAccessCtrl&quot;,
+    &quot;wanBasicCfg&quot;,
+    &quot;localhost&quot;,
+    &quot;onlineList&quot;,
+    &quot;macFilter&quot;,
+    &quot;guestList&quot;,
+    &quot;staticIPList&quot;,
+    &quot;IPTV&quot;,
+    &quot;portList&quot;,
+    &quot;ddns&quot;,
+    &quot;dmz&quot;,
+    &quot;upnp&quot;,
+    &quot;ping&quot;
+]
+
+
+class Wifi:
+    &quot;&quot;&quot;获取连接本WiFi的其他设备信息&quot;&quot;&quot;
+
+    def __init__(self, IP='192.168.0.1'):
+        self.IP = IP
+        self.data = self.req()
+
+    def req(self):
+        &quot;&quot;&quot;获取WiFi数据&quot;&quot;&quot;
+        req = requests.session()
+        module_args = &quot;,&quot;.join(module)
+        url = f'http://{self.IP}/goform/getStatus?&amp;modules={module_args}'
+        try:
+            req = req.get(url).json()
+            '''with open(&quot;wifi.json&quot;, 'r') as data:
+                req = json.loads(data.read())'''
+            self.status = True
+        except:
+            self.status = False
+        return req
+
+    #用于为后面flask搭建api来提供接口
+    def get(self, config_name):
+        if self.status:
+            if config_name ==&quot;all&quot;:
+                data = self.data
+            else:
+                try:
+                    data = self.data[config_name]
+                except:
+                    data = f&quot;no_{config_name}_data&quot;
+        else:
+            data = f&quot;no_{config_name}_data&quot;
+        return data
+</code></pre>
+<h1 id="3使用flask来搭建一个简单的api接口便于在浏览器中发起请求">3.使用flask来搭建一个简单的api接口，便于在浏览器中发起请求</h1>
+<pre><code class="language-python">from flask import Flask,render_template,jsonify
+
+app = Flask(__name__)
+
+from wifi import Wifi
+
+#实例化一个对象
+w = Wifi()
+
+#@app.route(&quot;/api/&lt;config_name&gt;&quot;)定义了这个路径需要做的事情，这里的的路径是router/&lt;config_name&gt;
+#当浏览器像这个地址发送请求的时候，get函数就会被调用，同时&lt;config_name&gt;会作为一个参数，传入get函数
+#method规定了请求的类型
+@app.route(&quot;/api/&lt;config_name&gt;&quot;,methods=['POST','GET'])
+def get(config_name):
+    try:
+        #返回json格式的数据
+        return jsonify(w.get(config_name))
+    except:
+        return &quot;404&quot;
+if __name__ == &quot;__main__&quot;:
+    app.run(debug=True)
+</code></pre>
+<p>运行app.py文件，测试可以发现<br>
+<img src="https://crazydear.github.io/post-images/1587040709592.jpg" alt="" loading="lazy"><br>
+上面的方法是使用面向对象的方法来写的<br>
+下面是一个普通的函数式的写法</p>
+<pre><code class="language-python">import requests
+import json
+module = [
+...
+]
+IP = &quot;192.168.0.1&quot;
+status = &quot;&quot;
+data = &quot;&quot;
+def req():
+    &quot;&quot;&quot;获取WiFi数据&quot;&quot;&quot;
+    req = requests.session()
+    module_args = &quot;,&quot;.join(module)
+    url = f'http://{IP}/goform/getStatus?&amp;modules={module_args}'
+    try:
+        req = req.get(url).json()
+        status = True
+    except:
+        status = False
+    return req
+
+#用于为后面flask搭建api来提供接口
+def get(config_name):
+    if status:
+        if config_name ==&quot;all&quot;:
+            data = data
+        else:
+            try:
+                data = data[config_name]
+            except:
+                data = f&quot;no_{config_name}_data&quot;
+    else:
+        data = f&quot;no_{config_name}_data&quot;
+    return data
+#flask部分
+from flask import Flask,render_template,jsonify
+app = Flask(__name__)
+#@app.route(&quot;/api/&lt;config_name&gt;&quot;)定义了这个路径需要做的事情，这里的的路径是router/&lt;config_name&gt;
+#当浏览器像这个地址发送请求的时候，get函数就会被调用，同时&lt;config_name&gt;会作为一个参数，传入get函数
+#method规定了请求的类型
+@app.route(&quot;/api/&lt;config_name&gt;&quot;,methods=['POST','GET'])
+def get_(config_name):
+    try:
+        #返回json格式的数据
+        return jsonify(get(config_name))
+    except:
+        return &quot;404&quot;
+if __name__ == &quot;__main__&quot;:
+    app.run(debug=True)
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Nextcloud手工安装记录]]></title>
+        <id>https://crazydear.github.io/post/install-Nextcloud/</id>
+        <link href="https://crazydear.github.io/post/install-Nextcloud/">
+        </link>
+        <updated>2020-04-15T12:05:01.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="1更新系统环境">1.更新系统环境</h2>
+<pre><code class="language-shell">apt update
+apt upgrade -y
+apt autoclean -y
+apt autoremove -y
+</code></pre>
+<h2 id="2重启所有服务">2.重启所有服务</h2>
+<p>最后使用</p>
+<pre><code class="language-shell">service nginx restart
+service mysql restart
+service redis-server restart
+service php7.4-fpm restart
+</code></pre>
+<h2 id="3开始安装软件">3.开始安装软件</h2>
+<pre><code class="language-shell">apt install gnupg gnupg2 lsb-release wget curl -y
+cd /etc/apt/sources.list.d
+echo &quot;deb [arch=amd64,arm64] http://ppa.launchpad.net/ondrej/php/ubuntu $(lsb_release -cs) main&quot; | tee php.list
+echo &quot;deb [arch=amd64,arm64] http://nginx.org/packages/mainline/ubuntu $(lsb_release -cs) nginx&quot; | tee nginx.list
+echo &quot;deb [arch=amd64,arm64] http://ftp.hosteurope.de/mirror/mariadb.org/repo/10.4/ubuntu $(lsb_release -cs) main&quot; | tee mariadb.list
+
+curl -fsSL https://nginx.org/keys/nginx_signing.key | sudo apt-key add -
+apt-key adv --recv-keys --keyserver hkps://keyserver.ubuntu.com:443 4F4EA0AAE5267A6C
+apt-key adv --recv-keys --keyserver hkps://keyserver.ubuntu.com:443 0xF1656F24C74CD1D8
+update_and_clean
+apt install software-properties-common zip unzip screen git wget ffmpeg libfile-fcntllock-perl locate ghostscript tree htop -y
+</code></pre>
+<h2 id="4安装nginx-using-tlsv13-openssl-111">4.安装NGINX using TLSv1.3, OpenSSL 1.1.1</h2>
+<pre><code class="language-shell">apt remove nginx nginx-common nginx-full -y --allow-change-held-packages
+apt install nginx -y
+systemctl enable nginx.service
+mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak &amp;&amp; touch /etc/nginx/nginx.conf
+</code></pre>
+<p>/etc/nginx/nginx.conf 文件内容</p>
+<pre><code>user www-data;
+worker_processes auto;
+pid /var/run/nginx.pid;
+events {
+worker_connections 1024;
+multi_accept on;
+use epoll;
+}
+http {
+server_names_hash_bucket_size 64;
+upstream php-handler {
+server unix:/run/php/php7.4-fpm.sock;
+}
+set_real_ip_from 127.0.0.1;
+# set_real_ip_from 192.168.2.0/24;
+real_ip_header X-Forwarded-For;
+real_ip_recursive on;
+include /etc/nginx/mime.types;
+include /etc/nginx/proxy.conf;
+include /etc/nginx/ssl.conf;
+include /etc/nginx/header.conf;
+include /etc/nginx/optimization.conf;
+default_type application/octet-stream;
+access_log /var/log/nginx/access.log;
+error_log /var/log/nginx/error.log warn;
+sendfile on;
+send_timeout 3600;
+tcp_nopush on;
+tcp_nodelay on;
+open_file_cache max=500 inactive=10m;
+open_file_cache_errors on;
+keepalive_timeout 65;
+reset_timedout_connection on;
+server_tokens off;
+resolver 127.0.0.53 valid=30s;
+resolver_timeout 5s;
+include /etc/nginx/conf.d/*.conf;
+}
+</code></pre>
+<pre><code class="language-shell">touch /etc/nginx/ssl.conf
+</code></pre>
+<p>/etc/nginx/ssl.conf</p>
+<pre><code>ssl_certificate /etc/ssl/certs/ssl-cert-snakeoil.pem;
+ssl_certificate_key /etc/ssl/private/ssl-cert-snakeoil.key;
+ssl_trusted_certificate /etc/ssl/certs/ssl-cert-snakeoil.pem;
+#ssl_certificate /etc/letsencrypt/rsa-certs/fullchain.pem;
+#ssl_certificate_key /etc/letsencrypt/rsa-certs/privkey.pem;
+#ssl_certificate /etc/letsencrypt/ecc-certs/fullchain.pem;
+#ssl_certificate_key /etc/letsencrypt/ecc-certs/privkey.pem;
+#ssl_trusted_certificate /etc/letsencrypt/ecc-certs/chain.pem;
+ssl_dhparam /etc/ssl/certs/dhparam.pem;
+ssl_session_timeout 1d; ssl_session_cache shared:SSL:50m;
+ssl_session_tickets off; ssl_protocols TLSv1.3 TLSv1.2;
+ssl_ciphers 'TLS-CHACHA20-POLY1305-SHA256:TLS-AES-256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA512:DHE-RSA-AES256-GCM-SHA512:ECDHE-RSA-AES256-GCM-SHA384:DHE-RSA-AES256-GCM-SHA384';
+ssl_ecdh_curve X448:secp521r1:secp384r1:prime256v1;
+ssl_prefer_server_ciphers on;
+ssl_stapling on;
+ssl_stapling_verify on;
+</code></pre>
+<p>/etc/nginx/proxy.conf</p>
+<pre><code>proxy_set_header Host \$host;
+proxy_set_header X-Real-IP \$remote_addr;
+proxy_set_header X-Forwarded-Host \$host;
+proxy_set_header X-Forwarded-Protocol \$scheme;
+proxy_set_header X-Forwarded-For \$remote_addr;
+proxy_set_header X-Forwarded-Port \$server_port;
+proxy_set_header X-Forwarded-Server \$host;
+proxy_connect_timeout 3600;
+proxy_send_timeout 3600;
+proxy_read_timeout 3600;
+proxy_redirect off;
+</code></pre>
+<p>/etc/nginx/header.conf</p>
+<pre><code>add_header Strict-Transport-Security &quot;max-age=15768000; includeSubDomains; preload;&quot;;
+add_header X-Robots-Tag none always;
+add_header X-Download-Options noopen always;
+add_header X-Permitted-Cross-Domain-Policies none always;
+add_header X-Content-Type-Options &quot;nosniff&quot; always;
+add_header X-XSS-Protection &quot;1; mode=block&quot; always;
+add_header Referrer-Policy &quot;no-referrer&quot; always;
+add_header X-Frame-Options &quot;SAMEORIGIN&quot; always;
+</code></pre>
+<p>/etc/nginx/optimization.conf</p>
+<pre><code>fastcgi_hide_header X-Powered-By;
+fastcgi_read_timeout 3600;
+fastcgi_send_timeout 3600;
+fastcgi_connect_timeout 3600;
+fastcgi_buffers 64 64K;
+fastcgi_buffer_size 256k;
+fastcgi_busy_buffers_size 3840K;
+fastcgi_cache_key \$http_cookie\$request_method\$host\$request_uri;
+fastcgi_cache_use_stale error timeout invalid_header http_500;
+fastcgi_ignore_headers Cache-Control Expires Set-Cookie;
+gzip on;
+gzip_vary on;
+gzip_comp_level 4;
+gzip_min_length 256;
+gzip_proxied expired no-cache no-store private no_last_modified no_etag auth;
+gzip_types application/atom+xml application/javascript application/json application/ld+json application/manifest+json application/rss+xml application/vnd.geo+json application/vnd.ms-fontobject application/x-font-ttf application/x-web-app-manifest+json application/xhtml+xml application/xml font/opentype image/bmp image/svg+xml image/x-icon text/cache-manifest text/css text/plain text/vcard text/vnd.rim.location.xloc text/vtt text/x-component text/x-cross-domain-policy;
+gzip_disable &quot;MSIE [1-6]\.&quot;;
+</code></pre>
+<p>/etc/nginx/php_optimization.conf</p>
+<pre><code>fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
+fastcgi_param PATH_INFO \$path_info;
+fastcgi_param modHeadersAvailable true;
+fastcgi_param front_controller_active true;
+fastcgi_pass php-handler;
+fastcgi_param HTTPS on;
+fastcgi_intercept_errors on;
+fastcgi_request_buffering off;
+fastcgi_cache_valid 404 1m;
+fastcgi_cache_valid any 1h;
+fastcgi_cache_methods GET HEAD;
+</code></pre>
+<p>/etc/ssl/certs/dhparam.pem</p>
+<pre><code>-----BEGIN DH PARAMETERS-----
+MIICCAKCAgEA//////////+t+FRYortKmq/cViAnPTzx2LnFg84tNpWp4TZBFGQz
++8yTnc4kmz75fS/jY2MMddj2gbICrsRhetPfHtXV/WVhJDP1H18GbtCFY2VVPe0a
+87VXE15/V8k1mE8McODmi3fipona8+/och3xWKE2rec1MKzKT0g6eXq8CrGCsyT7
+YdEIqUuyyOP7uWrat2DX9GgdT0Kj3jlN9K5W7edjcrsZCwenyO4KbXCeAvzhzffi
+7MA0BM0oNC9hkXL+nOmFg/+OTxIy7vKBg8P+OxtMb61zO7X8vC7CIAXFjvGDfRaD
+ssbzSibBsu/6iGtCOGEfz9zeNVs7ZRkDW7w09N75nAI4YbRvydbmyQd62R0mkff3
+7lmMsPrBhtkcrv4TCYUTknC0EwyTvEN5RPT9RFLi103TZPLiHnH1S/9croKrnJ32
+nuhtK8UiNjoNq8Uhl5sN6todv5pC1cRITgq80Gv6U93vPBsg7j/VnXwl5B0rZp4e
+8W5vUsMWTfT7eTDp5OWIV7asfV9C1p9tGHdjzx1VA0AEh/VbpX4xzHpxNciG77Qx
+iu1qHgEtnmgyqQdgCpGBMMRtx3j5ca0AOAkpmaMzy4t6Gh25PXFAADwqTs6p+Y0K
+zAqCkc3OyX3Pjsm1Wn+IpGtNtahR9EGC4caKAH5eZV9q//////////8CAQI=
+-----END DH PARAMETERS-----
+</code></pre>
+<h2 id="5安装php">5.安装PHP</h2>
+<p>安装相关软件</p>
+<pre><code class="language-shell">apt install php7.4-fpm php7.4-gd php7.4-mysql php7.4-sqlite3 php7.4-curl php7.4-xml php7.4-zip php7.4-intl php7.4-mbstring php7.4-json php7.4-bz2 php7.4-ldap php-apcu imagemagick php-imagick -y
+</code></pre>
+<p>备份配置文件</p>
+<pre><code class="language-shell">cp /etc/php/7.4/fpm/pool.d/www.conf /etc/php/7.4/fpm/pool.d/www.conf.bak
+cp /etc/php/7.4/cli/php.ini /etc/php/7.4/cli/php.ini.bak
+cp /etc/php/7.4/fpm/php.ini /etc/php/7.4/fpm/php.ini.bak
+cp /etc/php/7.4/fpm/php-fpm.conf /etc/php/7.4/fpm/php-fpm.conf.bak
+cp /etc/ImageMagick-6/policy.xml /etc/ImageMagick-6/policy.xml.bak
+</code></pre>
+<p>对www.conf文件进行配置</p>
+<pre><code class="language-shell">sed -i &quot;s/;env\[HOSTNAME\] = /env[HOSTNAME] = /&quot; /etc/php/7.4/fpm/pool.d/www.conf
+sed -i &quot;s/;env\[TMP\] = /env[TMP] = /&quot; /etc/php/7.4/fpm/pool.d/www.conf
+sed -i &quot;s/;env\[TMPDIR\] = /env[TMPDIR] = /&quot; /etc/php/7.4/fpm/pool.d/www.conf
+sed -i &quot;s/;env\[TEMP\] = /env[TEMP] = /&quot; /etc/php/7.4/fpm/pool.d/www.conf
+sed -i &quot;s/;env\[PATH\] = /env[PATH] = /&quot; /etc/php/7.4/fpm/pool.d/www.conf
+sed -i &quot;s/pm.max_children =.*/pm.max_children = 120/&quot; /etc/php/7.4/fpm/pool.d/www.conf
+sed -i &quot;s/pm.start_servers =.*/pm.start_servers = 12/&quot; /etc/php/7.4/fpm/pool.d/www.conf
+sed -i &quot;s/pm.min_spare_servers =.*/pm.min_spare_servers = 6/&quot; /etc/php/7.4/fpm/pool.d/www.conf
+sed -i &quot;s/pm.max_spare_servers =.*/pm.max_spare_servers = 18/&quot; /etc/php/7.4/fpm/pool.d/www.conf
+sed -i &quot;s/;pm.max_requests =.*/pm.max_requests = 1000/&quot; /etc/php/7.4/fpm/pool.d/www.conf
+</code></pre>
+<p>对cli/php.ini文件进行配置</p>
+<pre><code class="language-shell">sed -i &quot;s/output_buffering =.*/output_buffering = 'Off'/&quot; /etc/php/7.4/cli/php.ini
+sed -i &quot;s/max_execution_time =.*/max_execution_time = 3600/&quot; /etc/php/7.4/cli/php.ini
+sed -i &quot;s/max_input_time =.*/max_input_time = 3600/&quot; /etc/php/7.4/cli/php.ini
+sed -i &quot;s/post_max_size =.*/post_max_size = 10240M/&quot; /etc/php/7.4/cli/php.ini
+sed -i &quot;s/upload_max_filesize =.*/upload_max_filesize = 10240M/&quot; /etc/php/7.4/cli/php.ini
+sed -i &quot;s/;date.timezone.*/date.timezone = Asia\/\Shanghai/&quot; /etc/php/7.4/cli/php.ini
+</code></pre>
+<p>对fpm/php.ini文件进行配置</p>
+<pre><code class="language-shell">sed -i &quot;s/memory_limit = 128M/memory_limit = 512M/&quot; /etc/php/7.4/fpm/php.ini
+sed -i &quot;s/output_buffering =.*/output_buffering = 'Off'/&quot; /etc/php/7.4/fpm/php.ini
+sed -i &quot;s/max_execution_time =.*/max_execution_time = 3600/&quot; /etc/php/7.4/fpm/php.ini
+sed -i &quot;s/max_input_time =.*/max_input_time = 3600/&quot; /etc/php/7.4/fpm/php.ini
+sed -i &quot;s/post_max_size =.*/post_max_size = 10240M/&quot; /etc/php/7.4/fpm/php.ini
+sed -i &quot;s/upload_max_filesize =.*/upload_max_filesize = 10240M/&quot; /etc/php/7.4/fpm/php.ini
+sed -i &quot;s/;date.timezone.*/date.timezone = Asia\/\Shanghai/&quot; /etc/php/7.4/fpm/php.ini
+sed -i &quot;s/;session.cookie_secure.*/session.cookie_secure = True/&quot; /etc/php/7.4/fpm/php.ini
+sed -i &quot;s/;opcache.enable=.*/opcache.enable=1/&quot; /etc/php/7.4/fpm/php.ini
+sed -i &quot;s/;opcache.enable_cli=.*/opcache.enable_cli=1/&quot; /etc/php/7.4/fpm/php.ini
+sed -i &quot;s/;opcache.memory_consumption=.*/opcache.memory_consumption=128/&quot; /etc/php/7.4/fpm/php.ini
+sed -i &quot;s/;opcache.interned_strings_buffer=.*/opcache.interned_strings_buffer=8/&quot; /etc/php/7.4/fpm/php.ini
+sed -i &quot;s/;opcache.max_accelerated_files=.*/opcache.max_accelerated_files=10000/&quot; /etc/php/7.4/fpm/php.ini
+sed -i &quot;s/;opcache.revalidate_freq=.*/opcache.revalidate_freq=1/&quot; /etc/php/7.4/fpm/php.ini
+sed -i &quot;s/;opcache.save_comments=.*/opcache.save_comments=1/&quot; /etc/php/7.4/fpm/php.ini
+sed -i &quot;$aapc.enable_cli=1&quot; /etc/php/7.4/mods-available/apcu.ini
+</code></pre>
+<h2 id="6安装-mariadb">6.安装 MariaDB</h2>
+<pre><code class="language-shell">apt update &amp;&amp; apt install mariadb-server -y
+/usr/sbin/service mysql stop
+mv /etc/mysql/my.cnf /etc/mysql/my.cnf.bak
+</code></pre>
+<p>/etc/mysql/my.cnf文件配置</p>
+<pre><code>[client]
+default-character-set = utf8mb4
+port = 3306
+[mysqld_safe]
+log_error=/var/log/mysql/mysql_error.log
+nice = 0
+socket = /var/run/mysqld/mysqld.sock
+[mysqld]
+basedir = /usr
+bind-address = 127.0.0.1
+binlog_format = ROW
+bulk_insert_buffer_size = 16M
+character-set-server = utf8mb4
+collation-server = utf8mb4_general_ci
+concurrent_insert = 2
+connect_timeout = 5
+datadir = /var/lib/mysql
+default_storage_engine = InnoDB
+expire_logs_days = 10
+general_log_file = /var/log/mysql/mysql.log
+general_log = 0
+innodb_buffer_pool_size = 1024M
+innodb_buffer_pool_instances = 1
+innodb_flush_log_at_trx_commit = 2
+innodb_log_buffer_size = 32M
+innodb_max_dirty_pages_pct = 90
+innodb_file_per_table = 1
+innodb_open_files = 400
+innodb_io_capacity = 4000
+innodb_flush_method = O_DIRECT
+key_buffer_size = 128M
+lc_messages_dir = /usr/share/mysql
+lc_messages = en_US
+log_bin = /var/log/mysql/mariadb-bin
+log_bin_index = /var/log/mysql/mariadb-bin.index
+log_error = /var/log/mysql/mysql_error.log
+log_slow_verbosity = query_plan
+log_warnings = 2
+long_query_time = 1
+max_allowed_packet = 16M
+max_binlog_size = 100M
+max_connections = 200
+max_heap_table_size = 64M
+myisam_recover_options = BACKUP
+myisam_sort_buffer_size = 512M
+port = 3306
+pid-file = /var/run/mysqld/mysqld.pid
+query_cache_limit = 2M
+query_cache_size = 64M
+query_cache_type = 1
+query_cache_min_res_unit = 2k
+read_buffer_size = 2M
+read_rnd_buffer_size = 1M
+skip-external-locking
+skip-name-resolve
+slow_query_log_file = /var/log/mysql/mariadb-slow.log
+slow-query-log = 1
+socket = /var/run/mysqld/mysqld.sock
+sort_buffer_size = 4M
+table_open_cache = 400
+thread_cache_size = 128
+tmp_table_size = 64M
+tmpdir = /tmp
+transaction_isolation = READ-COMMITTED
+user = mysql
+wait_timeout = 600
+[mysqldump]
+max_allowed_packet = 16M
+quick
+quote-names
+[isamchk]
+key_buffer = 16M
+</code></pre>
+<p>创建数据库</p>
+<pre><code class="language-shell">/usr/sbin/service mysql restart &amp;&amp; mysql -uroot &lt;&lt;EOF
+CREATE DATABASE nextcloud CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+CREATE USER nextcloud@localhost identified by 'nextcloud';
+GRANT ALL PRIVILEGES on nextcloud.* to nextcloud@localhost;
+FLUSH privileges;
+EOF
+</code></pre>
+<blockquote>
+<p>说明</p>
+<pre><code class="language-shell">CREATE DATABASE 数据库名称 CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+CREATE USER 用户名@localhost identified by '密码';
+GRANT ALL PRIVILEGES on 数据库.* to 用户名@localhost identified by '密码';
+</code></pre>
+</blockquote>
+<p>数据库加固</p>
+<pre><code>mysql_secure_installation
+</code></pre>
+<h2 id="7安装redis-server">7.安装Redis-Server</h2>
+<pre><code class="language-shell">apt install redis-server php-redis -y
+cp /etc/redis/redis.conf /etc/redis/redis.conf.bak
+sed -i &quot;s/port 6379/port 0/&quot; /etc/redis/redis.conf
+sed -i s/\#\ unixsocket/\unixsocket/g /etc/redis/redis.conf
+sed -i &quot;s/unixsocketperm 700/unixsocketperm 770/&quot; /etc/redis/redis.conf
+sed -i &quot;s/# maxclients 10000/maxclients 512/&quot; /etc/redis/redis.conf
+usermod -a -G redis www-data
+cp /etc/sysctl.conf /etc/sysctl.conf.bak &amp;&amp; sed -i '$avm.overcommit_memory = 1' /etc/sysctl.conf
+</code></pre>
+<h2 id="8安装https证书">8.安装HTTPS证书</h2>
+<pre><code class="language-shell">apt install ssl-cert -y
+</code></pre>
+<pre><code class="language-shell">mkdir -p /var/www/letsencrypt /etc/letsencrypt/rsa-certs /etc/letsencrypt/ecc-certs
+chown -R www-data:www-data /var/www
+touch /etc/nginx/conf.d/letsencrypt.conf
+</code></pre>
+<p>创建Encrypt vhost文件（位于/etc/nginx/conf.d/letsencrypt.conf）</p>
+<pre><code>server
+{
+server_name 127.0.0.1;
+listen 127.0.0.1:81 default_server;
+charset utf-8;
+location ^~ /.well-known/acme-challenge
+{
+default_type text/plain;
+root /var/www/letsencrypt;
+}
+}
+</code></pre>
+<h2 id="9prepare-nginx-for-nextcloud-and-ssl">9.prepare NGINX for Nextcloud and SSL</h2>
+<pre><code class="language-shell">[ -f /etc/nginx/conf.d/default.conf ] &amp;&amp; mv /etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf.bak
+touch /etc/nginx/conf.d/default.conf
+</code></pre>
+<p>/etc/nginx/conf.d/nextcloud.conf</p>
+<pre><code>server {
+server_name YOUR.DEDYN.IO;
+listen 80 default_server;
+listen [::]:80 default_server;
+location ^~ /.well-known/acme-challenge {
+proxy_pass http://127.0.0.1:81;
+proxy_set_header Host \$host;
+}
+location / {
+return 301 https://\$host\$request_uri;
+}
+}
+server {
+server_name YOUR.DEDYN.IO;
+listen 443 ssl http2 default_server;
+listen [::]:443 ssl http2 default_server;
+root /var/www/nextcloud/;
+location = /robots.txt {
+allow all;
+log_not_found off;
+access_log off;
+}
+location = /.well-known/carddav {
+return 301 \$scheme://\$host/remote.php/dav;
+}
+location = /.well-known/caldav {
+return 301 \$scheme://\$host/remote.php/dav;
+}
+#SOCIAL app enabled? Please uncomment the following row
+#rewrite ^/.well-known/webfinger /public.php?service=webfinger last;
+#WEBFINGER app enabled? Please uncomment the following two rows.
+#rewrite ^/.well-known/host-meta /public.php?service=host-meta last;
+#rewrite ^/.well-known/host-meta.json /public.php?service=host-meta-json last;
+client_max_body_size 10240M;
+location / {
+rewrite ^ /index.php;
+}
+location ~ ^/(?:build|tests|config|lib|3rdparty|templates|data)/ {
+deny all;
+}
+location ~ ^/(?:\.|autotest|occ|issue|indie|db_|console) {
+deny all;
+}
+location ^~ /apps/rainloop/app/data {
+deny all;
+}
+location ~ \.(?:flv|mp4|mov|m4a)\$ {
+mp4;
+mp4_buffer_size 100M;
+mp4_max_buffer_size 1024M;
+fastcgi_split_path_info ^(.+?.php)(\/.*|)\$;
+set \$path_info \$fastcgi_path_info;
+try_files \$fastcgi_script_name =404;
+include fastcgi_params;
+include php_optimization.conf;
+}
+location ~ ^\/(?:index|remote|public|cron|core\/ajax\/update|status|ocs\/v[12]|updater\/.+|oc[ms]-provider\/.+).php(?:$|\/) {
+fastcgi_split_path_info ^(.+?.php)(\/.*|)\$;
+set \$path_info \$fastcgi_path_info;
+try_files \$fastcgi_script_name =404;
+include fastcgi_params;
+include php_optimization.conf;
+}
+location ~ ^\/(?:updater|oc[ms]-provider)(?:\$|\/) {
+try_files \$uri/ =404;
+index index.php;
+}
+location ~ .(?:css|js|woff2?|svg|gif|map|png|html|ttf|ico|jpg|jpeg)\$ {
+try_files \$uri /index.php\$request_uri;
+access_log off;
+expires 360d;
+}
+}
+</code></pre>
+<h2 id="10下载安装nextcloud">10.下载安装Nextcloud</h2>
+<pre><code class="language-shell">wget https://download.nextcloud.com/server/releases/latest.tar.bz2
+tar -xjf latest.tar.bz2 -C /var/www
+chown -R www-data:www-data /var/www/
+rm -f latest.tar.bz2
+</code></pre>
+<p>通过Ｃron脚本使Nextcloud任务定期地在系统后台自动运行</p>
+<pre><code class="language-shell">(crontab -u www-data -l ; echo &quot;*/5 * * * * php -f /var/www/nextcloud/cron.php &gt; /dev/null 2&gt;&amp;1&quot;) | crontab -u www-data -
+</code></pre>
+<p>解决ImageMagick errors</p>
+<pre><code class="language-shell">sed -i &quot;s/rights=\&quot;none\&quot; pattern=\&quot;PS\&quot;/rights=\&quot;read|write\&quot; pattern=\&quot;PS\&quot;/&quot; /etc/ImageMagick-6/policy.xml
+sed -i &quot;s/rights=\&quot;none\&quot; pattern=\&quot;EPI\&quot;/rights=\&quot;read|write\&quot; pattern=\&quot;EPI\&quot;/&quot; /etc/ImageMagick-6/policy.xml
+sed -i &quot;s/rights=\&quot;none\&quot; pattern=\&quot;PDF\&quot;/rights=\&quot;read|write\&quot; pattern=\&quot;PDF\&quot;/&quot; /etc/ImageMagick-6/policy.xml
+sed -i &quot;s/rights=\&quot;none\&quot; pattern=\&quot;XPS\&quot;/rights=\&quot;read|write\&quot; pattern=\&quot;XPS\&quot;/&quot; /etc/ImageMagick-6/policy.xml
+ln -s /usr/local/bin/gs /usr/bin/gs
+</code></pre>
+<p>步骤2重启所有服务<br>
+最后打开浏览器进行安装吧</p>
+<pre><code class="language-shell">cat /dev/null &gt; ~/.bash_history &amp;&amp; history -c &amp;&amp; history -w
+</code></pre>
+<p><a href="https://github.com/Crazydear/Techno-share/blob/master/project/nextcloud/install_new.sh">一键安装脚本</a></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[百度OCR接口的调用]]></title>
+        <id>https://crazydear.github.io/post/百度OCR接口的调用/</id>
+        <link href="https://crazydear.github.io/post/百度OCR接口的调用/">
+        </link>
+        <updated>2020-04-10T05:46:16.000Z</updated>
+        <content type="html"><![CDATA[<p>今天与大家分享的是利用百度OCR接口进行文字识别。</p>
+<p>首先呢，先去<a href="https://console.bce.baidu.com/ai/?_=1586498131714&amp;fromai=1#/ai/ocr/app/list">百度AI中心</a>申请应用，如图<br>
+<img src="https://crazydear.github.io/post-images/baiduocr.png" alt="" loading="lazy"><br>
+将API Key和Secret Key分别填到代码的相应位置处，替换完成后是不带&quot;[]&quot;的哦。</p>
+<pre><code class="language-python">#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+# Author:李绍丰 河北工业大学-能源与环境工程学院
+# times：2020.3.17
+
+# ****************************************************************
+# 程序功能：调用百度文字识别
+# 模块划分：无
+# ****************************************************************
+
+import requests
+import base64
+
+
+class baidu_ocr():
+    def __init__(self):
+        self.request_url = &quot;https://aip.baidubce.com/rest/2.0/ocr/v1/general_basic&quot;
+        self.content = []
+        self.get_token()
+
+    def get_token(self):
+        '''把获取的AK和SK替换下面的[AK],[SK]'''
+        host = 'https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&amp;client_id=[AK]&amp;client_secret=[SK]'
+        response = requests.get(host)
+        if response:
+            self.token = response.json()['access_token']
+        else:
+            if response.json()['error_description'] == 'unknown client id':
+                raise ValueError(&quot;API Key不正确&quot;)
+            else:
+                raise ValueError(&quot;Secret Key不正确&quot;)
+
+    def localpic(self,path):
+        f = open(path, 'rb')
+        self.img = base64.b64encode(f.read())
+        self.ocr(self.img)
+
+    def ocr(self, image=None, url=None):
+        if image:
+            params = {&quot;image&quot;:image}
+        else:
+            params = {&quot;url&quot;: url}
+        request_url = self.request_url + &quot;?access_token=&quot; + self.token
+        headers = {'content-type': 'application/x-www-form-urlencoded'}
+        response = requests.post(request_url, data=params, headers=headers)
+        if response:
+            try:
+                self.content.append(x['words'] for x in response.json()['words_result'])
+                return response.json()['words_result']
+            except:
+                print(url)
+
+    def __help__(self):
+        print(&quot;&quot;&quot;aa = baidu_ocr()\n aa.ocr(url='http')  # 网址的用法\n aa.localpic('path.png')     # 本地图片的用法\n print(aa.content)&quot;&quot;&quot;)
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Markdown语法]]></title>
+        <id>https://crazydear.github.io/post/Markdown/</id>
+        <link href="https://crazydear.github.io/post/Markdown/">
+        </link>
+        <updated>2020-04-10T05:05:37.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="markdown数学公式语法">Markdown数学公式语法</h1>
+<h2 id="希腊字母">希腊字母</h2>
+<table>
+<thead>
+<tr>
+<th>字母</th>
+<th>实现</th>
+<th>字母</th>
+<th>实现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td><code>A</code></td>
+<td>α</td>
+<td><code>\alhpa</code></td>
+</tr>
+<tr>
+<td>B</td>
+<td><code>B</code></td>
+<td>β</td>
+<td><code>\beta</code></td>
+</tr>
+<tr>
+<td>Γ</td>
+<td><code>\Gamma</code></td>
+<td>γ</td>
+<td><code>\gamma</code></td>
+</tr>
+<tr>
+<td>Δ</td>
+<td><code>\Delta</code></td>
+<td>δ</td>
+<td><code>\delta</code></td>
+</tr>
+<tr>
+<td>E</td>
+<td><code>E</code></td>
+<td>ϵ</td>
+<td><code>\epsilon</code></td>
+</tr>
+<tr>
+<td>Z</td>
+<td><code>Z</code></td>
+<td>ζ</td>
+<td><code>\zeta</code></td>
+</tr>
+<tr>
+<td>H</td>
+<td><code>H</code></td>
+<td>η</td>
+<td><code>\eta</code></td>
+</tr>
+<tr>
+<td>Θ</td>
+<td><code>\Theta</code></td>
+<td>θ</td>
+<td><code>\theta</code></td>
+</tr>
+<tr>
+<td>I</td>
+<td><code>I</code></td>
+<td>ι</td>
+<td><code>\iota</code></td>
+</tr>
+<tr>
+<td>K</td>
+<td><code>K</code></td>
+<td>κ</td>
+<td><code>\kappa</code></td>
+</tr>
+<tr>
+<td>Λ</td>
+<td><code>\Lambda</code></td>
+<td>λ</td>
+<td><code>\lambda</code></td>
+</tr>
+<tr>
+<td>M</td>
+<td><code>M</code></td>
+<td>μ</td>
+<td><code>\mu</code></td>
+</tr>
+<tr>
+<td>N</td>
+<td><code>N</code></td>
+<td>ν</td>
+<td><code>\nu</code></td>
+</tr>
+<tr>
+<td>Ξ</td>
+<td><code>\Xi</code></td>
+<td>ξ</td>
+<td><code>\xi</code></td>
+</tr>
+<tr>
+<td>O</td>
+<td><code>O</code></td>
+<td>ο</td>
+<td><code>\omicron</code></td>
+</tr>
+<tr>
+<td>Π</td>
+<td><code>\Pi</code></td>
+<td>π</td>
+<td><code>\pi</code></td>
+</tr>
+<tr>
+<td>P</td>
+<td><code>P</code></td>
+<td>ρ</td>
+<td><code>\rho</code></td>
+</tr>
+<tr>
+<td>Σ</td>
+<td><code>\Sigma</code></td>
+<td>σ</td>
+<td><code>\sigma</code></td>
+</tr>
+<tr>
+<td>T</td>
+<td><code>T</code></td>
+<td>τ</td>
+<td><code>\tau</code></td>
+</tr>
+<tr>
+<td>Υ</td>
+<td><code>\Upsilon</code></td>
+<td>υ</td>
+<td><code>\upsilon</code></td>
+</tr>
+<tr>
+<td>Φ</td>
+<td><code>\Phi</code></td>
+<td>ϕ</td>
+<td><code>\phi</code></td>
+</tr>
+<tr>
+<td>X</td>
+<td><code>X</code></td>
+<td>χ</td>
+<td><code>\chi</code></td>
+</tr>
+<tr>
+<td>Ψ</td>
+<td><code>\Psi</code></td>
+<td>ψ</td>
+<td><code>\psi</code></td>
+</tr>
+<tr>
+<td>Ω</td>
+<td><code>\Omega</code></td>
+<td>ω</td>
+<td><code>\omega</code></td>
+</tr>
+<tr>
+<td><img src="https://math.jianshu.com/math?formula=%5Cvarphi" alt="arphi" loading="lazy"></td>
+<td>\varphi</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="行内与独行">行内与独行</h2>
+<ol>
+<li>行内公式：将公式插入到本行内，符号：<code>$公式内容$</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mi>y</mi><mi>z</mi></mrow><annotation encoding="application/x-tex">xyz</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">x</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span></span></span></span></li>
+<li>独行公式：将公式插入到新的一行内，并且居中，符号：<code>$$公式内容$$</code>，如：$$xyz$$</li>
+</ol>
+<h2 id="上标-下标与组合">上标、下标与组合</h2>
+<ol>
+<li>上标符号，符号：<code>^</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>x</mi><mn>4</mn></msup></mrow><annotation encoding="application/x-tex">x^4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">4</span></span></span></span></span></span></span></span></span></span></span></li>
+<li>下标符号，符号：<code>_</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">x_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></li>
+<li>组合符号，符号：<code>{}</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mn>16</mn><mn>8</mn></msub><msubsup><mi>O</mi><mn>2</mn><mrow><mn>2</mn><mo>+</mo></mrow></msubsup></mrow><annotation encoding="application/x-tex">{16}_{8}O^{2+}_{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.120547em;vertical-align:-0.266308em;"></span><span class="mord"><span class="mord"><span class="mord">1</span><span class="mord">6</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">8</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.854239em;"><span style="top:-2.433692em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span><span style="top:-3.1031310000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span><span class="mord mtight">+</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.266308em;"><span></span></span></span></span></span></span></span></span></span></li>
+</ol>
+<h2 id="汉字-字体与格式">汉字、字体与格式</h2>
+<ol>
+<li>汉字形式，符号：<code>\mbox{}</code>，如：<span class='katex-error' title='ParseError: KaTeX parse error: Undefined control sequence: \mbox at position 4: V_{\̲m̲b̲o̲x̲{初始}}'>V_{\mbox{初始}}</span></li>
+<li>字体控制，符号：<code>\displaystyle</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mstyle scriptlevel="0" displaystyle="true"><mfrac><mrow><mi>x</mi><mo>+</mo><mi>y</mi></mrow><mrow><mi>y</mi><mo>+</mo><mi>z</mi></mrow></mfrac></mstyle></mrow><annotation encoding="application/x-tex">\displaystyle \frac{x+y}{y+z}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.1407700000000003em;vertical-align:-0.8804400000000001em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.2603300000000002em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.8804400000000001em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></li>
+<li>下划线符号，符号：<code>\underline</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><munder accentunder="true"><mrow><mi>x</mi><mo>+</mo><mi>y</mi></mrow><mo stretchy="true">‾</mo></munder></mrow><annotation encoding="application/x-tex">\underline{x+y}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.97777em;vertical-align:-0.3944400000000001em;"></span><span class="mord underline"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.5833299999999999em;"><span style="top:-2.6455599999999997em;"><span class="pstrut" style="height:3em;"></span><span class="underline-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3944400000000001em;"><span></span></span></span></span></span></span></span></span></li>
+<li>标签，符号<code>\tag{数字}</code>，如：<span class='katex-error' title='ParseError: KaTeX parse error: \tag works only in display equations'>\tag{11}</span></li>
+<li>上大括号，符号：<code>\overbrace{算式}</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover><mover><mrow><mi>a</mi><mo>+</mo><mi>b</mi><mo>+</mo><mi>c</mi><mo>+</mo><mi>d</mi></mrow><mo stretchy="true">⏞</mo></mover><mn>2.0</mn></mover></mrow><annotation encoding="application/x-tex">\overbrace{a+b+c+d}^{2.0}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.076878em;vertical-align:-0.08333em;"></span><span class="mord mover"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.9935479999999997em;"><span style="top:-3.34244em;"><span class="pstrut" style="height:3.34244em;"></span><span class="mord mover"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3424399999999999em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">a</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathdefault">b</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathdefault">c</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathdefault">d</span></span></span><span class="svg-align" style="top:-3.79444em;"><span class="pstrut" style="height:3em;"></span><span class="stretchy" style="height:0.548em;min-width:1.6em;"><span class="brace-left" style="height:0.548em;"><svg width='400em' height='0.548em' viewBox='0 0 400000 548' preserveAspectRatio='xMinYMin slice'><path d='M6 548l-6-6v-35l6-11c56-104 135.3-181.3 238-232 57.3-28.7 117
+-45 179-50h399577v120H403c-43.3 7-81 15-113 26-100.7 33-179.7 91-237 174-2.7
+ 5-6 9-10 13-.7 1-7.3 1-20 1H6z'/></svg></span><span class="brace-center" style="height:0.548em;"><svg width='400em' height='0.548em' viewBox='0 0 400000 548' preserveAspectRatio='xMidYMin slice'><path d='M200428 334
+c-100.7-8.3-195.3-44-280-108-55.3-42-101.7-93-139-153l-9-14c-2.7 4-5.7 8.7-9 14
+-53.3 86.7-123.7 153-211 199-66.7 36-137.3 56.3-212 62H0V214h199568c178.3-11.7
+ 311.7-78.3 403-201 6-8 9.7-12 11-12 .7-.7 6.7-1 18-1s17.3.3 18 1c1.3 0 5 4 11
+ 12 44.7 59.3 101.3 106.3 170 141s145.3 54.3 229 60h199572v120z'/></svg></span><span class="brace-right" style="height:0.548em;"><svg width='400em' height='0.548em' viewBox='0 0 400000 548' preserveAspectRatio='xMaxYMin slice'><path d='M400000 542l
+-6 6h-17c-12.7 0-19.3-.3-20-1-4-4-7.3-8.3-10-13-35.3-51.3-80.8-93.8-136.5-127.5
+s-117.2-55.8-184.5-66.5c-.7 0-2-.3-4-1-18.7-2.7-76-4.3-172-5H0V214h399571l6 1
+c124.7 8 235 61.7 331 161 31.3 33.3 59.7 72.7 85 118l7 13v35z'/></svg></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.08333em;"><span></span></span></span></span></span></span><span style="top:-4.88488em;"><span class="pstrut" style="height:3.34244em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span><span class="mord mtight">.</span><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.08333em;"><span></span></span></span></span></span></span></span></span></li>
+<li>下大括号，符号：<code>\underbrace{算式}</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>a</mi><mo>+</mo><munder><munder><mrow><mi>b</mi><mo>+</mo><mi>c</mi></mrow><mo stretchy="true">⎵</mo></munder><mn>1.0</mn></munder><mo>+</mo><mi>d</mi></mrow><annotation encoding="application/x-tex">a+\underbrace{b+c}_{1.0}+d</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">a</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:2.076878em;vertical-align:-1.382438em;"></span><span class="mord munder"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-1.617562em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mord mtight">.</span><span class="mord mtight">0</span></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord munder"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span class="svg-align" style="top:-2.26867em;"><span class="pstrut" style="height:3em;"></span><span class="stretchy" style="height:0.548em;min-width:1.6em;"><span class="brace-left" style="height:0.548em;"><svg width='400em' height='0.548em' viewBox='0 0 400000 548' preserveAspectRatio='xMinYMin slice'><path d='M0 6l6-6h17c12.688 0 19.313.3 20 1 4 4 7.313 8.3 10 13
+ 35.313 51.3 80.813 93.8 136.5 127.5 55.688 33.7 117.188 55.8 184.5 66.5.688
+ 0 2 .3 4 1 18.688 2.7 76 4.3 172 5h399450v120H429l-6-1c-124.688-8-235-61.7
+-331-161C60.687 138.7 32.312 99.3 7 54L0 41V6z'/></svg></span><span class="brace-center" style="height:0.548em;"><svg width='400em' height='0.548em' viewBox='0 0 400000 548' preserveAspectRatio='xMidYMin slice'><path d='M199572 214
+c100.7 8.3 195.3 44 280 108 55.3 42 101.7 93 139 153l9 14c2.7-4 5.7-8.7 9-14
+ 53.3-86.7 123.7-153 211-199 66.7-36 137.3-56.3 212-62h199568v120H200432c-178.3
+ 11.7-311.7 78.3-403 201-6 8-9.7 12-11 12-.7.7-6.7 1-18 1s-17.3-.3-18-1c-1.3 0
+-5-4-11-12-44.7-59.3-101.3-106.3-170-141s-145.3-54.3-229-60H0V214z'/></svg></span><span class="brace-right" style="height:0.548em;"><svg width='400em' height='0.548em' viewBox='0 0 400000 548' preserveAspectRatio='xMaxYMin slice'><path d='M399994 0l6 6v35l-6 11c-56 104-135.3 181.3-238 232-57.3
+ 28.7-117 45-179 50H-300V214h399897c43.3-7 81-15 113-26 100.7-33 179.7-91 237
+-174 2.7-5 6-9 10-13 .7-1 7.3-1 20-1h17z'/></svg></span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">b</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathdefault">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.73133em;"><span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.382438em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">d</span></span></span></span></li>
+<li>上位符号，符号：<code>\stacrel{上位符号}{基位符号}</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mi>x</mi><mo>⃗</mo></mover><msup><mo><mo>=</mo></mo><mrow><mi mathvariant="normal">d</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">f</mi></mrow></msup><mrow><msub><mi>x</mi><mn>1</mn></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>x</mi><mi>n</mi></msub></mrow></mrow><annotation encoding="application/x-tex">\vec{x}\stackrel{\mathrm{def}}{=}{x_1,\dots,x_n}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.152978em;vertical-align:0em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.714em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">x</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.20772em;"><span class="overlay" style="height:0.714em;width:0.471em;"><svg width='0.471em' height='0.714em' style='width:0.471em' viewBox='0 0 471 714' preserveAspectRatio='xMinYMin'><path d='M377 20c0-5.333 1.833-10 5.5-14S391 0 397 0c4.667 0 8.667 1.667 12 5
+3.333 2.667 6.667 9 10 19 6.667 24.667 20.333 43.667 41 57 7.333 4.667 11
+10.667 11 18 0 6-1 10-3 12s-6.667 5-14 9c-28.667 14.667-53.667 35.667-75 63
+-1.333 1.333-3.167 3.5-5.5 6.5s-4 4.833-5 5.5c-1 .667-2.5 1.333-4.5 2s-4.333 1
+-7 1c-4.667 0-9.167-1.833-13.5-5.5S337 184 337 178c0-12.667 15.667-32.333 47-59
+H213l-171-1c-8.667-6-13-12.333-13-19 0-4.667 4.333-11.333 13-20h359
+c-16-25.333-24-45-24-59z'/></svg></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel"><span class="mop op-limits"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:1.152978em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span><span class="mop">=</span></span></span><span style="top:-3.5668699999999998em;margin-left:0em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathrm mtight">d</span><span class="mord mathrm mtight">e</span><span class="mord mathrm mtight" style="margin-right:0.07778em;">f</span></span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></li>
+</ol>
+<h2 id="占位符">占位符</h2>
+<ol>
+<li>两个quad空格，符号：<code>\qquad</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mspace width="2em"/><mi>y</mi></mrow><annotation encoding="application/x-tex">x \qquad y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:2em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span></li>
+<li>quad空格，符号：<code>\quad</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mspace width="1em"/><mi>y</mi></mrow><annotation encoding="application/x-tex">x \quad y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:1em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span></li>
+<li>大空格，符号<code>\</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mtext> </mtext><mi>y</mi></mrow><annotation encoding="application/x-tex">x \  y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">x</span><span class="mspace"> </span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span></li>
+<li>中空格，符号<code>\:</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>:</mo><mi>y</mi></mrow><annotation encoding="application/x-tex">x : y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span></li>
+<li>小空格，符号<code>\,</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo separator="true">,</mo><mi>y</mi></mrow><annotation encoding="application/x-tex">x , y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span></li>
+<li>没有空格，符号``，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mi>y</mi></mrow><annotation encoding="application/x-tex">xy</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">x</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span></li>
+<li>紧贴，符号<code>\!</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>!</mo><mi>y</mi></mrow><annotation encoding="application/x-tex">x ! y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">x</span><span class="mclose">!</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span></li>
+</ol>
+<h2 id="定界符与组合">定界符与组合</h2>
+<ol>
+<li>括号，符号：<code>（）\big(\big) \Big(\Big) \bigg(\bigg) \Bigg(\Bigg)</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">（</mi><mi mathvariant="normal">）</mi><mo fence="false">(</mo><mo fence="false">)</mo><mo fence="false">(</mo><mo fence="false">)</mo><mo fence="false">(</mo><mo fence="false">)</mo><mo fence="false">(</mo><mo fence="false">)</mo></mrow><annotation encoding="application/x-tex">（）\big(\big) \Big(\Big) \bigg(\bigg) \Bigg(\Bigg)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:3.0000299999999998em;vertical-align:-1.25003em;"></span><span class="mord cjk_fallback">（</span><span class="mord cjk_fallback">）</span><span class="mord"><span class="delimsizing size1">(</span></span><span class="mord"><span class="delimsizing size1">)</span></span><span class="mord"><span class="delimsizing size2">(</span></span><span class="mord"><span class="delimsizing size2">)</span></span><span class="mord"><span class="delimsizing size3">(</span></span><span class="mord"><span class="delimsizing size3">)</span></span><span class="mord"><span class="delimsizing size4">(</span></span><span class="mord"><span class="delimsizing size4">)</span></span></span></span></span></li>
+<li>中括号，符号：<code>[]</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mi>x</mi><mo>+</mo><mi>y</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">[x+y]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mclose">]</span></span></span></span></li>
+<li>大括号，符号：<code>\{ \}</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>{</mo><mi>x</mi><mo>+</mo><mi>y</mi><mo>}</mo></mrow><annotation encoding="application/x-tex">\{x+y\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mclose">}</span></span></span></span></li>
+<li>自适应括号，符号：<code>\left \right</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo fence="true">(</mo><mi>x</mi><mo fence="true">)</mo></mrow><annotation encoding="application/x-tex">\left(x\right)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;">(</span><span class="mord mathdefault">x</span><span class="mclose delimcenter" style="top:0em;">)</span></span></span></span></span>，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo fence="true">(</mo><mi>x</mi><mrow><mi>y</mi><mi>z</mi></mrow><mo fence="true">)</mo></mrow><annotation encoding="application/x-tex">\left(x{yz}\right)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;">(</span><span class="mord mathdefault">x</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span></span><span class="mclose delimcenter" style="top:0em;">)</span></span></span></span></span></li>
+<li>组合公式，符号：<code>{上位公式 \choose 下位公式}</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mrow><mo fence="true">(</mo><mfrac linethickness="0px"><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow><mi>k</mi></mfrac><mo fence="true">)</mo></mrow><mo>=</mo><mrow><mo fence="true">(</mo><mfrac linethickness="0px"><mi>n</mi><mi>k</mi></mfrac><mo fence="true">)</mo></mrow><mo>+</mo><mrow><mo fence="true">(</mo><mfrac linethickness="0px"><mi>n</mi><mrow><mi>k</mi><mo>−</mo><mn>1</mn></mrow></mfrac><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">{n+1 \choose k}={n \choose k}+{n \choose k-1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.245118em;vertical-align:-0.35001em;"></span><span class="mord"><span class="mord"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size1">(</span></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8951079999999999em;"><span style="top:-2.3550000000000004em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span></span></span></span><span style="top:-3.144em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size1">)</span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.20001em;vertical-align:-0.35001em;"></span><span class="mord"><span class="mord"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size1">(</span></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.7453919999999999em;"><span style="top:-2.3550000000000004em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span></span></span></span><span style="top:-3.144em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size1">)</span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.253331em;vertical-align:-0.403331em;"></span><span class="mord"><span class="mord"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size1">(</span></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.745392em;"><span style="top:-2.355em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.144em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.403331em;"><span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size1">)</span></span></span></span></span></span></span></li>
+<li>组合公式，符号：<code>{上位公式 \atop 下位公式}</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mo>∑</mo><mfrac linethickness="0px"><mrow><msub><mi>k</mi><mn>0</mn></msub><mo separator="true">,</mo><msub><mi>k</mi><mn>1</mn></msub><mo separator="true">,</mo><mo>…</mo><mo>&gt;</mo><mn>0</mn></mrow><mrow><msub><mi>k</mi><mn>0</mn></msub><mo>+</mo><msub><mi>k</mi><mn>1</mn></msub><mo>+</mo><mo>⋯</mo><mo>=</mo><mi>n</mi></mrow></mfrac></msub><msub><mi>A</mi><msub><mi>k</mi><mn>0</mn></msub></msub><msub><mi>A</mi><msub><mi>k</mi><mn>1</mn></msub></msub><mo>⋯</mo></mrow><annotation encoding="application/x-tex">\sum_{k_0,k_1,\ldots&gt;0 \atop k_0+k_1+\cdots=n}A_{k_0}A_{k_1}\cdots</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.50218em;vertical-align:-0.75218em;"></span><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:-0.0000050000000000050004em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3447999999999999em;"><span style="top:-2.3448em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.69164em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mopen nulldelimiter sizing reset-size3 size6"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9880571428571429em;"><span style="top:-2.1349714285714283em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3447999999999998em;margin-left:-0.03148em;margin-right:0.1em;"><span class="pstrut" style="height:2.64444em;"></span><span class="mord mtight">0</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.29964em;"><span></span></span></span></span></span></span><span class="mbin mtight">+</span><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3447999999999998em;margin-left:-0.03148em;margin-right:0.1em;"><span class="pstrut" style="height:2.64444em;"></span><span class="mord mtight">1</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.29964em;"><span></span></span></span></span></span></span><span class="mbin mtight">+</span><span class="minner mtight">⋯</span><span class="mrel mtight">=</span><span class="mord mathdefault mtight">n</span></span></span></span><span style="top:-2.9920285714285715em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3447999999999998em;margin-left:-0.03148em;margin-right:0.1em;"><span class="pstrut" style="height:2.64444em;"></span><span class="mord mtight">0</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.29964em;"><span></span></span></span></span></span></span><span class="mpunct mtight">,</span><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3447999999999998em;margin-left:-0.03148em;margin-right:0.1em;"><span class="pstrut" style="height:2.64444em;"></span><span class="mord mtight">1</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.29964em;"><span></span></span></span></span></span></span><span class="mpunct mtight">,</span><span class="minner mtight">…</span><span class="mrel mtight">&gt;</span><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.5790571428571429em;"><span></span></span></span></span></span><span class="mclose nulldelimiter sizing reset-size3 size6"></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.75218em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31731428571428577em;"><span style="top:-2.357em;margin-left:-0.03148em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2501em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathdefault">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31731428571428577em;"><span style="top:-2.357em;margin-left:-0.03148em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2501em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">⋯</span></span></span></span></li>
+</ol>
+<h2 id="四则运算">四则运算</h2>
+<ol>
+<li>加法运算，符号：<code>+</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>+</mo><mi>y</mi><mo>=</mo><mi>z</mi></mrow><annotation encoding="application/x-tex">x+y=z</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span></span></span></span></li>
+<li>减法运算，符号：<code>-</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>−</mo><mi>y</mi><mo>=</mo><mi>z</mi></mrow><annotation encoding="application/x-tex">x-y=z</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span></span></span></span></li>
+<li>加减运算，符号：<code>\pm</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>±</mo><mi>y</mi><mo>=</mo><mi>z</mi></mrow><annotation encoding="application/x-tex">x \pm y=z</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">±</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span></span></span></span></li>
+<li>减加运算，符号：<code>\mp</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>∓</mo><mi>y</mi><mo>=</mo><mi>z</mi></mrow><annotation encoding="application/x-tex">x \mp y=z</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∓</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span></span></span></span></li>
+<li>乘法运算，符号：<code>\times</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>×</mo><mi>y</mi><mo>=</mo><mi>z</mi></mrow><annotation encoding="application/x-tex">x \times y=z</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span></span></span></span></li>
+<li>点乘运算，符号：<code>\cdot</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>⋅</mo><mi>y</mi><mo>=</mo><mi>z</mi></mrow><annotation encoding="application/x-tex">x \cdot y=z</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.44445em;vertical-align:0em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span></span></span></span></li>
+<li>星乘运算，符号：<code>\ast</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>∗</mo><mi>y</mi><mo>=</mo><mi>z</mi></mrow><annotation encoding="application/x-tex">x \ast y=z</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.46528em;vertical-align:0em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span></span></span></span></li>
+<li>除法运算，符号：<code>\div</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>÷</mo><mi>y</mi><mo>=</mo><mi>z</mi></mrow><annotation encoding="application/x-tex">x \div y=z</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">÷</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span></span></span></span></li>
+<li>斜法运算，符号：<code>/</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mi mathvariant="normal">/</mi><mi>y</mi><mo>=</mo><mi>z</mi></mrow><annotation encoding="application/x-tex">x/y=z</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">x</span><span class="mord">/</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span></span></span></span></li>
+<li>分式表示，符号：<code>\frac{分子}{分母}</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mrow><mi>x</mi><mo>+</mo><mi>y</mi></mrow><mrow><mi>y</mi><mo>+</mo><mi>z</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">\frac{x+y}{y+z}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.335547em;vertical-align:-0.481108em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.854439em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">y</span><span class="mbin mtight">+</span><span class="mord mathdefault mtight" style="margin-right:0.04398em;">z</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.446108em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">x</span><span class="mbin mtight">+</span><span class="mord mathdefault mtight" style="margin-right:0.03588em;">y</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.481108em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></li>
+<li>分式表示，符号：<code>{分子} \voer {分母}</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mrow><mi>x</mi><mo>+</mo><mi>y</mi></mrow><mrow><mi>y</mi><mo>+</mo><mi>z</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">{x+y} \over {y+z}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.335547em;vertical-align:-0.481108em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.854439em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">y</span><span class="mbin mtight">+</span><span class="mord mathdefault mtight" style="margin-right:0.04398em;">z</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.446108em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">x</span><span class="mbin mtight">+</span><span class="mord mathdefault mtight" style="margin-right:0.03588em;">y</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.481108em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></li>
+<li>绝对值表示，符号：<code>||</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">∣</mi><mi>x</mi><mo>+</mo><mi>y</mi><mi mathvariant="normal">∣</mi></mrow><annotation encoding="application/x-tex">|x+y|</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">∣</span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mord">∣</span></span></span></span></li>
+</ol>
+<h2 id="高级运算">高级运算</h2>
+<ol>
+<li>平均数运算，符号：<code>\overline{算式}</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mrow><mi>x</mi><mi>y</mi><mi>z</mi></mrow><mo stretchy="true">‾</mo></mover></mrow><annotation encoding="application/x-tex">\overline{xyz}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.825em;vertical-align:-0.19444em;"></span><span class="mord overline"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.63056em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span></span></span><span style="top:-3.55056em;"><span class="pstrut" style="height:3em;"></span><span class="overline-line" style="border-bottom-width:0.04em;"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span></span></span></span></li>
+<li>开二次方运算，符号：<code>\sqrt</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msqrt><mi>x</mi></msqrt></mrow><annotation encoding="application/x-tex">\sqrt x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.04em;vertical-align:-0.23972em;"></span><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8002800000000001em;"><span class="svg-align" style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathdefault" style="padding-left:0.833em;">x</span></span><span style="top:-2.76028em;"><span class="pstrut" style="height:3em;"></span><span class="hide-tail" style="min-width:0.853em;height:1.08em;"><svg width='400em' height='1.08em' viewBox='0 0 400000 1080' preserveAspectRatio='xMinYMin slice'><path d='M95,702c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,
+-10,-9.5,-14c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54c44.2,-33.3,65.8,
+-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10s173,378,173,378c0.7,0,
+35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429c69,-144,104.5,-217.7,106.5,
+-221c5.3,-9.3,12,-14,20,-14H400000v40H845.2724s-225.272,467,-225.272,467
+s-235,486,-235,486c-2.7,4.7,-9,7,-19,7c-6,0,-10,-1,-12,-3s-194,-422,-194,-422
+s-65,47,-65,47z M834 80H400000v40H845z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.23972em;"><span></span></span></span></span></span></span></span></span></li>
+<li>开方运算，符号：<code>\sqrt[开方数]{被开方数}</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mroot><mrow><mi>x</mi><mo>+</mo><mi>y</mi></mrow><mn>3</mn></mroot></mrow><annotation encoding="application/x-tex">\sqrt[3]{x+y}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.04em;vertical-align:-0.26055499999999987em;"></span><span class="mord sqrt"><span class="root"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6335540000000002em;"><span style="top:-2.811334em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size6 size1 mtight"><span class="mord mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.7794450000000002em;"><span class="svg-align" style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord" style="padding-left:0.833em;"><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span><span style="top:-2.739445em;"><span class="pstrut" style="height:3em;"></span><span class="hide-tail" style="min-width:0.853em;height:1.08em;"><svg width='400em' height='1.08em' viewBox='0 0 400000 1080' preserveAspectRatio='xMinYMin slice'><path d='M95,702c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,
+-10,-9.5,-14c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54c44.2,-33.3,65.8,
+-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10s173,378,173,378c0.7,0,
+35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429c69,-144,104.5,-217.7,106.5,
+-221c5.3,-9.3,12,-14,20,-14H400000v40H845.2724s-225.272,467,-225.272,467
+s-235,486,-235,486c-2.7,4.7,-9,7,-19,7c-6,0,-10,-1,-12,-3s-194,-422,-194,-422
+s-65,47,-65,47z M834 80H400000v40H845z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.26055499999999987em;"><span></span></span></span></span></span></span></span></span></li>
+<li>对数运算，符号：<code>\log</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>log</mi><mo>⁡</mo><mo>(</mo><mi>x</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">\log(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mopen">(</span><span class="mord mathdefault">x</span><span class="mclose">)</span></span></span></span></li>
+<li>极限运算，符号：<code>\lim</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msubsup><mi>lim</mi><mo>⁡</mo><mrow><mi>y</mi><mo>→</mo><mn>0</mn></mrow><mrow><mi>x</mi><mo>→</mo><mi mathvariant="normal">∞</mi></mrow></msubsup><mfrac><mi>x</mi><mi>y</mi></mfrac></mrow><annotation encoding="application/x-tex">\lim^{x \to \infty}_{y \to 0}{\frac{x}{y}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.2298399999999998em;vertical-align:-0.481108em;"></span><span class="mop"><span class="mop">lim</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.748732em;"><span style="top:-2.4530000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">y</span><span class="mrel mtight">→</span><span class="mord mtight">0</span></span></span></span><span style="top:-3.1473400000000002em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">x</span><span class="mrel mtight">→</span><span class="mord mtight">∞</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.383108em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.695392em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">y</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">x</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.481108em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></li>
+<li>极限运算，符号：<code>\displaystyle \lim</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mstyle scriptlevel="0" displaystyle="true"><munderover><mi>lim</mi><mo>⁡</mo><mrow><mi>y</mi><mo>→</mo><mn>0</mn></mrow><mrow><mi>x</mi><mo>→</mo><mi mathvariant="normal">∞</mi></mrow></munderover><mfrac><mi>x</mi><mi>y</mi></mfrac></mstyle></mrow><annotation encoding="application/x-tex">\displaystyle \lim^{x \to \infty}_{y \to 0}{\frac{x}{y}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.176272em;vertical-align:-0.8804400000000001em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.2958319999999999em;"><span style="top:-2.082892em;margin-left:0em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">y</span><span class="mrel mtight">→</span><span class="mord mtight">0</span></span></span></span><span style="top:-2.7em;"><span class="pstrut" style="height:2.7em;"></span><span><span class="mop">lim</span></span></span><span style="top:-3.59444em;margin-left:0em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">x</span><span class="mrel mtight">→</span><span class="mord mtight">∞</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.853216em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.10756em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">x</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.8804400000000001em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></li>
+<li>求和运算，符号：<code>\sum</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msubsup><mo>∑</mo><mrow><mi>y</mi><mo>→</mo><mn>0</mn></mrow><mrow><mi>x</mi><mo>→</mo><mi mathvariant="normal">∞</mi></mrow></msubsup><mfrac><mi>x</mi><mi>y</mi></mfrac></mrow><annotation encoding="application/x-tex">\sum^{x \to \infty}_{y \to 0}{\frac{x}{y}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.2854em;vertical-align:-0.481108em;"></span><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:-0.0000050000000000050004em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.804292em;"><span style="top:-2.40029em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">y</span><span class="mrel mtight">→</span><span class="mord mtight">0</span></span></span></span><span style="top:-3.2029em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">x</span><span class="mrel mtight">→</span><span class="mord mtight">∞</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.43581800000000004em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.695392em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">y</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">x</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.481108em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></li>
+<li>求和运算，符号：<code>\displaystyle \sum</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mstyle scriptlevel="0" displaystyle="true"><munderover><mo>∑</mo><mrow><mi>y</mi><mo>→</mo><mn>0</mn></mrow><mrow><mi>x</mi><mo>→</mo><mi mathvariant="normal">∞</mi></mrow></munderover><mfrac><mi>x</mi><mi>y</mi></mfrac></mstyle></mrow><annotation encoding="application/x-tex">\displaystyle \sum^{x \to \infty}_{y \to 0}{\frac{x}{y}}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:3.0546180000000005em;vertical-align:-1.403221em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.6513970000000002em;"><span style="top:-1.8828869999999998em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">y</span><span class="mrel mtight">→</span><span class="mord mtight">0</span></span></span></span><span style="top:-3.0500049999999996em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.300005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">x</span><span class="mrel mtight">→</span><span class="mord mtight">∞</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.403221em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.10756em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">x</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.8804400000000001em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></li>
+<li>积分运算，符号：<code>\int</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msubsup><mo>∫</mo><mn>0</mn><mi mathvariant="normal">∞</mi></msubsup><mrow><mi>x</mi><mi>d</mi><mi>x</mi></mrow></mrow><annotation encoding="application/x-tex">\int^{\infty}_{0}{xdx}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.215112em;vertical-align:-0.35582em;"></span><span class="mop"><span class="mop op-symbol small-op" style="margin-right:0.19445em;position:relative;top:-0.0005599999999999772em;">∫</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8592920000000001em;"><span style="top:-2.34418em;margin-left:-0.19445em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span><span style="top:-3.2579000000000002em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">∞</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.35582em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="mord mathdefault">d</span><span class="mord mathdefault">x</span></span></span></span></span></li>
+<li>积分运算，符号：<code>\displaystyle \int</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mstyle scriptlevel="0" displaystyle="true"><msubsup><mo>∫</mo><mn>0</mn><mi mathvariant="normal">∞</mi></msubsup><mrow><mi>x</mi><mi>d</mi><mi>x</mi></mrow></mstyle></mrow><annotation encoding="application/x-tex">\displaystyle \int^{\infty}_{0}{xdx}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:2.326242em;vertical-align:-0.9119499999999999em;"></span><span class="mop"><span class="mop op-symbol large-op" style="margin-right:0.44445em;position:relative;top:-0.0011249999999999316em;">∫</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.414292em;"><span style="top:-1.7880500000000001em;margin-left:-0.44445em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">0</span></span></span></span><span style="top:-3.8129000000000004em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">∞</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9119499999999999em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="mord mathdefault">d</span><span class="mord mathdefault">x</span></span></span></span></span></li>
+<li>微分运算，符号：<code>\partial</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mrow><mi mathvariant="normal">∂</mi><mi>x</mi></mrow><mrow><mi mathvariant="normal">∂</mi><mi>y</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">\frac{\partial x}{\partial y}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.3612159999999998em;vertical-align:-0.481108em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8801079999999999em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight" style="margin-right:0.05556em;">∂</span><span class="mord mathdefault mtight" style="margin-right:0.03588em;">y</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight" style="margin-right:0.05556em;">∂</span><span class="mord mathdefault mtight">x</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.481108em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></li>
+<li>矩阵表示，符号：<code>\begin{matrix} \end{matrix}</code>，如：<span class='katex-error' title='ParseError: KaTeX parse error: Undefined control sequence: \5 at position 38: …1 &amp;2 &amp;\cdots &amp;4\̲5̲ &amp;6 &amp;\cdots &amp;8\…'>\left[ \begin{matrix} 1 &amp;2 &amp;\cdots &amp;4\5 &amp;6 &amp;\cdots &amp;8\\vdots &amp;\vdots &amp;\ddots &amp;\vdots\13 &amp;14 &amp;\cdots &amp;16\end{matrix} \right]</span></li>
+</ol>
+<h2 id="逻辑运算">逻辑运算</h2>
+<ol>
+<li>等于运算，符号：<code>=</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>+</mo><mi>y</mi><mo>=</mo><mi>z</mi></mrow><annotation encoding="application/x-tex">x+y=z</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span></span></span></span></li>
+<li>大于运算，符号：<code>&gt;</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>+</mo><mi>y</mi><mo>&gt;</mo><mi>z</mi></mrow><annotation encoding="application/x-tex">x+y&gt;z</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.7335400000000001em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span></span></span></span></li>
+<li>小于运算，符号：<code>&lt;</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>+</mo><mi>y</mi><mo>&lt;</mo><mi>z</mi></mrow><annotation encoding="application/x-tex">x+y&lt;z</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.7335400000000001em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span></span></span></span></li>
+<li>大于等于运算，符号：<code>\geq</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>+</mo><mi>y</mi><mo>≥</mo><mi>z</mi></mrow><annotation encoding="application/x-tex">x+y \geq z</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8304100000000001em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≥</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span></span></span></span></li>
+<li>小于等于运算，符号：<code>\leq</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>+</mo><mi>y</mi><mo>≤</mo><mi>z</mi></mrow><annotation encoding="application/x-tex">x+y \leq z</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8304100000000001em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span></span></span></span></li>
+<li>不等于运算，符号：<code>\neq</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>+</mo><mi>y</mi><mi mathvariant="normal">≠</mi><mi>z</mi></mrow><annotation encoding="application/x-tex">x+y \neq z</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel"><span class="mrel"><span class="mord"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="rlap"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="inner"><span class="mrel"></span></span><span class="fix"></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span></span><span class="mrel">=</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span></span></span></span></li>
+<li>不大于等于运算，符号：<code>\ngeq</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>+</mo><mi>y</mi><mo>≱</mo><mi>z</mi></mrow><annotation encoding="application/x-tex">x+y \ngeq z</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.09657em;vertical-align:-0.30274em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel amsrm">≱</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span></span></span></span></li>
+<li>不大于等于运算，符号：<code>\not\geq</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>+</mo><mi>y</mi><mpadded width="0px"><mo></mo></mpadded><mo>≥</mo><mi>z</mi></mrow><annotation encoding="application/x-tex">x+y \not\geq z</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel"><span class="mord"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="rlap"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="inner"><span class="mrel"></span></span><span class="fix"></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span></span></span><span class="base"><span class="strut" style="height:0.7719400000000001em;vertical-align:-0.13597em;"></span><span class="mrel">≥</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span></span></span></span></li>
+<li>不小于等于运算，符号：<code>\nleq</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>+</mo><mi>y</mi><mo>≰</mo><mi>z</mi></mrow><annotation encoding="application/x-tex">x+y \nleq z</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.09657em;vertical-align:-0.30274em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel amsrm">≰</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span></span></span></span></li>
+<li>不小于等于运算，符号：<code>\not\leq</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>+</mo><mi>y</mi><mpadded width="0px"><mo></mo></mpadded><mo>≤</mo><mi>z</mi></mrow><annotation encoding="application/x-tex">x+y \not\leq z</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel"><span class="mord"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="rlap"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="inner"><span class="mrel"></span></span><span class="fix"></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span></span></span><span class="base"><span class="strut" style="height:0.7719400000000001em;vertical-align:-0.13597em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span></span></span></span></li>
+<li>约等于运算，符号：<code>\approx</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>+</mo><mi>y</mi><mo>≈</mo><mi>z</mi></mrow><annotation encoding="application/x-tex">x+y \approx z</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.6775599999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span></span></span></span></li>
+<li>恒定等于运算，符号：<code>\equiv</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>+</mo><mi>y</mi><mo>≡</mo><mi>z</mi></mrow><annotation encoding="application/x-tex">x+y \equiv z</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.65819em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≡</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span></span></span></span></li>
+</ol>
+<h2 id="集合运算">集合运算</h2>
+<ol>
+<li>属于运算，符号：<code>\in</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>∈</mo><mi>y</mi></mrow><annotation encoding="application/x-tex">x \in y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span></li>
+<li>不属于运算，符号：<code>\notin</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mi mathvariant="normal">∉</mi><mi>y</mi></mrow><annotation encoding="application/x-tex">x \notin y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel"><span class="mord"><span class="mrel">∈</span></span><span class="mord"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.75em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="llap"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="inner"><span class="mord"><span class="mord">/</span><span class="mspace" style="margin-right:0.05555555555555555em;"></span></span></span><span class="fix"></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.25em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span></li>
+<li>不属于运算，符号：<code>\not\in</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mpadded width="0px"><mo></mo></mpadded><mo>∈</mo><mi>y</mi></mrow><annotation encoding="application/x-tex">x \not\in y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel"><span class="mord"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="rlap"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="inner"><span class="mrel"></span></span><span class="fix"></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span></span></span><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span></li>
+<li>子集运算，符号：<code>\subset</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>⊂</mo><mi>y</mi></mrow><annotation encoding="application/x-tex">x \subset y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">⊂</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span></li>
+<li>子集运算，符号：<code>\supset</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>⊃</mo><mi>y</mi></mrow><annotation encoding="application/x-tex">x \supset y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">⊃</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span></li>
+<li>真子集运算，符号：<code>\subseteq</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>⊆</mo><mi>y</mi></mrow><annotation encoding="application/x-tex">x \subseteq y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7719400000000001em;vertical-align:-0.13597em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">⊆</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span></li>
+<li>非真子集运算，符号：<code>\subsetneq</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>⊊</mo><mi>y</mi></mrow><annotation encoding="application/x-tex">x \subsetneq y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7719400000000001em;vertical-align:-0.13597em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel amsrm">⊊</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span></li>
+<li>真子集运算，符号：<code>\supseteq</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>⊇</mo><mi>y</mi></mrow><annotation encoding="application/x-tex">x \supseteq y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7719400000000001em;vertical-align:-0.13597em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">⊇</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span></li>
+<li>非真子集运算，符号：<code>\supsetneq</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>⊋</mo><mi>y</mi></mrow><annotation encoding="application/x-tex">x \supsetneq y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7719400000000001em;vertical-align:-0.13597em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel amsrm">⊋</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span></li>
+<li>非子集运算，符号：<code>\not\subset</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mpadded width="0px"><mo></mo></mpadded><mo>⊂</mo><mi>y</mi></mrow><annotation encoding="application/x-tex">x \not\subset y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel"><span class="mord"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="rlap"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="inner"><span class="mrel"></span></span><span class="fix"></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span></span></span><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mrel">⊂</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span></li>
+<li>非子集运算，符号：<code>\not\supset</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mpadded width="0px"><mo></mo></mpadded><mo>⊃</mo><mi>y</mi></mrow><annotation encoding="application/x-tex">x \not\supset y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel"><span class="mord"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="rlap"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="inner"><span class="mrel"></span></span><span class="fix"></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.19444em;"><span></span></span></span></span></span></span></span><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mrel">⊃</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span></li>
+<li>并集运算，符号：<code>\cup</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>∪</mo><mi>y</mi></mrow><annotation encoding="application/x-tex">x \cup y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.55556em;vertical-align:0em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∪</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span></li>
+<li>交集运算，符号：<code>\cap</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>∩</mo><mi>y</mi></mrow><annotation encoding="application/x-tex">x \cap y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.55556em;vertical-align:0em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∩</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span></li>
+<li>差集运算，符号：<code>\setminus</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>∖</mo><mi>y</mi></mrow><annotation encoding="application/x-tex">x \setminus y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∖</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span></li>
+<li>同或运算，符号：<code>\bigodot</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>⨀</mo><mi>y</mi></mrow><annotation encoding="application/x-tex">x \bigodot y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.00001em;vertical-align:-0.25001em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-symbol small-op" style="position:relative;top:-0.0000050000000000050004em;">⨀</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span></li>
+<li>同与运算，符号：<code>\bigotimes</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi><mo>⨂</mo><mi>y</mi></mrow><annotation encoding="application/x-tex">x \bigotimes y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.00001em;vertical-align:-0.25001em;"></span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-symbol small-op" style="position:relative;top:-0.0000050000000000050004em;">⨂</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span></li>
+<li>实数集合，符号：<code>\mathbb{R}</code>，如：<code>\mathbb{R}</code></li>
+<li>自然数集合，符号：<code>\mathbb{Z}</code>，如：<code>\mathbb{Z}</code></li>
+<li>空集，符号：<code>\emptyset</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">∅</mi></mrow><annotation encoding="application/x-tex">\emptyset</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.80556em;vertical-align:-0.05556em;"></span><span class="mord">∅</span></span></span></span></li>
+</ol>
+<h2 id="数学符号">数学符号</h2>
+<ol>
+<li>无穷，符号：<code>\infty</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">∞</mi></mrow><annotation encoding="application/x-tex">\infty</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord">∞</span></span></span></span></li>
+<li>虚数，符号：<code>\imath</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ı</mi></mrow><annotation encoding="application/x-tex">\imath</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathit latin_fallback">ı</span></span></span></span></li>
+<li>虚数，符号：<code>\jmath</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ȷ</mi></mrow><annotation encoding="application/x-tex">\jmath</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathit latin_fallback">ȷ</span></span></span></span></li>
+<li>数学符号，符号<code>\hat{a}</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mi>a</mi><mo>^</mo></mover></mrow><annotation encoding="application/x-tex">\hat{a}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">a</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">^</span></span></span></span></span></span></span></span></span></li>
+<li>数学符号，符号<code>\check{a}</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mi>a</mi><mo>ˇ</mo></mover></mrow><annotation encoding="application/x-tex">\check{a}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.62847em;vertical-align:0em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.62847em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">a</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">ˇ</span></span></span></span></span></span></span></span></span></li>
+<li>数学符号，符号<code>\breve{a}</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mi>a</mi><mo>˘</mo></mover></mrow><annotation encoding="application/x-tex">\breve{a}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">a</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">˘</span></span></span></span></span></span></span></span></span></li>
+<li>数学符号，符号<code>\tilde{a}</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mi>a</mi><mo>~</mo></mover></mrow><annotation encoding="application/x-tex">\tilde{a}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6678599999999999em;vertical-align:0em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6678599999999999em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">a</span></span></span><span style="top:-3.35em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">~</span></span></span></span></span></span></span></span></span></li>
+<li>数学符号，符号<code>\bar{a}</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mi>a</mi><mo>ˉ</mo></mover></mrow><annotation encoding="application/x-tex">\bar{a}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.56778em;vertical-align:0em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.56778em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">a</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">ˉ</span></span></span></span></span></span></span></span></span></li>
+<li>矢量符号，符号<code>\vec{a}</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mi>a</mi><mo>⃗</mo></mover></mrow><annotation encoding="application/x-tex">\vec{a}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.714em;vertical-align:0em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.714em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">a</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.2355em;"><span class="overlay" style="height:0.714em;width:0.471em;"><svg width='0.471em' height='0.714em' style='width:0.471em' viewBox='0 0 471 714' preserveAspectRatio='xMinYMin'><path d='M377 20c0-5.333 1.833-10 5.5-14S391 0 397 0c4.667 0 8.667 1.667 12 5
+3.333 2.667 6.667 9 10 19 6.667 24.667 20.333 43.667 41 57 7.333 4.667 11
+10.667 11 18 0 6-1 10-3 12s-6.667 5-14 9c-28.667 14.667-53.667 35.667-75 63
+-1.333 1.333-3.167 3.5-5.5 6.5s-4 4.833-5 5.5c-1 .667-2.5 1.333-4.5 2s-4.333 1
+-7 1c-4.667 0-9.167-1.833-13.5-5.5S337 184 337 178c0-12.667 15.667-32.333 47-59
+H213l-171-1c-8.667-6-13-12.333-13-19 0-4.667 4.333-11.333 13-20h359
+c-16-25.333-24-45-24-59z'/></svg></span></span></span></span></span></span></span></span></span></span></li>
+<li>数学符号，符号<code>\acute{a}</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mi>a</mi><mo>ˊ</mo></mover></mrow><annotation encoding="application/x-tex">\acute{a}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">a</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">ˊ</span></span></span></span></span></span></span></span></span></li>
+<li>数学符号，符号<code>\grave{a}</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mi>a</mi><mo>ˋ</mo></mover></mrow><annotation encoding="application/x-tex">\grave{a}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">a</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">ˋ</span></span></span></span></span></span></span></span></span></li>
+<li>数学符号，符号<code>\mathring{a}</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mi>a</mi><mo>˚</mo></mover></mrow><annotation encoding="application/x-tex">\mathring{a}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.69444em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">a</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.375em;">˚</span></span></span></span></span></span></span></span></span></li>
+<li>一阶导数符号，符号<code>\dot{a}</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mi>a</mi><mo>˙</mo></mover></mrow><annotation encoding="application/x-tex">\dot{a}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66786em;vertical-align:0em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.66786em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">a</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.13889em;">˙</span></span></span></span></span></span></span></span></span></li>
+<li>二阶导数符号，符号<code>\ddot{a}</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mi>a</mi><mo>¨</mo></mover></mrow><annotation encoding="application/x-tex">\ddot{a}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.66786em;vertical-align:0em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.66786em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">a</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;">¨</span></span></span></span></span></span></span></span></span></li>
+<li>上箭头，符号：<code>\uparrow</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>↑</mo></mrow><annotation encoding="application/x-tex">\uparrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mrel">↑</span></span></span></span></li>
+<li>上箭头，符号：<code>\Uparrow</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>⇑</mo></mrow><annotation encoding="application/x-tex">\Uparrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mrel">⇑</span></span></span></span></li>
+<li>下箭头，符号：<code>\downarrow</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>↓</mo></mrow><annotation encoding="application/x-tex">\downarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mrel">↓</span></span></span></span></li>
+<li>下箭头，符号：<code>\Downarrow</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>⇓</mo></mrow><annotation encoding="application/x-tex">\Downarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mrel">⇓</span></span></span></span></li>
+<li>左箭头，符号：<code>\leftarrow</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>←</mo></mrow><annotation encoding="application/x-tex">\leftarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">←</span></span></span></span></li>
+<li>左箭头，符号：<code>\Leftarrow</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>⇐</mo></mrow><annotation encoding="application/x-tex">\Leftarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">⇐</span></span></span></span></li>
+<li>右箭头，符号：<code>\rightarrow</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span></li>
+<li>右箭头，符号：<code>\Rightarrow</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>⇒</mo></mrow><annotation encoding="application/x-tex">\Rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">⇒</span></span></span></span></li>
+<li>底端对齐的省略号，符号：<code>\ldots</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn><mo separator="true">,</mo><mn>2</mn><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">1,2,\ldots,n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">n</span></span></span></span></li>
+<li>中线对齐的省略号，符号：<code>\cdots</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msubsup><mi>x</mi><mn>1</mn><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>x</mi><mn>2</mn><mn>2</mn></msubsup><mo>+</mo><mo>⋯</mo><mo>+</mo><msubsup><mi>x</mi><mi>n</mi><mn>2</mn></msubsup></mrow><annotation encoding="application/x-tex">x_1^2 + x_2^2 + \cdots + x_n^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0622159999999998em;vertical-align:-0.24810799999999997em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-2.4518920000000004em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.24810799999999997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.0622159999999998em;vertical-align:-0.24810799999999997em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-2.4518920000000004em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.24810799999999997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="minner">⋯</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.061108em;vertical-align:-0.247em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-2.4530000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">n</span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span></span></span></span></li>
+<li>竖直对齐的省略号，符号：<code>\vdots</code>，如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">⋮</mi><mrow></mrow></mrow><annotation encoding="application/x-tex">\vdots</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.53em;vertical-align:-0.03em;"></span><span class="mord"><span class="mord">⋮</span><span class="mord rule" style="border-right-width:0em;border-top-width:1.5em;bottom:0em;"></span></span></span></span></span></li>
+<li>斜对齐的省略号，符号：<code>\ddots</code>，如：</li>
+</ol>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Software-Recommendation]]></title>
+        <id>https://crazydear.github.io/post/Software-Recommendation/</id>
+        <link href="https://crazydear.github.io/post/Software-Recommendation/">
+        </link>
+        <updated>2020-04-09T10:48:37.000Z</updated>
+        <content type="html"><![CDATA[<blockquote>
+<p>简单绿色软件推荐<br>
+一部分直接贴链接，可以直接点击相关软件名跳转到官网</p>
+</blockquote>
+<h1 id="一-杀毒软件">一、杀毒软件</h1>
+<p><a href="https://www.huorong.cn/">火绒</a></p>
+<h1 id="二-系统优化软件">二、系统优化软件</h1>
+<p><a href="https://www.chuyu.me/">Dism ++</a></p>
+<p><a href="http://www.yishimei.cn/network/319.html">MicroKMS 神龙版</a></p>
+<p><a href="https://otp.landian.vip/">Office Tool</a></p>
+<p><a href="https://spacesniffer.en.softonic.com/">SpaceSniffer</a>   查看磁盘空间占用情况</p>
+<p><a href="https://rufus.en.softonic.com/">Rufus</a>   直接将镜像烧录成U盘启动盘</p>
+<p><a href="http://www.wepe.com.cn/">微PE工具箱</a>     PE启动盘</p>
+<p>【Uninstall Tool】    本<a href="https://github.com/Crazydear/Software-Recommendation/tree/master/%E4%BC%98%E5%8C%96%E8%BD%AF%E4%BB%B6">项目</a>文件夹自取</p>
+<h1 id="三-实用软件">三、实用软件</h1>
+<p><strong>以下在本项目里可以找到</strong><br>
+【好压】 本<a href="https://github.com/Crazydear/Software-Recommendation/tree/master/%E5%AE%9E%E7%94%A8%E8%BD%AF%E4%BB%B6">项目</a>文件夹自取   安装完成后把自动更新关掉</p>
+<p>** 以下可以直接点击跳转到官网**<br>
+<a href="http://qq.pinyin.cn/">QQ输入法</a></p>
+<p><a href="https://player.qq.com/">QQ影音</a></p>
+<p><a href="https://mathewsachin.github.io/Captura/">Captura</a>    免费开源的屏幕录制软件</p>
+<p><a href="https://www.tracker-software.com/product/pdf-xchange-editor">PDF-XChange Editor</a>   功能强大，强烈推荐</p>
+<h1 id="四-常用软件">四、常用软件</h1>
+<p><a href="https://im.qq.com/">QQ</a>、<br>
+<a href="https://weixin.qq.com/">微信</a>、<br>
+<a href="https://www.google.cn/intl/zh-CN/chrome/">谷歌浏览器</a>、<br>
+<a href="https://pan.baidu.com/download">百度网盘</a>、<br>
+<a href="https://typora.io/">Typora</a>、</p>
+<h1 id="五-高级软件">五、高级软件</h1>
+<p><a href="https://gparted.org/index.php">GParted</a>    非常好用的存储设备修复软件<br>
+** 截至本文发布之时，我已用本软件修复好 1T移动硬盘一个、1GB TF卡一张，均插到电脑上无反应、不能识别、甚至卡死等情况 **</p>
+<pre><code># linux下用法，有图形界面
+sudo apt-get install gparted
+gparted 
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Hello Gridea]]></title>
+        <id>https://crazydear.github.io/post/hello-gridea/</id>
+        <link href="https://crazydear.github.io/post/hello-gridea/">
+        </link>
+        <updated>2018-12-11T16:00:00.000Z</updated>
+        <summary type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
+✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
+✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
+<!-- more -->
+<p><a href="https://github.com/getgridea/gridea">Github</a><br>
+<a href="https://gridea.dev/">Gridea 主页</a><br>
+<a href="http://fehey.com/">示例网站</a></p>
+<h2 id="特性">特性👇</h2>
+<p>📝  你可以使用最酷的 <strong>Markdown</strong> 语法，进行快速创作</p>
+<p>🌉  你可以给文章配上精美的封面图和在文章任意位置插入图片</p>
+<p>🏷️  你可以对文章进行标签分组</p>
+<p>📋  你可以自定义菜单，甚至可以创建外部链接菜单</p>
+<p>💻  你可以在 <strong>Windows</strong>，<strong>MacOS</strong> 或 <strong>Linux</strong> 设备上使用此客户端</p>
+<p>🌎  你可以使用 <strong>𝖦𝗂𝗍𝗁𝗎𝖻 𝖯𝖺𝗀𝖾𝗌</strong> 或 <strong>Coding Pages</strong> 向世界展示，未来将支持更多平台</p>
+<p>💬  你可以进行简单的配置，接入 <a href="https://github.com/gitalk/gitalk">Gitalk</a> 或 <a href="https://github.com/SukkaW/DisqusJS">DisqusJS</a> 评论系统</p>
+<p>🇬🇧  你可以使用<strong>中文简体</strong>或<strong>英语</strong></p>
+<p>🌁  你可以任意使用应用内默认主题或任意第三方主题，强大的主题自定义能力</p>
+<p>🖥  你可以自定义源文件夹，利用 OneDrive、百度网盘、iCloud、Dropbox 等进行多设备同步</p>
+<p>🌱 当然 <strong>Gridea</strong> 还很年轻，有很多不足，但请相信，它会不停向前 🏃</p>
+<p>未来，它一定会成为你离不开的伙伴</p>
+<p>尽情发挥你的才华吧！</p>
+<p>😘 Enjoy~</p>
+]]></content>
+    </entry>
+</feed>
